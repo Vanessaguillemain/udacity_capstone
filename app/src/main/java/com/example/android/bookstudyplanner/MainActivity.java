@@ -1,23 +1,37 @@
 package com.example.android.bookstudyplanner;
 
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.design.widget.TabLayout;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private FloatingActionButton fabAdd;
+    private FloatingActionButton fabEdit;
+    private FloatingActionButton fabSearch;
+    private LinearLayout layoutFabEdit;
+    private LinearLayout layoutFabSearch;
+    private boolean fabExpanded = false;
+    private final String FAB_EXPANDED_KEY = "FAB_EXPANDED_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // recovering the instance state
+        if (savedInstanceState != null) {
+            fabExpanded = savedInstanceState.getBoolean(FAB_EXPANDED_KEY);
+        }
+
         setContentView(R.layout.activity_main);
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -32,13 +46,80 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabAdd = (FloatingActionButton) this.findViewById(R.id.fabAdd);
+        fabEdit = (FloatingActionButton) this.findViewById(R.id.fabEdit);
+        fabSearch = (FloatingActionButton) this.findViewById(R.id.fabSearch);
+        layoutFabEdit = (LinearLayout) this.findViewById(R.id.layoutFabEdit);
+        layoutFabSearch = (LinearLayout) this.findViewById(R.id.layoutFabSearch);
+
+        fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (fabExpanded == true){
+                    closeSubMenusFab();
+                } else {
+                    openSubMenusFab();
+                }
             }
         });
+
+        fabEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditBook();
+            }
+        });
+
+        fabSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSearchBook();
+            }
+        });
+
+        //In the beginning submenus are closed
+        if(fabExpanded) {
+            openSubMenusFab();
+        } else {
+            closeSubMenusFab();
+        }
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(FAB_EXPANDED_KEY, fabExpanded);
+        //outState.putString(TEXT_VIEW_KEY, textView.getText());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        //textView.setText(savedInstanceState.getString(TEXT_VIEW_KEY));
+    }
+
+    private void closeSubMenusFab(){
+        layoutFabEdit.animate().translationY(0);
+        layoutFabSearch.animate().translationY(0);
+        //Change close icon to add icon
+        fabAdd.setImageResource(R.drawable.ic_menu_add);
+        fabExpanded = false;
+    }
+
+    //Opens FAB submenus
+    private void openSubMenusFab(){
+        layoutFabEdit.animate().translationY(-getResources().getDimension(R.dimen.standard_60));
+        layoutFabSearch.animate().translationY(-getResources().getDimension(R.dimen.standard_110));
+        //Change add icon to close icon
+        fabAdd.setImageResource(R.drawable.ic_menu_close);
+        fabExpanded = true;
+    }
+
+    private void openEditBook(){
+        Toast.makeText(this,"open edit", Toast.LENGTH_SHORT).show();
+    }
+
+    private void openSearchBook(){
+        Toast.makeText(this,"open search", Toast.LENGTH_SHORT).show();
     }
 }

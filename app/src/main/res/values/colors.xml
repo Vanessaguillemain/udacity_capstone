@@ -4,6 +4,13 @@
     <color name="colorPrimaryDark">@color/black</color>
     <color name="colorAccent">@color/orange_A200</color>
 
+    <color name="cardview_light_background">@color/orange_A200</color>
+
+    <!-- for FAB
+    <color name="colorSecondary">@color/orange_A200</color>
+    <color name="colorOnSecondary">@color/orange_A200</color>-->
+
+
     <color name="white">#FFFFFF</color>
     <color name="green">#007700</color>
     <color name="red">#FF0000</color>
