@@ -17,6 +17,7 @@ import com.example.android.bookstudyplanner.database.AppDatabase;
 import com.example.android.bookstudyplanner.database.AppExecutor;
 import com.example.android.bookstudyplanner.database.BookEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String BUNDLE_KEY_TAB_POSITION = "BUNDLE_KEY_TAB_POSITION";
     // Member variable for the Database
     private AppDatabase mDb;
+    private ArrayList<String> bookTitles = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,14 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         adapter = new TabAdapter(getSupportFragmentManager());
-        adapter.addFragment(new TabBooksFragment(), getString(R.string.tab_books_title));
+
+        mDb = AppDatabase.getInstance(getApplicationContext());
+        retrieveBooks();
+
+        TabBooksFragment tabBooksFragment = new TabBooksFragment();
+        tabBooksFragment.setBookTitles(bookTitles);
+
+        adapter.addFragment(tabBooksFragment, getString(R.string.tab_books_title));
         adapter.addFragment(new TabTodayFragment(), getString(R.string.tab_today_title));
         adapter.addFragment(new TabPlanningFragment(), getString(R.string.tab_planning_title));
 
@@ -69,11 +78,9 @@ public class MainActivity extends AppCompatActivity {
         layoutFabSearch = (LinearLayout) this.findViewById(R.id.layoutFabSearch);
 
         initListeners();
-        mDb = AppDatabase.getInstance(getApplicationContext());
 
         hideFABMenu(!fabExpanded);
 
-        retrieveBooks();
     }
 
     private void initListeners() {
@@ -126,7 +133,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if(books != null) {
-                            Toast.makeText(MainActivity.this, books.toString(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(MainActivity.this, books.toString(), Toast.LENGTH_LONG).show();
+                            bookTitles.clear();
+                            for(BookEntity book : books) {
+                                bookTitles.add(book.getTitle());
+                            }
                         } else {
                             Toast.makeText(MainActivity.this, "nothing in db", Toast.LENGTH_LONG).show();
                         }

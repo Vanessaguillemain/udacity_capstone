@@ -20,18 +20,15 @@ import java.util.ArrayList;
 public class TabBooksFragment extends Fragment implements MyRecyclerViewAdapter.ItemClickListener  {
 
     MyRecyclerViewAdapter adapter;
+    ArrayList<String> bookTitles = new ArrayList<>();
+
+    public void setBookTitles(ArrayList<String> bookTitles) {
+        this.bookTitles = bookTitles;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_books, container, false);
-
-        // data to populate the RecyclerView with
-        ArrayList<String> bookTitles = new ArrayList<>();
-        bookTitles.add("Android for dummies");
-        bookTitles.add("The alchemist");
-        bookTitles.add("the 4 hours week");
-        bookTitles.add("Hello World");
-        bookTitles.add("Misery");
 
         // set up the RecyclerView
         RecyclerView recyclerView = rootView.findViewById(R.id.rvBooks);
