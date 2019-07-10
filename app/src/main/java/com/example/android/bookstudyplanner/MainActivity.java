@@ -1,5 +1,6 @@
 package com.example.android.bookstudyplanner;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -21,27 +22,33 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout layoutFabEdit;
     private LinearLayout layoutFabSearch;
     private boolean fabExpanded = false;
-    private final String FAB_EXPANDED_KEY = "FAB_EXPANDED_KEY";
+    private static final String BUNDLE_KEY_FAB_EXPANDED = "BUNDLE_KEY_FAB_EXPANDED";
+    private static final String BUNDLE_KEY_TAB_POSITION = "BUNDLE_KEY_TAB_POSITION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // recovering the instance state
-        if (savedInstanceState != null) {
-            fabExpanded = savedInstanceState.getBoolean(FAB_EXPANDED_KEY);
-        }
-
+        
         setContentView(R.layout.activity_main);
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         adapter = new TabAdapter(getSupportFragmentManager());
-        adapter.addFragment(new TabBooksFragment(), "Books");
-        adapter.addFragment(new TabTodayFragment(), "Today");
-        adapter.addFragment(new TabPlanningFragment(), "Planning");
+        adapter.addFragment(new TabBooksFragment(), getString(R.string.tab_books_title));
+        adapter.addFragment(new TabTodayFragment(), getString(R.string.tab_today_title));
+        adapter.addFragment(new TabPlanningFragment(), getString(R.string.tab_planning_title));
+
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+
+        // recovering the instance state
+        if (savedInstanceState != null) {
+            fabExpanded = savedInstanceState.getBoolean(BUNDLE_KEY_FAB_EXPANDED);
+            int tabPos = savedInstanceState.getInt(BUNDLE_KEY_TAB_POSITION);
+            tabLayout.getTabAt(tabPos).select();
+        } else {
+            fabExpanded = false;
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -52,6 +59,18 @@ public class MainActivity extends AppCompatActivity {
         layoutFabEdit = (LinearLayout) this.findViewById(R.id.layoutFabEdit);
         layoutFabSearch = (LinearLayout) this.findViewById(R.id.layoutFabSearch);
 
+        initListeners();
+
+        //In the beginning submenus are closed
+        if(fabExpanded) {
+            openSubMenusFab();
+        } else {
+            closeSubMenusFab();
+        }
+
+    }
+
+    private void initListeners() {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,20 +95,14 @@ public class MainActivity extends AppCompatActivity {
                 openSearchBook();
             }
         });
-
-        //In the beginning submenus are closed
-        if(fabExpanded) {
-            openSubMenusFab();
-        } else {
-            closeSubMenusFab();
-        }
-
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(FAB_EXPANDED_KEY, fabExpanded);
+        outState.putBoolean(BUNDLE_KEY_FAB_EXPANDED, fabExpanded);
         //outState.putString(TEXT_VIEW_KEY, textView.getText());
+        outState.putInt(BUNDLE_KEY_TAB_POSITION,  tabLayout.getSelectedTabPosition());
+
         super.onSaveInstanceState(outState);
     }
 
@@ -116,7 +129,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openEditBook(){
-        Toast.makeText(this,"open edit", Toast.LENGTH_SHORT).show();
+        int tab_position = tabLayout.getSelectedTabPosition();
+        Intent myIntent = new Intent(MainActivity.this, BookDetailActivity.class);
+        myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_CREATE);
+        myIntent.putExtra(Utils.INTENT_KEY_TAB_POSITION, tab_position);
+
+        MainActivity.this.startActivity(myIntent);
+        closeSubMenusFab();
     }
 
     private void openSearchBook(){
