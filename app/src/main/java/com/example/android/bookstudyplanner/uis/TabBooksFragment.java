@@ -1,10 +1,12 @@
-package com.example.android.bookstudyplanner;
+package com.example.android.bookstudyplanner.uis;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.android.bookstudyplanner.R;
 
 /**
  * Created by vanessa on 08/07/2019.

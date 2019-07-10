@@ -1,4 +1,4 @@
-package com.example.android.bookstudyplanner;
+package com.example.android.bookstudyplanner.uis;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.example.android.bookstudyplanner.R;
+import com.example.android.bookstudyplanner.Utils;
+import com.example.android.bookstudyplanner.database.AppDatabase;
+import com.example.android.bookstudyplanner.database.AppExecutor;
+import com.example.android.bookstudyplanner.database.BookEntity;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean fabExpanded = false;
     private static final String BUNDLE_KEY_FAB_EXPANDED = "BUNDLE_KEY_FAB_EXPANDED";
     private static final String BUNDLE_KEY_TAB_POSITION = "BUNDLE_KEY_TAB_POSITION";
+    // Member variable for the Database
+    private AppDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +51,12 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        fabExpanded = false;
         // recovering the instance state
         if (savedInstanceState != null) {
             fabExpanded = savedInstanceState.getBoolean(BUNDLE_KEY_FAB_EXPANDED);
             int tabPos = savedInstanceState.getInt(BUNDLE_KEY_TAB_POSITION);
             tabLayout.getTabAt(tabPos).select();
-        } else {
-            fabExpanded = false;
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -60,25 +69,17 @@ public class MainActivity extends AppCompatActivity {
         layoutFabSearch = (LinearLayout) this.findViewById(R.id.layoutFabSearch);
 
         initListeners();
+        mDb = AppDatabase.getInstance(getApplicationContext());
 
-        //In the beginning submenus are closed
-        if(fabExpanded) {
-            openSubMenusFab();
-        } else {
-            closeSubMenusFab();
-        }
+        hideFABMenu(!fabExpanded);
 
+        retrieveBooks();
     }
 
     private void initListeners() {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (fabExpanded == true){
-                    closeSubMenusFab();
-                } else {
-                    openSubMenusFab();
-                }
+            public void onClick(View view) {hideFABMenu(fabExpanded);
             }
         });
 
@@ -96,6 +97,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void hideFABMenu(boolean toHide) {
+        if (toHide) closeSubMenusFab();
+        else openSubMenusFab();
+    }
+
+    /**
+     * This method is called after this activity has been paused or restarted.
+     * Often, this is after new data has been inserted through a BookDetailActivity,
+     * so this re-queries the database data for any changes.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        retrieveBooks();
+    }
+
+    private void retrieveBooks() {
+        AppExecutor.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                final List<BookEntity> books = mDb.bookDao().loadAllBooks();
+
+                // We will be able to simplify this once we learn more
+                // about Android Architecture Components
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(books != null) {
+                            Toast.makeText(MainActivity.this, books.toString(), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "nothing in db", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

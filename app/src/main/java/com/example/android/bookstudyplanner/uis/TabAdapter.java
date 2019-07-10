@@ -1,4 +1,4 @@
-package com.example.android.bookstudyplanner;
+package com.example.android.bookstudyplanner.uis;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
