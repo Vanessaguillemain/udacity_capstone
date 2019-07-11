@@ -15,28 +15,28 @@ import java.util.List;
  * Created by vanessa on 10/07/2019.
  */
 
-public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
+public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecyclerViewAdapter.BooksViewHolder> {
 
     private List<String> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    MyRecyclerViewAdapter(Context context, List<String> data) {
+    BooksRecyclerViewAdapter(Context context, List<String> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
 
     // inflates the row layout from xml when needed
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BooksViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.rv_books_item, parent, false);
-        return new ViewHolder(view);
+        return new BooksViewHolder(view);
     }
 
     // binds the data to the TextView in each row
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(BooksViewHolder holder, int position) {
         String animal = mData.get(position);
         holder.myTextView.setText(animal);
     }
@@ -49,10 +49,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
 
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class BooksViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView myTextView;
 
-        ViewHolder(View itemView) {
+        BooksViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.tvBookTitle);
             itemView.setOnClickListener(this);

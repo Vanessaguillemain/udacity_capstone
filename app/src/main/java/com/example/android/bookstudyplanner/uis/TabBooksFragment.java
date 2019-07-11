@@ -17,9 +17,9 @@ import java.util.ArrayList;
  * Created by vanessa on 08/07/2019.
  */
 
-public class TabBooksFragment extends Fragment implements MyRecyclerViewAdapter.ItemClickListener  {
+public class TabBooksFragment extends Fragment implements BooksRecyclerViewAdapter.ItemClickListener  {
 
-    MyRecyclerViewAdapter adapter;
+    BooksRecyclerViewAdapter booksRecyclerViewAdapter;
     ArrayList<String> bookTitles = new ArrayList<>();
 
     public void setBookTitles(ArrayList<String> bookTitles) {
@@ -33,15 +33,15 @@ public class TabBooksFragment extends Fragment implements MyRecyclerViewAdapter.
         // set up the RecyclerView
         RecyclerView recyclerView = rootView.findViewById(R.id.rvBooks);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new MyRecyclerViewAdapter(getActivity(), bookTitles);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
+        booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(getActivity(), bookTitles);
+        booksRecyclerViewAdapter.setClickListener(this);
+        recyclerView.setAdapter(booksRecyclerViewAdapter);
 
         return rootView;
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(getActivity(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "You clicked " + booksRecyclerViewAdapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 }
