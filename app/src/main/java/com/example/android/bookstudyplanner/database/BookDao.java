@@ -33,7 +33,7 @@ public interface BookDao {
     void deleteBookById(int id);
 
     @Query("SELECT * FROM book WHERE id = :id")
-    BookEntity loadBookById(int id);
+    LiveData<BookEntity> loadBookById(int id);
 
     @Query("SELECT * FROM book WHERE isbn = :isbn")
     BookEntity loadBookByIsbn(int isbn);

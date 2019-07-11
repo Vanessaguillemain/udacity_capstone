@@ -1,23 +1,24 @@
 package com.example.android.bookstudyplanner.uis;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.android.bookstudyplanner.AddBookViewModel;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
+import com.example.android.bookstudyplanner.database.AddBookViewModelFactory;
 import com.example.android.bookstudyplanner.database.AppDatabase;
 import com.example.android.bookstudyplanner.database.AppExecutor;
 import com.example.android.bookstudyplanner.database.BookEntity;
-import com.example.android.bookstudyplanner.database.DatabaseUtils;
 
-import java.util.Date;
-
-import static com.example.android.bookstudyplanner.Utils.tostS;
 import static com.example.android.bookstudyplanner.database.DatabaseUtils.ISBN_ABSENT_VALUE;
 
 /**
@@ -25,6 +26,9 @@ import static com.example.android.bookstudyplanner.database.DatabaseUtils.ISBN_A
  */
 
 public class BookDetailActivity extends AppCompatActivity {
+
+    // Constant for logging
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private final String BUNDLE_KEY_TEXT_TITLE = "BUNDLE_KEY_TEXT_TITLE";
     private TextView mTvTitle;
@@ -63,7 +67,19 @@ public class BookDetailActivity extends AppCompatActivity {
                 //TODO test if null
                 BookEntity book = intent.getParcelableExtra("BOOK");
                 mBookId = book.getId();
-                fillLayoutFields(book);
+
+                AddBookViewModelFactory factory = new AddBookViewModelFactory(mDb, mBookId);
+                final AddBookViewModel viewModel = ViewModelProviders.of(this, factory).get(AddBookViewModel.class);
+
+                viewModel.getBook().observe(this, new Observer<BookEntity>() {
+                    @Override
+                    public void onChanged(@Nullable BookEntity book) {
+                        viewModel.getBook().removeObserver(this);
+                        Log.d(TAG, "Receiving database update from LiveData");
+                        fillLayoutFields(book);
+                    }
+                });
+
             }
         }
     }
@@ -126,6 +142,7 @@ public class BookDetailActivity extends AppCompatActivity {
             pageCount = Integer.parseInt(mTvPageCount.getText().toString());
         }
 
+        //Book Entity
         final BookEntity book = new BookEntity(ISBN_ABSENT_VALUE, title, pageCount);//TODO fill always pagecount
 
         AppExecutor.getInstance().diskIO().execute(new Runnable() {
