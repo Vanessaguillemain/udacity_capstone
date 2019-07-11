@@ -1,5 +1,6 @@
 package com.example.android.bookstudyplanner.database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -17,7 +18,7 @@ import java.util.List;
 public interface BookDao {
 
     @Query("SELECT * FROM book")
-    List<BookEntity> loadAllBooks();
+    LiveData<List<BookEntity>> loadAllBooks();
 
     @Insert
     void insertBook(BookEntity bookEntry);

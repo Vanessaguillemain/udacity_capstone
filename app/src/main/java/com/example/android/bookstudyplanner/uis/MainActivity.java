@@ -1,12 +1,16 @@
 package com.example.android.bookstudyplanner.uis;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -123,27 +127,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void retrieveBooks() {
-        AppExecutor.getInstance().diskIO().execute(new Runnable() {
+
+        final LiveData<List<BookEntity>> books = mDb.bookDao().loadAllBooks();
+
+        books.observe(this, new Observer<List<BookEntity>>() {
             @Override
-            public void run() {
-                final List<BookEntity> books = mDb.bookDao().loadAllBooks();
+            public void onChanged(@Nullable List<BookEntity> books) {
+                Log.d("MAIN", "Receiving Database update fom LiveData");
+                if(books != null) {
+                    tabBooksFragment.setBooksToAdapter(books);
+                    bookEntities.clear();
+                    bookEntities.addAll(books);
 
-                // We will be able to simplify this once we learn more
-                // about Android Architecture Components
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(books != null) {
-                            tabBooksFragment.setBooksToAdapter(books);
-
-                            bookEntities.clear();
-                            bookEntities.addAll(books);
-
-                        } else {
-                            Toast.makeText(MainActivity.this, "nothing in db", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+                } else {
+                    Toast.makeText(MainActivity.this, "nothing in db", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
