@@ -16,6 +16,7 @@ import com.example.android.bookstudyplanner.database.DatabaseUtils;
 
 import java.util.Date;
 
+import static com.example.android.bookstudyplanner.Utils.tostS;
 import static com.example.android.bookstudyplanner.database.DatabaseUtils.ISBN_ABSENT_VALUE;
 
 /**
@@ -49,18 +50,23 @@ public class BookDetailActivity extends AppCompatActivity {
             mTvTitle.setText(savedInstanceState.getString(BUNDLE_KEY_TEXT_TITLE));
         }
 
-        /*
-        ActionBar actionBar = this.getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }*/
-
         Intent intent = getIntent();
         if(intent != null) {
+            tostS(this, "intent not null");
             String action = intent.getStringExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION);
-            int tabPosition = intent.getIntExtra(Utils.INTENT_KEY_TAB_POSITION, -1);
+            tostS(this, "action=" + action);
+
+            // int tabPosition = intent.getIntExtra(Utils.INTENT_KEY_TAB_POSITION, -1);
+            if (Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF.equals(action)) {
+                String title = intent.getStringExtra("TITLE");
+                fillLayoutFields(title);
+            }
         }
 
+    }
+
+    private void fillLayoutFields(String item) {
+        mTvTitle.setText(item);
     }
 
     /**
@@ -68,7 +74,6 @@ public class BookDetailActivity extends AppCompatActivity {
      */
     private void initViews() {
         mTvTitle = findViewById(R.id.tvTitle);
-
         mButtonSave = findViewById(R.id.buttonSave);
         mButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override

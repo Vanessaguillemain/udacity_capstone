@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         int tab_position = tabLayout.getSelectedTabPosition();
         Intent myIntent = new Intent(MainActivity.this, BookDetailActivity.class);
         myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_CREATE);
-        myIntent.putExtra(Utils.INTENT_KEY_TAB_POSITION, tab_position);
+        //myIntent.putExtra(Utils.INTENT_KEY_TAB_POSITION, tab_position);
 
         MainActivity.this.startActivity(myIntent);
         closeSubMenusFab();

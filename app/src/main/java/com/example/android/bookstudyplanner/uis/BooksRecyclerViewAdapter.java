@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.bookstudyplanner.R;
+import com.example.android.bookstudyplanner.database.BookEntity;
 
 import java.util.List;
 
@@ -44,7 +45,20 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
     // total number of rows
     @Override
     public int getItemCount() {
+        if (mData == null) {
+            return 0;
+        }
         return mData.size();
+    }
+
+    /**
+     * When data changes, this method updates the list of taskEntries
+     * and notifies the adapter to use the new values on it
+     */
+    public void setBooks(List<String> books) {
+        //TODO see if useful
+        mData = books;
+        notifyDataSetChanged();
     }
 
 

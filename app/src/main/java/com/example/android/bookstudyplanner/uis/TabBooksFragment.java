@@ -1,5 +1,6 @@
 package com.example.android.bookstudyplanner.uis;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.android.bookstudyplanner.R;
+import com.example.android.bookstudyplanner.Utils;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,7 @@ public class TabBooksFragment extends Fragment implements BooksRecyclerViewAdapt
 
     public void setBookTitles(ArrayList<String> bookTitles) {
         this.bookTitles = bookTitles;
+      //  adapter.setBooks(bookTitles);
     }
 
     @Override
@@ -42,6 +45,12 @@ public class TabBooksFragment extends Fragment implements BooksRecyclerViewAdapt
 
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(getActivity(), "You clicked " + booksRecyclerViewAdapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+        String item = booksRecyclerViewAdapter.getItem(position);
+
+        Intent myIntent = new Intent(getActivity(), BookDetailActivity.class);
+        myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF);
+        myIntent.putExtra("TITLE", item);
+
+        getActivity().startActivity(myIntent);
     }
 }
