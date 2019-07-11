@@ -2,6 +2,7 @@ package com.example.android.bookstudyplanner.uis;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.android.bookstudyplanner.MainViewModel;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
 import com.example.android.bookstudyplanner.database.AppDatabase;
@@ -25,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    // Constant for logging
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private TabAdapter adapter;
     private TabLayout tabLayout;
@@ -53,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         adapter = new TabAdapter(getSupportFragmentManager());
 
         mDb = AppDatabase.getInstance(getApplicationContext());
-        retrieveBooks();
+        setUpViewModel();
 
         tabBooksFragment = new TabBooksFragment();
         tabBooksFragment.setBookEntities(bookEntities);
@@ -123,25 +128,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        retrieveBooks();
+        //retrieveBooks();
     }
 
-    private void retrieveBooks() {
-
-        final LiveData<List<BookEntity>> books = mDb.bookDao().loadAllBooks();
-
-        books.observe(this, new Observer<List<BookEntity>>() {
+    private void setUpViewModel() {
+        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        viewModel.getBooks().observe(this, new Observer<List<BookEntity>>() {
             @Override
             public void onChanged(@Nullable List<BookEntity> books) {
-                Log.d("MAIN", "Receiving Database update fom LiveData");
-                if(books != null) {
-                    tabBooksFragment.setBooksToAdapter(books);
-                    bookEntities.clear();
-                    bookEntities.addAll(books);
-
-                } else {
-                    Toast.makeText(MainActivity.this, "nothing in db", Toast.LENGTH_LONG).show();
-                }
+                Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
+               // mAdapter.setTasks(taskEntries);
+                tabBooksFragment.setBooksToAdapter(books);
+                bookEntities.clear();
+                bookEntities.addAll(books);
             }
         });
     }

@@ -56,9 +56,7 @@ public class BookDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if(intent != null) {
-            tostS(this, "intent not null");
             String action = intent.getStringExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION);
-            tostS(this, "action=" + action);
 
             // int tabPosition = intent.getIntExtra(Utils.INTENT_KEY_TAB_POSITION, -1);
             if (Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF.equals(action)) {
@@ -68,7 +66,6 @@ public class BookDetailActivity extends AppCompatActivity {
                 fillLayoutFields(book);
             }
         }
-
     }
 
     private void fillLayoutFields(BookEntity item) {
