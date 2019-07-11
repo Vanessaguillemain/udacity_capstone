@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String BUNDLE_KEY_TAB_POSITION = "BUNDLE_KEY_TAB_POSITION";
     // Member variable for the Database
     private AppDatabase mDb;
-    private ArrayList<String> bookTitles = new ArrayList<>();
+    private ArrayList<BookEntity> bookEntities = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         retrieveBooks();
 
         TabBooksFragment tabBooksFragment = new TabBooksFragment();
-        tabBooksFragment.setBookTitles(bookTitles);
+        tabBooksFragment.setBookEntities(bookEntities);
 
         adapter.addFragment(tabBooksFragment, getString(R.string.tab_books_title));
         adapter.addFragment(new TabTodayFragment(), getString(R.string.tab_today_title));
@@ -133,10 +133,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if(books != null) {
-                            //Toast.makeText(MainActivity.this, books.toString(), Toast.LENGTH_LONG).show();
-                            bookTitles.clear();
+                            bookEntities.clear();
                             for(BookEntity book : books) {
-                                bookTitles.add(book.getTitle());
+                                bookEntities.add(book);
                             }
                         } else {
                             Toast.makeText(MainActivity.this, "nothing in db", Toast.LENGTH_LONG).show();
@@ -151,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(BUNDLE_KEY_FAB_EXPANDED, fabExpanded);
-        //outState.putString(TEXT_VIEW_KEY, textView.getText());
         outState.putInt(BUNDLE_KEY_TAB_POSITION,  tabLayout.getSelectedTabPosition());
 
         super.onSaveInstanceState(outState);
@@ -183,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
         int tab_position = tabLayout.getSelectedTabPosition();
         Intent myIntent = new Intent(MainActivity.this, BookDetailActivity.class);
         myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_CREATE);
-        //myIntent.putExtra(Utils.INTENT_KEY_TAB_POSITION, tab_position);
 
         MainActivity.this.startActivity(myIntent);
         closeSubMenusFab();

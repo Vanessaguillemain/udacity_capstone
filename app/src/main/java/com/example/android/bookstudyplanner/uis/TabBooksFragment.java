@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
+import com.example.android.bookstudyplanner.database.BookEntity;
 
 import java.util.ArrayList;
 
@@ -22,11 +23,10 @@ import java.util.ArrayList;
 public class TabBooksFragment extends Fragment implements BooksRecyclerViewAdapter.ItemClickListener  {
 
     BooksRecyclerViewAdapter booksRecyclerViewAdapter;
-    ArrayList<String> bookTitles = new ArrayList<>();
+    ArrayList<BookEntity> bookEntities = new ArrayList<>();
 
-    public void setBookTitles(ArrayList<String> bookTitles) {
-        this.bookTitles = bookTitles;
-      //  adapter.setBooks(bookTitles);
+    public void setBookEntities(ArrayList<BookEntity> bookEntities) {
+        this.bookEntities = bookEntities;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class TabBooksFragment extends Fragment implements BooksRecyclerViewAdapt
         // set up the RecyclerView
         RecyclerView recyclerView = rootView.findViewById(R.id.rvBooks);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(getActivity(), bookTitles);
+        booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(getActivity(), bookEntities);
         booksRecyclerViewAdapter.setClickListener(this);
         recyclerView.setAdapter(booksRecyclerViewAdapter);
 
@@ -45,11 +45,11 @@ public class TabBooksFragment extends Fragment implements BooksRecyclerViewAdapt
 
     @Override
     public void onItemClick(View view, int position) {
-        String item = booksRecyclerViewAdapter.getItem(position);
+        BookEntity item = booksRecyclerViewAdapter.getItem(position);
 
         Intent myIntent = new Intent(getActivity(), BookDetailActivity.class);
         myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF);
-        myIntent.putExtra("TITLE", item);
+        myIntent.putExtra("BOOK", item);
 
         getActivity().startActivity(myIntent);
     }

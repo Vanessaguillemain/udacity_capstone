@@ -58,15 +58,16 @@ public class BookDetailActivity extends AppCompatActivity {
 
             // int tabPosition = intent.getIntExtra(Utils.INTENT_KEY_TAB_POSITION, -1);
             if (Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF.equals(action)) {
-                String title = intent.getStringExtra("TITLE");
-                fillLayoutFields(title);
+                //TODO test if null
+                BookEntity book = intent.getParcelableExtra("BOOK");
+                fillLayoutFields(book);
             }
         }
 
     }
 
-    private void fillLayoutFields(String item) {
-        mTvTitle.setText(item);
+    private void fillLayoutFields(BookEntity item) {
+        mTvTitle.setText(item.getTitle());
     }
 
     /**

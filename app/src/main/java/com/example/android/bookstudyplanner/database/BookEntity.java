@@ -2,12 +2,14 @@ package com.example.android.bookstudyplanner.database;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by vanessa on 10/07/2019.
  */
 @Entity (tableName = "book")
-public class BookEntity {
+public class BookEntity implements Parcelable   {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int isbn;
@@ -20,6 +22,40 @@ public class BookEntity {
         this.pageCount = pageCount;
     }
 
+    //Parcelable Part
+    public BookEntity(Parcel parcel) {
+        this.id = parcel.readInt();
+        this.isbn = parcel.readInt();
+        this.title = parcel.readString();
+        this.pageCount = parcel.readInt();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(isbn);
+        dest.writeString(title);
+        dest.writeInt(pageCount);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator<BookEntity>() {
+        @Override
+        public BookEntity createFromParcel(Parcel parcel) {
+            return new BookEntity(parcel);
+        }
+
+        @Override
+        public BookEntity[] newArray(int i) {
+            return new BookEntity[i];
+        }
+    };
+
+    //Getter and setter Part
     public int getId() {
         return id;
     }

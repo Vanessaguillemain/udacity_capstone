@@ -18,14 +18,14 @@ import java.util.List;
 
 public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecyclerViewAdapter.BooksViewHolder> {
 
-    private List<String> mData;
+    private List<BookEntity> mDataBookEntities;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    BooksRecyclerViewAdapter(Context context, List<String> data) {
+    BooksRecyclerViewAdapter(Context context, List<BookEntity> dataBookEntities) {
         this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
+        this.mDataBookEntities = dataBookEntities;
     }
 
     // inflates the row layout from xml when needed
@@ -38,26 +38,26 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(BooksViewHolder holder, int position) {
-        String animal = mData.get(position);
-        holder.myTextView.setText(animal);
+        BookEntity book = mDataBookEntities.get(position);
+        holder.myTextView.setText(book.getTitle());
     }
 
     // total number of rows
     @Override
     public int getItemCount() {
-        if (mData == null) {
+        if (mDataBookEntities == null) {
             return 0;
         }
-        return mData.size();
+        return mDataBookEntities.size();
     }
 
     /**
      * When data changes, this method updates the list of taskEntries
      * and notifies the adapter to use the new values on it
      */
-    public void setBooks(List<String> books) {
+    public void setBooks(List<BookEntity> books) {
         //TODO see if useful
-        mData = books;
+        mDataBookEntities = books;
         notifyDataSetChanged();
     }
 
@@ -79,8 +79,8 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
     }
 
     // convenience method for getting data at click position
-    String getItem(int id) {
-        return mData.get(id);
+    BookEntity getItem(int id) {
+        return mDataBookEntities.get(id);
     }
 
     // allows clicks events to be caught
