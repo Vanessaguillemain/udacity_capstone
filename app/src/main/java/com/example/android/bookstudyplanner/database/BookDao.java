@@ -28,6 +28,9 @@ public interface BookDao {
     @Delete
     void deleteBook(BookEntity bookEntry);
 
+    @Query("DELETE FROM book WHERE id = :id")
+    void deleteBookById(int id);
+
     @Query("SELECT * FROM book WHERE id = :id")
     BookEntity loadBookById(int id);
 

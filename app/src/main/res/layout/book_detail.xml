@@ -65,4 +65,16 @@
         android:text="Submit"
         android:textColor="#fff" />
 
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorAccent"
+        android:elevation="4dp"
+        android:paddingLeft="70dp"
+        android:paddingRight="70dp"
+        android:text="Delete"
+        android:textColor="#fff" />
+
 </LinearLayout>

@@ -30,6 +30,7 @@ public class BookDetailActivity extends AppCompatActivity {
     private TextView mTvId;
     private TextView mTvPageCount;
     private Button mButtonSave;
+    private Button mButtonDelete;
 
     // Constant for default book id to be used when not in update mode
     private static final int DEFAULT_BOOK_ID = -1;
@@ -62,6 +63,7 @@ public class BookDetailActivity extends AppCompatActivity {
             if (Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF.equals(action)) {
                 //TODO test if null
                 BookEntity book = intent.getParcelableExtra("BOOK");
+                mBookId = book.getId();
                 fillLayoutFields(book);
             }
         }
@@ -82,10 +84,17 @@ public class BookDetailActivity extends AppCompatActivity {
         mTvId = findViewById(R.id.tvId);
         mTvPageCount = findViewById(R.id.tvPageCount);
         mButtonSave = findViewById(R.id.buttonSave);
+        mButtonDelete = findViewById(R.id.buttonDelete);
         mButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onSaveButtonClicked();
+            }
+        });
+        mButtonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onDeleteButtonClicked();
             }
         });
     }
@@ -120,6 +129,18 @@ public class BookDetailActivity extends AppCompatActivity {
                     book.setId(mBookId);
                     mDb.bookDao().updateBook(book);
                 }
+                finish();
+            }
+        });
+    }
+
+    public void onDeleteButtonClicked() {
+        final int id = Integer.parseInt(mTvId.getText().toString());
+
+        AppExecutor.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.bookDao().deleteBookById(id);
                 finish();
             }
         });

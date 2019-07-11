@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                             for(BookEntity book : books) {
                                 bookEntities.add(book);
                             }
+                            //TODO add refresh of the list?
                         } else {
                             Toast.makeText(MainActivity.this, "nothing in db", Toast.LENGTH_LONG).show();
                         }
