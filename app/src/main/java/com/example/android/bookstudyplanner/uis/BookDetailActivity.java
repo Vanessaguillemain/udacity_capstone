@@ -103,24 +103,31 @@ public class BookDetailActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(BUNDLE_KEY_TEXT_TITLE, mTvTitle.getText().toString());
-        //outState.putString(TEXT_VIEW_KEY, textView.getText());
         super.onSaveInstanceState(outState);
     }
 
 
     public void onSaveButtonClicked() {
+
+        //Title validation
         String title = mTvTitle.getText().toString();
+        if( title.length() == 0 ) {
+            mTvTitle.setError("Title is required!");
+            return;
+        }
+
+        //PageCount Validation
         int pageCount;
-
-        //int id = Integer.parseInt(mTvId.getText().toString());
-
-        if( mTvPageCount.getText().toString().length() == 0 ) {
-               mTvPageCount.setError("Page count is required!");
+        String pageCountStr = mTvPageCount.getText().toString();
+        if( pageCountStr.length() == 0 ) {
+            mTvPageCount.setError("Page count is required!");
+            return;
+        } else if(Integer.parseInt(pageCountStr) <= 0) {
+            mTvPageCount.setError("Page count must be positive");
             return;
         } else {
             pageCount = Integer.parseInt(mTvPageCount.getText().toString());
         }
-
 
         final BookEntity book = new BookEntity(ISBN_ABSENT_VALUE, title, pageCount);//TODO fill always pagecount
 
@@ -128,8 +135,7 @@ public class BookDetailActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // insert the book only if mBookId matches DEFAULT_BOOK_ID
-                // Otherwise update it
-                // call finish in any case
+                // Otherwise update it. Call finish in any case
                 if (mBookId == DEFAULT_BOOK_ID) {
                     // insert new book
                     mDb.bookDao().insertBook(book);
@@ -143,6 +149,9 @@ public class BookDetailActivity extends AppCompatActivity {
         });
     }
 
+    private void validateInputs() {
+
+    }
     public void onDeleteButtonClicked() {
         final int id = Integer.parseInt(mTvId.getText().toString());
 
