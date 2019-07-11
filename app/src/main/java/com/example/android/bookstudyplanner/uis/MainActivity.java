@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     // Member variable for the Database
     private AppDatabase mDb;
     private ArrayList<BookEntity> bookEntities = new ArrayList<>();
+    private TabBooksFragment tabBooksFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         mDb = AppDatabase.getInstance(getApplicationContext());
         retrieveBooks();
 
-        TabBooksFragment tabBooksFragment = new TabBooksFragment();
+        tabBooksFragment = new TabBooksFragment();
         tabBooksFragment.setBookEntities(bookEntities);
 
         adapter.addFragment(tabBooksFragment, getString(R.string.tab_books_title));
@@ -133,11 +134,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if(books != null) {
+                            tabBooksFragment.setBooksToAdapter(books);
+
                             bookEntities.clear();
-                            for(BookEntity book : books) {
-                                bookEntities.add(book);
-                            }
-                            //TODO add refresh of the list?
+                            bookEntities.addAll(books);
+
                         } else {
                             Toast.makeText(MainActivity.this, "nothing in db", Toast.LENGTH_LONG).show();
                         }

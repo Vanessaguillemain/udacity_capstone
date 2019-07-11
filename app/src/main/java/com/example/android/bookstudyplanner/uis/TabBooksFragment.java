@@ -15,6 +15,7 @@ import com.example.android.bookstudyplanner.Utils;
 import com.example.android.bookstudyplanner.database.BookEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by vanessa on 08/07/2019.
@@ -27,6 +28,15 @@ public class TabBooksFragment extends Fragment implements BooksRecyclerViewAdapt
 
     public void setBookEntities(ArrayList<BookEntity> bookEntities) {
         this.bookEntities = bookEntities;
+    }
+
+    public void setBooksToAdapter(List<BookEntity> books) {
+        //TODO remove after when LiveData ?
+        if (booksRecyclerViewAdapter != null) {
+            booksRecyclerViewAdapter.setBooks(books);
+        } else {
+            bookEntities.addAll(books);
+        }
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.android.bookstudyplanner.R;
@@ -109,9 +110,17 @@ public class BookDetailActivity extends AppCompatActivity {
 
     public void onSaveButtonClicked() {
         String title = mTvTitle.getText().toString();
-        int id = Integer.parseInt(mTvId.getText().toString());
-        int pageCount = Integer.parseInt(mTvPageCount.getText().toString());
-        Date date = new Date();
+        int pageCount;
+
+        //int id = Integer.parseInt(mTvId.getText().toString());
+
+        if( mTvPageCount.getText().toString().length() == 0 ) {
+               mTvPageCount.setError("Page count is required!");
+            return;
+        } else {
+            pageCount = Integer.parseInt(mTvPageCount.getText().toString());
+        }
+
 
         final BookEntity book = new BookEntity(ISBN_ABSENT_VALUE, title, pageCount);//TODO fill always pagecount
 
