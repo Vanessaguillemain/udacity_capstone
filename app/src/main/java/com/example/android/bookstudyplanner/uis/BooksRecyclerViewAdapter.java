@@ -39,7 +39,9 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
     @Override
     public void onBindViewHolder(BooksViewHolder holder, int position) {
         BookEntity book = mDataBookEntities.get(position);
-        holder.myTextView.setText(book.getTitle());
+        holder.tvBookTitle.setText(book.getTitle());
+        holder.tvBookId.setText(String.valueOf(book.getId()));
+        holder.tvBookPageCount.setText(String.valueOf(book.getPageCount()));
     }
 
     // total number of rows
@@ -64,11 +66,15 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 
     // stores and recycles views as they are scrolled off screen
     public class BooksViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView myTextView;
+        TextView tvBookTitle;
+        TextView tvBookId;
+        TextView tvBookPageCount;
 
         BooksViewHolder(View itemView) {
             super(itemView);
-            myTextView = itemView.findViewById(R.id.tvBookTitle);
+            tvBookTitle = itemView.findViewById(R.id.tvBookTitle_books);
+            tvBookId = itemView.findViewById(R.id.tvBookId_books);
+            tvBookPageCount = itemView.findViewById(R.id.tvBookPageCount_books);
             itemView.setOnClickListener(this);
         }
 

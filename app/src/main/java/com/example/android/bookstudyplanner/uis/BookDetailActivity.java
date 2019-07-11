@@ -27,6 +27,8 @@ public class BookDetailActivity extends AppCompatActivity {
 
     private final String BUNDLE_KEY_TEXT_TITLE = "BUNDLE_KEY_TEXT_TITLE";
     private TextView mTvTitle;
+    private TextView mTvId;
+    private TextView mTvPageCount;
     private Button mButtonSave;
 
     // Constant for default book id to be used when not in update mode
@@ -68,6 +70,8 @@ public class BookDetailActivity extends AppCompatActivity {
 
     private void fillLayoutFields(BookEntity item) {
         mTvTitle.setText(item.getTitle());
+        mTvId.setText(String.valueOf(item.getId()));
+        mTvPageCount.setText(String.valueOf(item.getPageCount()));
     }
 
     /**
@@ -75,6 +79,8 @@ public class BookDetailActivity extends AppCompatActivity {
      */
     private void initViews() {
         mTvTitle = findViewById(R.id.tvTitle);
+        mTvId = findViewById(R.id.tvId);
+        mTvPageCount = findViewById(R.id.tvPageCount);
         mButtonSave = findViewById(R.id.buttonSave);
         mButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,9 +100,11 @@ public class BookDetailActivity extends AppCompatActivity {
 
     public void onSaveButtonClicked() {
         String title = mTvTitle.getText().toString();
+        int id = Integer.parseInt(mTvId.getText().toString());
+        int pageCount = Integer.parseInt(mTvPageCount.getText().toString());
         Date date = new Date();
 
-        final BookEntity book = new BookEntity(ISBN_ABSENT_VALUE, title, ISBN_ABSENT_VALUE);//TODO fill always pagecount
+        final BookEntity book = new BookEntity(ISBN_ABSENT_VALUE, title, pageCount);//TODO fill always pagecount
 
         AppExecutor.getInstance().diskIO().execute(new Runnable() {
             @Override
