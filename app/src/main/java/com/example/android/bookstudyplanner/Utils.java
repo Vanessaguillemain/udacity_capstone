@@ -25,4 +25,12 @@ public class Utils {
         Toast.makeText(c, msg, Toast.LENGTH_SHORT).show();
     }
 
+    public static String getTime(int totalSecs, String sHours, String sMinutes) {
+        int hours = totalSecs / 3600;
+        int minutes = (totalSecs % 3600) / 60;
+        //int seconds = totalSecs % 60;
+        String result = String.valueOf(hours) + sHours + minutes + sMinutes;
+        return result;
+    }
+
 }

@@ -3,9 +3,12 @@ package com.example.android.bookstudyplanner.uis;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,17 +28,23 @@ import static com.example.android.bookstudyplanner.database.DatabaseUtils.ISBN_A
  * Created by vanessa on 09/07/2019.
  */
 
-public class BookDetailActivity extends AppCompatActivity {
+public class BookDetailActivity extends AppCompatActivity implements TextWatcher{
 
     // Constant for logging
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private final String BUNDLE_KEY_TEXT_TITLE = "BUNDLE_KEY_TEXT_TITLE";
     private TextView mTvTitle;
-    private TextView mTvId;
-    private TextView mTvPageCount;
+    private TextView mValuePageCount;
+    private TextView mTvFromPage;
+    private TextView mTvToPage;
+    private TextView mValueNbPagesToRead;
+    private TextView mLabelNbPagesToRead;
+    private TextView mValueTimeEstimated;
     private Button mButtonSave;
     private Button mButtonDelete;
+
+    private int mCalculatedPageCount;
 
     // Constant for default book id to be used when not in update mode
     private static final int DEFAULT_BOOK_ID = -1;
@@ -88,8 +97,8 @@ public class BookDetailActivity extends AppCompatActivity {
 
     private void fillLayoutFields(BookEntity item) {
         mTvTitle.setText(item.getTitle());
-        mTvId.setText(String.valueOf(item.getId()));
-        mTvPageCount.setText(String.valueOf(item.getPageCount()));
+        //mTvId.setText(String.valueOf(item.getId()));
+        mValuePageCount.setText(String.valueOf(item.getPageCount()));
     }
 
     /**
@@ -97,8 +106,14 @@ public class BookDetailActivity extends AppCompatActivity {
      */
     private void initViews() {
         mTvTitle = findViewById(R.id.tvTitle);
-        mTvId = findViewById(R.id.tvId);
-        mTvPageCount = findViewById(R.id.tvPageCount);
+
+        mTvFromPage = findViewById(R.id.tvFromPage);
+        mTvToPage = findViewById(R.id.tvToPage);
+        mValueNbPagesToRead = findViewById(R.id.valueNbPagesToRead);
+        mLabelNbPagesToRead = findViewById(R.id.labelNbPagesToRead);
+        mValueTimeEstimated = findViewById(R.id.valueTimeEstimated);
+
+        mValuePageCount = findViewById(R.id.valuePageCount);
         mButtonSave = findViewById(R.id.buttonSave);
         mButtonDelete = findViewById(R.id.buttonDelete);
         mButtonSave.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +128,10 @@ public class BookDetailActivity extends AppCompatActivity {
                 onDeleteButtonClicked();
             }
         });
+
+        mTvFromPage.addTextChangedListener(this);
+        mTvToPage.addTextChangedListener(this);
+
     }
 
     @Override
@@ -123,7 +142,6 @@ public class BookDetailActivity extends AppCompatActivity {
 
 
     public void onSaveButtonClicked() {
-
         //Title validation
         String title = mTvTitle.getText().toString();
         if( title.length() == 0 ) {
@@ -131,17 +149,52 @@ public class BookDetailActivity extends AppCompatActivity {
             return;
         }
 
-        //PageCount Validation
-        int pageCount;
-        String pageCountStr = mTvPageCount.getText().toString();
+        //PageCount validation
+        int pageCount ;
+        int intFromPage;
+        int intToPage;
+
+        String pageCountStr = mValuePageCount.getText().toString();
         if( pageCountStr.length() == 0 ) {
-            mTvPageCount.setError("Page count is required!");
+            mValuePageCount.setError("Page count is required!");
             return;
         } else if(Integer.parseInt(pageCountStr) <= 0) {
-            mTvPageCount.setError("Page count must be positive");
+            mValuePageCount.setError("Page count must be positive");
             return;
         } else {
-            pageCount = Integer.parseInt(mTvPageCount.getText().toString());
+            pageCount = Integer.parseInt(mValuePageCount.getText().toString());
+        }
+
+        //From Page validation
+        String fromPage = mTvFromPage.getText().toString();
+        if( fromPage.length() == 0 ) {
+            mTvFromPage.setError("fromPage is required!");
+            return;
+        } else {
+            intFromPage = Integer.parseInt(fromPage);
+            if(intFromPage > pageCount) {
+                mTvFromPage.setError("fromPage greater than total pages!");
+                return;
+            }
+        }
+
+        //To Page validation
+        String toPage = mTvToPage.getText().toString();
+        if( toPage.length() == 0 ) {
+            mTvToPage.setError("toPage is required!");
+            return;
+        } else {
+            intToPage = Integer.parseInt(toPage);
+            if(intToPage > pageCount) {
+                mTvToPage.setError("intToPage greater than total pages!");
+                return;
+            }
+        }
+
+        if(intToPage - intFromPage <= 0) {
+            mTvFromPage.setError("Pages to read must be > 0!");
+            mTvToPage.setError("Pages to read must be > 0!");
+            return;
         }
 
         //Book Entity
@@ -169,15 +222,66 @@ public class BookDetailActivity extends AppCompatActivity {
 
     }
     public void onDeleteButtonClicked() {
-        final int id = Integer.parseInt(mTvId.getText().toString());
 
         AppExecutor.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mDb.bookDao().deleteBookById(id);
+                mDb.bookDao().deleteBookById(mBookId);
                 finish();
             }
         });
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        String fromPage = mTvFromPage.getText().toString();
+        String toPage = mTvToPage.getText().toString();
+        String pageCountStr = mValuePageCount.getText().toString();
+        int pageCount;
+        int from;
+        int to;
+
+        if(fromPage.length() > 0 && toPage.length() > 0 && pageCountStr.length() > 0) {
+            pageCount = Integer.parseInt(pageCountStr);
+            from = Integer.parseInt(fromPage);
+            to = Integer.parseInt(toPage);
+            if (from > pageCount) {
+                mTvFromPage.setError("fromPage greater than total pages!");
+                return;
+            }
+            if (to > pageCount) {
+                mTvToPage.setError("toPage greater than total pages!");
+                return;
+            }
+            if (to - from +1 <=0) {
+                mTvFromPage.setError("pages to read must be positive!");
+                mTvToPage.setError("pages to read must be positive!");
+                return;
+            }
+            int nbPagesToRead = to-from+1;
+            mValueNbPagesToRead.setText(String.valueOf(nbPagesToRead));
+            Resources res = getResources();
+            int avg_nb_sec_by_page = res.getInteger(R.integer.avg_nb_sec_by_page);
+            int total = avg_nb_sec_by_page*nbPagesToRead;
+            String time = Utils.getTime(total, getString(R.string.label_hour), getString(R.string.label_minute));
+
+            mValueTimeEstimated.setText(time);
+            mValueTimeEstimated.setVisibility(View.VISIBLE);
+            //mLabelMinutesEstimated.setVisibility(View.VISIBLE);
+            mValueNbPagesToRead.setVisibility(View.VISIBLE);
+            mLabelNbPagesToRead.setVisibility(View.VISIBLE);
+        } else {
+            mValueNbPagesToRead.setVisibility(View.INVISIBLE);
+            mLabelNbPagesToRead.setVisibility(View.INVISIBLE);
+        }
+
+    }
 }

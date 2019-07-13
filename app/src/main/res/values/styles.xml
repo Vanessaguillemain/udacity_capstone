@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="MyToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark">
@@ -16,6 +17,10 @@
     <style name="DetailButton" parent="ThemeOverlay.AppCompat">
         <item name="colorButtonNormal">@drawable/btn_detail</item>
         <item name="android:textColor">@color/text_color</item>
+    </style>
+
+    <style name="SubtitleText" parent="TextAppearance.AppCompat">
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>
