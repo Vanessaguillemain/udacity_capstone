@@ -17,6 +17,7 @@
     <color name="yellow">#FFFF00</color>
     <color name="pink">#FF00FF</color>
     <color name="black">#000000</color>
+    <color name="light_grey">#EEEEEE</color>
 
     <color name="orange_A200">#FF6E40</color>
     <color name="blue_gray_500">#607D8B</color>
