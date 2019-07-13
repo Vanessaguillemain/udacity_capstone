@@ -1,6 +1,5 @@
 package com.example.android.bookstudyplanner.uis;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -20,11 +19,13 @@ import com.example.android.bookstudyplanner.MainViewModel;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
 import com.example.android.bookstudyplanner.database.AppDatabase;
-import com.example.android.bookstudyplanner.database.AppExecutor;
 import com.example.android.bookstudyplanner.database.BookEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,13 +33,24 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private TabAdapter adapter;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private FloatingActionButton fabAdd;
-    private FloatingActionButton fabEdit;
-    private FloatingActionButton fabSearch;
-    private LinearLayout layoutFabEdit;
-    private LinearLayout layoutFabSearch;
+
+    @BindView(R.id.tabLayout)
+     TabLayout tabLayout;
+    @BindView(R.id.viewPager)
+     ViewPager viewPager;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.fabAdd)
+     FloatingActionButton fabAdd;
+    @BindView(R.id.fabEdit)
+     FloatingActionButton fabEdit;
+    @BindView(R.id.fabSearch)
+     FloatingActionButton fabSearch;
+    @BindView(R.id.layoutFabEdit)
+     LinearLayout layoutFabEdit;
+    @BindView(R.id.layoutFabSearch)
+     LinearLayout layoutFabSearch;
+
     private boolean fabExpanded = false;
     private static final String BUNDLE_KEY_FAB_EXPANDED = "BUNDLE_KEY_FAB_EXPANDED";
     private static final String BUNDLE_KEY_TAB_POSITION = "BUNDLE_KEY_TAB_POSITION";
@@ -53,8 +65,7 @@ public class MainActivity extends AppCompatActivity {
         
         setContentView(R.layout.activity_main);
 
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        ButterKnife.bind(this);
         adapter = new TabAdapter(getSupportFragmentManager());
 
         mDb = AppDatabase.getInstance(getApplicationContext());
@@ -78,15 +89,7 @@ public class MainActivity extends AppCompatActivity {
             tabLayout.getTabAt(tabPos).select();
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        fabAdd = (FloatingActionButton) this.findViewById(R.id.fabAdd);
-        fabEdit = (FloatingActionButton) this.findViewById(R.id.fabEdit);
-        fabSearch = (FloatingActionButton) this.findViewById(R.id.fabSearch);
-        layoutFabEdit = (LinearLayout) this.findViewById(R.id.layoutFabEdit);
-        layoutFabSearch = (LinearLayout) this.findViewById(R.id.layoutFabSearch);
-
         initListeners();
 
         hideFABMenu(!fabExpanded);

@@ -22,6 +22,9 @@ import com.example.android.bookstudyplanner.database.AppDatabase;
 import com.example.android.bookstudyplanner.database.AppExecutor;
 import com.example.android.bookstudyplanner.database.BookEntity;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.example.android.bookstudyplanner.database.DatabaseUtils.ISBN_ABSENT_VALUE;
 
 /**
@@ -34,15 +37,25 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private final String BUNDLE_KEY_TEXT_TITLE = "BUNDLE_KEY_TEXT_TITLE";
-    private TextView mTvTitle;
-    private TextView mValuePageCount;
-    private TextView mTvFromPage;
-    private TextView mTvToPage;
-    private TextView mValueNbPagesToRead;
-    private TextView mLabelNbPagesToRead;
-    private TextView mValueTimeEstimated;
-    private Button mButtonSave;
-    private Button mButtonDelete;
+
+    @BindView(R.id.tvTitle)
+     TextView mTvTitle;
+    @BindView(R.id.valuePageCount)
+     TextView mValuePageCount;
+    @BindView(R.id.tvFromPage)
+     TextView mTvFromPage;
+    @BindView(R.id.tvToPage)
+     TextView mTvToPage;
+    @BindView(R.id.valueNbPagesToRead)
+     TextView mValueNbPagesToRead;
+    @BindView(R.id.labelNbPagesToRead)
+     TextView mLabelNbPagesToRead;
+    @BindView(R.id.valueTimeEstimated)
+     TextView mValueTimeEstimated;
+    @BindView(R.id.buttonSave)
+     Button mButtonSave;
+    @BindView(R.id.buttonDelete)
+     Button mButtonDelete;
 
     private int mCalculatedPageCount;
 
@@ -105,17 +118,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
      * initViews is called from onCreate to init the member variable views
      */
     private void initViews() {
-        mTvTitle = findViewById(R.id.tvTitle);
 
-        mTvFromPage = findViewById(R.id.tvFromPage);
-        mTvToPage = findViewById(R.id.tvToPage);
-        mValueNbPagesToRead = findViewById(R.id.valueNbPagesToRead);
-        mLabelNbPagesToRead = findViewById(R.id.labelNbPagesToRead);
-        mValueTimeEstimated = findViewById(R.id.valueTimeEstimated);
-
-        mValuePageCount = findViewById(R.id.valuePageCount);
-        mButtonSave = findViewById(R.id.buttonSave);
-        mButtonDelete = findViewById(R.id.buttonDelete);
+        ButterKnife.bind(this);
         mButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
