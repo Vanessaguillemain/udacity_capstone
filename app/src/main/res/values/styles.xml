@@ -14,5 +14,10 @@
         <item name="titleTextColor">@color/white</item>
     </style>
 
+    <style name="DetailButton" parent="ThemeOverlay.AppCompat">
+        <item name="colorButtonNormal">@drawable/btn_detail</item>
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+
 </resources>
 

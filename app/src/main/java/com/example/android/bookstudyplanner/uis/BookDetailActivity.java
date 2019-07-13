@@ -80,6 +80,8 @@ public class BookDetailActivity extends AppCompatActivity {
                     }
                 });
 
+            } else {
+                mButtonDelete.setEnabled(false);
             }
         }
     }
