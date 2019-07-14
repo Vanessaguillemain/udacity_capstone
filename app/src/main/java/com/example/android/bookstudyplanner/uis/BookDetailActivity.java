@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,6 +22,8 @@ import com.example.android.bookstudyplanner.database.AddBookViewModelFactory;
 import com.example.android.bookstudyplanner.database.AppDatabase;
 import com.example.android.bookstudyplanner.database.AppExecutor;
 import com.example.android.bookstudyplanner.database.BookEntity;
+
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,6 +59,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
      Button mButtonSave;
     @BindView(R.id.buttonDelete)
      Button mButtonDelete;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
 
     private int mCalculatedPageCount;
 
@@ -103,15 +108,29 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 });
 
             } else {
-                mButtonDelete.setEnabled(false);
+                mButtonDelete.setVisibility(View.GONE);
+                mToolbar.setTitle("CREATE");
+                mButtonSave.setEnabled(false);
             }
         }
     }
 
     private void fillLayoutFields(BookEntity item) {
         mTvTitle.setText(item.getTitle());
-        //mTvId.setText(String.valueOf(item.getId()));
         mValuePageCount.setText(String.valueOf(item.getPageCount()));
+        if(item.getNbPagesToRead() != null) {
+            mValueNbPagesToRead.setText(String.valueOf(item.getNbPagesToRead()));
+        }
+        if(item.getFromPageNb() == null) {
+            mTvFromPage.setText("0");
+        } else {
+            mTvFromPage.setText(String.valueOf(item.getFromPageNb()));
+        }
+        if(item.getToPageNb() == null) {
+            mTvToPage.setText("0");
+        } else {
+            mTvToPage.setText(String.valueOf(item.getToPageNb()));
+        }
     }
 
     /**
@@ -133,9 +152,10 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             }
         });
 
+        mTvTitle.addTextChangedListener(this);
         mTvFromPage.addTextChangedListener(this);
         mTvToPage.addTextChangedListener(this);
-
+        mValuePageCount.addTextChangedListener(this);
     }
 
     @Override
@@ -195,16 +215,28 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             }
         }
 
+        //From and To Page validation
         if(intToPage - intFromPage <= 0) {
             mTvFromPage.setError("Pages to read must be > 0!");
             mTvToPage.setError("Pages to read must be > 0!");
             return;
         }
 
-        //Book Entity
-        final BookEntity book = new BookEntity(ISBN_ABSENT_VALUE, title, pageCount);//TODO fill always pagecount
+        Integer fromPageNb = Integer.parseInt(fromPage);
+        Integer toPageNb = Integer.parseInt(toPage);
+        Integer nbPagesToRead = toPageNb - fromPageNb +1;
+        Date beginDate = null;
+        Date endDate = null;
+        String weekPlanning = null;
+        Integer nbPagesRead = null;
+        Integer readTimeInSeconds = null;
+        Integer nbSecondsByPage = null;
 
-        AppExecutor.getInstance().diskIO().execute(new Runnable() {
+        //Book Entity
+        final BookEntity book = new BookEntity(ISBN_ABSENT_VALUE,  title,  pageCount,  fromPageNb,  toPageNb, nbPagesToRead,
+                beginDate, endDate, weekPlanning, nbPagesRead, readTimeInSeconds, nbSecondsByPage);
+
+            AppExecutor.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 // insert the book only if mBookId matches DEFAULT_BOOK_ID
@@ -253,23 +285,47 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         int from;
         int to;
 
+        String title = mTvTitle.getText().toString();
+        if( title.length() == 0 ) {
+            mTvTitle.setError("Title is required!");
+            mButtonSave.setEnabled(false);
+            return;
+        }
+
         if(fromPage.length() > 0 && toPage.length() > 0 && pageCountStr.length() > 0) {
             pageCount = Integer.parseInt(pageCountStr);
             from = Integer.parseInt(fromPage);
             to = Integer.parseInt(toPage);
             if (from > pageCount) {
                 mTvFromPage.setError("fromPage greater than total pages!");
+                mButtonSave.setEnabled(false);
+                return;
+            }
+            if (from == 0) {
+                mTvFromPage.setError("fromPage must be greater than 0 !");
+                mButtonSave.setEnabled(false);
                 return;
             }
             if (to > pageCount) {
                 mTvToPage.setError("toPage greater than total pages!");
+                mButtonSave.setEnabled(false);
+                return;
+            }
+            if (to == 0) {
+                mTvToPage.setError("toPage must be greater than 0 !");
+                mButtonSave.setEnabled(false);
                 return;
             }
             if (to - from +1 <=0) {
                 mTvFromPage.setError("pages to read must be positive!");
                 mTvToPage.setError("pages to read must be positive!");
+                mButtonSave.setEnabled(false);
                 return;
+            } else {
+                mTvFromPage.setError(null);
+                mTvToPage.setError(null);
             }
+            mButtonSave.setEnabled(true);
             int nbPagesToRead = to-from+1;
             mValueNbPagesToRead.setText(String.valueOf(nbPagesToRead));
             Resources res = getResources();
@@ -279,7 +335,6 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
             mValueTimeEstimated.setText(time);
             mValueTimeEstimated.setVisibility(View.VISIBLE);
-            //mLabelMinutesEstimated.setVisibility(View.VISIBLE);
             mValueNbPagesToRead.setVisibility(View.VISIBLE);
             mLabelNbPagesToRead.setVisibility(View.VISIBLE);
         } else {

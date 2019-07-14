@@ -4,8 +4,8 @@
     <string name="tab_today_title">Today</string>
     <string name="tab_planning_title">Planning</string>
 
-    <string name="label_hour"> h </string>
-    <string name="label_minute"> m </string>
+    <string name="label_hour">h</string>
+    <string name="label_minute">m</string>
 
 
     <string name="lorem_ipsum_20">Ut enim bene Cato in perfecto et spectato viro.</string>

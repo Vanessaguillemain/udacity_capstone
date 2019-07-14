@@ -31,7 +31,7 @@ public class BookEntity implements Parcelable   {
     @Ignore
     private float percentRead;
 
-    @Ignore
+
     public BookEntity(int id, int isbn, String title, int pageCount, Integer fromPageNb, Integer toPageNb, Integer nbPagesToRead, Date beginDate, Date endDate, String weekPlanning, Integer nbPagesRead, Integer readTimeInSeconds, Integer nbSecondsByPage) {
         this.id = id;
         this.isbn = isbn;
@@ -47,7 +47,7 @@ public class BookEntity implements Parcelable   {
         this.readTimeInSeconds = readTimeInSeconds;
         this.nbSecondsByPage = nbSecondsByPage;
     }
-
+    @Ignore
     public BookEntity(int isbn, String title, int pageCount, Integer fromPageNb, Integer toPageNb, Integer nbPagesToRead, Date beginDate, Date endDate, String weekPlanning, Integer nbPagesRead, Integer readTimeInSeconds, Integer nbSecondsByPage) {
         this.isbn = isbn;
         this.title = title;

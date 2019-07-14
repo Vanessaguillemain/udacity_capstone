@@ -28,8 +28,11 @@ public class Utils {
     public static String getTime(int totalSecs, String sHours, String sMinutes) {
         int hours = totalSecs / 3600;
         int minutes = (totalSecs % 3600) / 60;
-        //int seconds = totalSecs % 60;
-        String result = String.valueOf(hours) + sHours + minutes + sMinutes;
+        String sMin = String.valueOf(minutes);
+        if(minutes <10) {
+            sMin = "0" + minutes;
+        }
+        String result = String.valueOf(hours) + " " + sHours+ " " + sMin + " " + sMinutes;
         return result;
     }
 
