@@ -224,7 +224,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         mTvFromPage.addTextChangedListener(this);
         mTvToPage.addTextChangedListener(this);
         mValuePageCount.addTextChangedListener(this);
-        
+
         mDateFromSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -310,75 +310,6 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-    }
-
-    private boolean datesValidation(String origin, DatePicker view, int year, int month, int dayOfMonth) {
-        Date chosenDate = Utils.getDateFromDatePicker(view);
-        String formatedDate = Utils.getFormatedDateFromDatePicker(view, BookDetailActivity.this);
-
-        if(origin.equals("BEGIN")) {
-            mBeginDate = chosenDate;
-            mLabelSelectFromDate.setText(formatedDate);
-            if(dateIsBeforeToday(chosenDate)) {
-                mLabelSelectFromDate.setError("");
-                mLabelErrorFromDate.setVisibility(View.VISIBLE);
-                mLabelErrorFromDate.setText("date before today!");
-                mLabelErrorToDate.setVisibility(View.INVISIBLE);
-                mLabelSelectToDate.setError(null);
-                mButtonSave.setEnabled(false);
-                return false;
-            } else {
-                if(!Utils.dateOneIsBeforeDateTwo(chosenDate, mEndDate)) {
-                    mLabelSelectFromDate.setError("");
-                    mLabelErrorFromDate.setVisibility(View.VISIBLE);
-                    mLabelErrorFromDate.setText("From is after To");
-                    mButtonSave.setEnabled(false);
-                    return false;
-                } else {
-                    mLabelSelectFromDate.setError(null);
-                    yearFrom = year;
-                    monthFrom = month + 1;
-                    dayOfMonthFrom = dayOfMonth;
-                    //mLabelSelectFromDate.setText(formatedDate);
-                    mLabelErrorFromDate.setVisibility(View.INVISIBLE);
-                    mButtonSave.setEnabled(true);
-                }
-            }
-        } else {
-            mEndDate = chosenDate;
-            mLabelSelectToDate.setText(formatedDate);
-            if(dateIsBeforeToday(chosenDate)) {
-                mLabelSelectToDate.setError("");
-                mLabelErrorToDate.setVisibility(View.VISIBLE);
-                mLabelErrorToDate.setText("date before today!");
-                mLabelErrorFromDate.setVisibility(View.INVISIBLE);
-                mLabelSelectFromDate.setError(null);
-                mButtonSave.setEnabled(false);
-                return false;
-            }else {
-                if(!Utils.dateOneIsBeforeDateTwo(mBeginDate, chosenDate)) {
-                    mLabelSelectToDate.setError("");
-                    mLabelErrorToDate.setVisibility(View.VISIBLE);
-                    mLabelErrorToDate.setText("To before from");
-                    mButtonSave.setEnabled(false);
-                    return false;
-                } else {
-                    if(!dateIsBeforeToday(mBeginDate)) {
-                        mLabelErrorFromDate.setVisibility(View.INVISIBLE);
-                        mLabelSelectFromDate.setError(null);
-                    }
-                    mLabelSelectToDate.setError(null);
-                    yearTo = year;
-                    monthTo = month + 1;
-                    dayOfMonthTo = dayOfMonth;
-                    //mLabelSelectToDate.setText(formatedDate);
-                    mLabelErrorToDate.setVisibility(View.INVISIBLE);
-                    mButtonSave.setEnabled(true);
-                }
-            }
-        }
-
-        return true;
     }
 
     @Override
