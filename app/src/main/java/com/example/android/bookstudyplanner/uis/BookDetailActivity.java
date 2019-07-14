@@ -105,7 +105,15 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             String sEnd = savedInstanceState.getString(BUNDLE_KEY_TEXT_TO_DATE);
             //Save locally the dates to avoid them to be wipe off by data base values
             mBeginDate = Utils.getDateFromFormatedDate(sBegin, BookDetailActivity.this);
+            yearFrom = Utils.getYearFromDate(mBeginDate);
+            monthFrom = Utils.getMonthFromDate(mBeginDate);
+            dayOfMonthFrom = Utils.getDayFromDate(mBeginDate);
+
             mEndDate = Utils.getDateFromFormatedDate(sEnd, BookDetailActivity.this);
+            yearTo = Utils.getYearFromDate(mEndDate);
+            monthTo = Utils.getMonthFromDate(mEndDate);
+            dayOfMonthTo = Utils.getDayFromDate(mEndDate);
+
             mLabelSelectFromDate.setText(sBegin);
             mLabelSelectToDate.setText(sEnd);
         }
@@ -161,6 +169,9 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             if (mBeginDate != null) {
                 String sBegin = Utils.getFormatedDateFromDate(mBeginDate, BookDetailActivity.this);
                 mLabelSelectFromDate.setText(sBegin);
+                yearFrom = Utils.getYearFromDate(mBeginDate);
+                monthFrom = Utils.getMonthFromDate(mBeginDate);
+                dayOfMonthFrom = Utils.getDayFromDate(mBeginDate);
             }
         }
         //If mEndDate is not null, it has been initialized in savednstanceSTate
@@ -169,6 +180,9 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             if (mEndDate != null) {
                 String sEnd = Utils.getFormatedDateFromDate(mEndDate, BookDetailActivity.this);
                 mLabelSelectToDate.setText(sEnd);
+                yearTo = Utils.getYearFromDate(mEndDate);
+                monthTo = Utils.getMonthFromDate(mEndDate);
+                dayOfMonthTo = Utils.getDayFromDate(mEndDate);
             }
         }
     }
@@ -232,7 +246,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 String formatedDate = Utils.getFormatedDateFromDatePicker(view, BookDetailActivity.this);
                 mLabelSelectFromDate.setText(formatedDate);
                 yearFrom = year;
-                monthFrom = month + 1;
+                monthFrom = month;
                 dayOfMonthFrom = dayOfMonth;
                 if(dateIsBeforeToday(chosenDate)) {
                     mLabelSelectFromDate.setError("");
@@ -268,7 +282,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 String formatedDate = Utils.getFormatedDateFromDatePicker(view, BookDetailActivity.this);
                 mLabelSelectToDate.setText(formatedDate);
                 yearTo = year;
-                monthTo = month + 1;
+                monthTo = month;
                 dayOfMonthTo = dayOfMonth;
 
                 if(dateIsBeforeToday(chosenDate)) {
@@ -373,11 +387,13 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
     public void onDateFromButtonClicked() {
         int y = (yearFrom != 0) ? yearFrom:year;
-        int m = (monthFrom != 0) ? monthFrom-1:month;
+        int m = (monthFrom != 0) ? monthFrom:month;
         int d = (dayOfMonthFrom != 0) ? dayOfMonthFrom:dayOfMonth;
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(BookDetailActivity.this, android.R.style.Theme_Black,
                 mDateFromSetListener, y, m, d);
+        datePickerDialog.getDatePicker().setSpinnersShown(true);
+        datePickerDialog.getDatePicker().setCalendarViewShown(false);
 
         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         datePickerDialog.show();
@@ -385,11 +401,13 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
     public void onDateToButtonClicked() {
         int y = (yearTo != 0) ? yearTo:year;
-        int m = (monthTo != 0) ? monthTo-1:month;
+        int m = (monthTo != 0) ? monthTo:month;
         int d = (dayOfMonthTo != 0) ? dayOfMonthTo:dayOfMonth;
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(BookDetailActivity.this, android.R.style.Theme_Black,
                 mDateToSetListener, y, m, d);
+        datePickerDialog.getDatePicker().setSpinnersShown(true);
+        datePickerDialog.getDatePicker().setCalendarViewShown(false);
 
         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         datePickerDialog.show();
