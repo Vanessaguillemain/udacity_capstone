@@ -390,10 +390,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         int m = (monthFrom != 0) ? monthFrom:month;
         int d = (dayOfMonthFrom != 0) ? dayOfMonthFrom:dayOfMonth;
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(BookDetailActivity.this, android.R.style.Theme_Black,
+        DatePickerDialog datePickerDialog = new DatePickerDialog(BookDetailActivity.this, android.R.style.Theme_Holo_Dialog,
                 mDateFromSetListener, y, m, d);
-        datePickerDialog.getDatePicker().setSpinnersShown(true);
-        datePickerDialog.getDatePicker().setCalendarViewShown(false);
 
         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         datePickerDialog.show();
@@ -404,10 +402,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         int m = (monthTo != 0) ? monthTo:month;
         int d = (dayOfMonthTo != 0) ? dayOfMonthTo:dayOfMonth;
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(BookDetailActivity.this, android.R.style.Theme_Black,
+        DatePickerDialog datePickerDialog = new DatePickerDialog(BookDetailActivity.this, android.R.style.Theme_Holo_Dialog,
                 mDateToSetListener, y, m, d);
-        datePickerDialog.getDatePicker().setSpinnersShown(true);
-        datePickerDialog.getDatePicker().setCalendarViewShown(false);
 
         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         datePickerDialog.show();
