@@ -1,9 +1,12 @@
 package com.example.android.bookstudyplanner.uis;
 
+import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +16,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.example.android.bookstudyplanner.AddBookViewModel;
@@ -23,11 +27,13 @@ import com.example.android.bookstudyplanner.database.AppDatabase;
 import com.example.android.bookstudyplanner.database.AppExecutor;
 import com.example.android.bookstudyplanner.database.BookEntity;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.android.bookstudyplanner.Utils.dateIsBeforeToday;
 import static com.example.android.bookstudyplanner.database.DatabaseUtils.ISBN_ABSENT_VALUE;
 
 /**
@@ -59,10 +65,26 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
      Button mButtonSave;
     @BindView(R.id.buttonDelete)
      Button mButtonDelete;
+    @BindView(R.id.labelSelectFromDate)
+    TextView mLabelSelectFromDate;
+    @BindView(R.id.btnCalendarFrom)
+    Button mButtonCalendarFrom;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
     private int mCalculatedPageCount;
+    private DatePickerDialog datePickerDialog;
+    private int year;
+    private int month;
+    private int dayOfMonth;
+    private int yearFrom;
+    private int monthFrom;
+    private int dayOfMonthFrom;
+    private int yearTo;
+    private int monthTo;
+    private int dayOfMonthTo;
+    private Calendar calendar;
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     // Constant for default book id to be used when not in update mode
     private static final int DEFAULT_BOOK_ID = -1;
@@ -151,11 +173,59 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 onDeleteButtonClicked();
             }
         });
+        mButtonCalendarFrom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onDateFromButtonClicked();
+            }
+        });
 
-        mTvTitle.addTextChangedListener(this);
+        mTvTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if( s.length() == 0 ) {
+                    mTvTitle.setError("Title is required!");
+                    mButtonSave.setEnabled(false);
+                    return;
+                }
+            }
+        });
+
         mTvFromPage.addTextChangedListener(this);
         mTvToPage.addTextChangedListener(this);
         mValuePageCount.addTextChangedListener(this);
+
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                Date chosenDate = Utils.getDateFromDatePicker(view);
+                String formatedDate = Utils.getFormatedDateFromDatePicker(view, BookDetailActivity.this);
+                if(dateIsBeforeToday(chosenDate)) {
+                    mLabelSelectFromDate.setText("date before today!");
+                    mLabelSelectFromDate.setError("date before today!");
+                    mButtonSave.setEnabled(false);
+                    return;
+                } else {
+                    mLabelSelectFromDate.setError(null);
+                    yearFrom = year;
+                    monthFrom = month + 1;
+                    dayOfMonthFrom = dayOfMonth;
+                    mLabelSelectFromDate.setText(formatedDate);
+                }
+            }
+        };
+
+        //init Fields
+        calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
     }
 
     @Override
@@ -165,62 +235,15 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     }
 
 
+    /**
+     * Save Data
+     */
     public void onSaveButtonClicked() {
-        //Title validation
+
         String title = mTvTitle.getText().toString();
-        if( title.length() == 0 ) {
-            mTvTitle.setError("Title is required!");
-            return;
-        }
-
-        //PageCount validation
-        int pageCount ;
-        int intFromPage;
-        int intToPage;
-
-        String pageCountStr = mValuePageCount.getText().toString();
-        if( pageCountStr.length() == 0 ) {
-            mValuePageCount.setError("Page count is required!");
-            return;
-        } else if(Integer.parseInt(pageCountStr) <= 0) {
-            mValuePageCount.setError("Page count must be positive");
-            return;
-        } else {
-            pageCount = Integer.parseInt(mValuePageCount.getText().toString());
-        }
-
-        //From Page validation
-        String fromPage = mTvFromPage.getText().toString();
-        if( fromPage.length() == 0 ) {
-            mTvFromPage.setError("fromPage is required!");
-            return;
-        } else {
-            intFromPage = Integer.parseInt(fromPage);
-            if(intFromPage > pageCount) {
-                mTvFromPage.setError("fromPage greater than total pages!");
-                return;
-            }
-        }
-
-        //To Page validation
         String toPage = mTvToPage.getText().toString();
-        if( toPage.length() == 0 ) {
-            mTvToPage.setError("toPage is required!");
-            return;
-        } else {
-            intToPage = Integer.parseInt(toPage);
-            if(intToPage > pageCount) {
-                mTvToPage.setError("intToPage greater than total pages!");
-                return;
-            }
-        }
-
-        //From and To Page validation
-        if(intToPage - intFromPage <= 0) {
-            mTvFromPage.setError("Pages to read must be > 0!");
-            mTvToPage.setError("Pages to read must be > 0!");
-            return;
-        }
+        String fromPage = mTvFromPage.getText().toString();
+        Integer pageCount = Integer.parseInt(mValuePageCount.getText().toString());
 
         Integer fromPageNb = Integer.parseInt(fromPage);
         Integer toPageNb = Integer.parseInt(toPage);
@@ -254,11 +277,20 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         });
     }
 
-    private void validateInputs() {
+    public void onDateFromButtonClicked() {
+        int y = (yearFrom != 0) ? yearFrom:year;
+        int m = (monthFrom != 0) ? monthFrom-1:month;
+        int d = (dayOfMonthFrom != 0) ? dayOfMonthFrom:dayOfMonth;
 
+        DatePickerDialog datePickerDialog = new DatePickerDialog(BookDetailActivity.this, android.R.style.Theme_Black,
+                mDateSetListener, y, m, d);
+
+        datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        datePickerDialog.show();
     }
-    public void onDeleteButtonClicked() {
 
+    public void onDeleteButtonClicked() {
+        //TODO demand validation
         AppExecutor.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -285,12 +317,13 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         int from;
         int to;
 
+        /*
         String title = mTvTitle.getText().toString();
         if( title.length() == 0 ) {
             mTvTitle.setError("Title is required!");
             mButtonSave.setEnabled(false);
             return;
-        }
+        }*/
 
         if(fromPage.length() > 0 && toPage.length() > 0 && pageCountStr.length() > 0) {
             pageCount = Integer.parseInt(pageCountStr);

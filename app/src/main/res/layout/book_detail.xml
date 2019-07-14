@@ -45,8 +45,7 @@
                 android:id="@+id/labelTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Title : "
-                 />
+                android:text="Title : "/>
 
             <EditText
                 android:id="@+id/tvTitle"
@@ -172,6 +171,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="From date : "/>
+            <TextView
+                android:id="@+id/labelSelectFromDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick a date"/>
+            <Button
+                android:id="@+id/btnCalendarFrom"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/ic_calendar"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

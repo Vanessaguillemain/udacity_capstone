@@ -1,7 +1,14 @@
 package com.example.android.bookstudyplanner;
 
 import android.content.Context;
+import android.os.Build;
+import android.widget.DatePicker;
 import android.widget.Toast;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by vanessa on 09/07/2019.
@@ -36,4 +43,35 @@ public class Utils {
         return result;
     }
 
+    public static java.util.Date getDateFromDatePicker(DatePicker datePicker){
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth();
+        int year =  datePicker.getYear();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        return calendar.getTime();
+    }
+
+    public static String getFormatedDateFromDatePicker(DatePicker datePicker, Context context){
+        java.util.Date date = getDateFromDatePicker(datePicker);
+        DateFormat df = DateFormat.getDateInstance(DateFormat.DEFAULT, getCurrentLocale(context));
+        return df.format(date);
+    }
+
+    public static boolean dateIsBeforeToday(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        int compare = today.compareTo(date);
+        if (compare <= 0) return false;
+        return true;
+    }
+
+    static Locale getCurrentLocale(Context context){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            return context.getResources().getConfiguration().getLocales().get(0);
+        } else{
+            //noinspection deprecation
+            return context.getResources().getConfiguration().locale;
+        }
+    }
 }
