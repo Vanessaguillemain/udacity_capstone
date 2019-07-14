@@ -43,11 +43,12 @@ import static com.example.android.bookstudyplanner.database.DatabaseUtils.ISBN_A
 public class BookDetailActivity extends AppCompatActivity implements TextWatcher{
 
     // Constant for logging
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = BookDetailActivity.class.getSimpleName();
 
     private final String BUNDLE_KEY_TEXT_TITLE = "BUNDLE_KEY_TEXT_TITLE";
     private final String BUNDLE_KEY_TEXT_FROM_DATE = "BUNDLE_KEY_TEXT_FROM_DATE";
     private final String BUNDLE_KEY_TEXT_TO_DATE = "BUNDLE_KEY_TEXT_TO_DATE";
+    private final String STRING_NUMBER_PAGE_NULL = "0";
 
     @BindView(R.id.tvTitle) TextView mTvTitle;
     @BindView(R.id.valuePageCount) TextView mValuePageCount;
@@ -66,8 +67,6 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     @BindView(R.id.btnCalendarTo) Button mButtonCalendarTo;
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
-    private int mCalculatedPageCount;
-    private DatePickerDialog datePickerDialog;
     private int year;
     private int month;
     private int dayOfMonth;
@@ -117,7 +116,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
             if (Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF.equals(action)) {
                 //TODO test if null
-                BookEntity book = intent.getParcelableExtra("BOOK");
+                BookEntity book = intent.getParcelableExtra(Utils.INTENT_KEY_BOOK);
                 mBookId = book.getId();
 
                 AddBookViewModelFactory factory = new AddBookViewModelFactory(mDb, mBookId);
@@ -134,7 +133,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
             } else {
                 mButtonDelete.setVisibility(View.GONE);
-                mToolbar.setTitle("CREATE");
+                mToolbar.setTitle(getString(R.string.title_create));
                 mButtonSave.setEnabled(false);
             }
         }
@@ -147,12 +146,12 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             mValueNbPagesToRead.setText(String.valueOf(item.getNbPagesToRead()));
         }
         if(item.getFromPageNb() == null) {
-            mTvFromPage.setText("0");
+            mTvFromPage.setText(STRING_NUMBER_PAGE_NULL);
         } else {
             mTvFromPage.setText(String.valueOf(item.getFromPageNb()));
         }
         if(item.getToPageNb() == null) {
-            mTvToPage.setText("0");
+            mTvToPage.setText(STRING_NUMBER_PAGE_NULL);
         } else {
             mTvToPage.setText(String.valueOf(item.getToPageNb()));
         }
@@ -214,7 +213,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             @Override
             public void afterTextChanged(Editable s) {
                 if( s.length() == 0 ) {
-                    mTvTitle.setError("Title is required!");
+                    mTvTitle.setError(getString(R.string.err_title_required));
                     mButtonSave.setEnabled(false);
                     return;
                 }
@@ -238,7 +237,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 if(dateIsBeforeToday(chosenDate)) {
                     mLabelSelectFromDate.setError("");
                     mLabelErrorFromDate.setVisibility(View.VISIBLE);
-                    mLabelErrorFromDate.setText("date before today!");
+                    mLabelErrorFromDate.setText(getString(R.string.err_date_before_today));
                     if(!dateIsBeforeToday(mEndDate)) {
                         mLabelErrorToDate.setVisibility(View.INVISIBLE);
                         mLabelSelectToDate.setError(null);
@@ -249,7 +248,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                     if(!Utils.dateOneIsBeforeDateTwo(chosenDate, mEndDate)) {
                         mLabelSelectFromDate.setError("");
                         mLabelErrorFromDate.setVisibility(View.VISIBLE);
-                        mLabelErrorFromDate.setText("From is after To");
+                        mLabelErrorFromDate.setText(getString(R.string.err_date_from_after_to));
                         mButtonSave.setEnabled(false);
                         return;
                     } else {
@@ -275,7 +274,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 if(dateIsBeforeToday(chosenDate)) {
                     mLabelSelectToDate.setError("");
                     mLabelErrorToDate.setVisibility(View.VISIBLE);
-                    mLabelErrorToDate.setText("date before today!");
+                    mLabelErrorToDate.setText(getString(R.string.err_date_before_today));
                     if(!dateIsBeforeToday(mBeginDate)) {
                         mLabelErrorFromDate.setVisibility(View.INVISIBLE);
                         mLabelSelectFromDate.setError(null);
@@ -287,7 +286,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                     if(!Utils.dateOneIsBeforeDateTwo(mBeginDate, chosenDate)) {
                         mLabelSelectToDate.setError("");
                         mLabelErrorToDate.setVisibility(View.VISIBLE);
-                        mLabelErrorToDate.setText("To before from");
+                        mLabelErrorToDate.setText(getString(R.string.err_date_to_before_from));
                         mButtonSave.setEnabled(false);
                         return;
                     } else {
@@ -331,7 +330,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         boolean intervaleOk = Utils.dateOneIsBeforeDateTwo(beginDate, endDate);
         if(!intervaleOk) {
             mLabelErrorToDate.setVisibility(View.VISIBLE);
-            mLabelErrorToDate.setText("date before From!");
+            mLabelErrorToDate.setText(getString(R.string.err_date_to_before_from));
             mLabelSelectToDate.setError("");
             mButtonSave.setEnabled(false);
             return;
@@ -429,28 +428,28 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             from = Integer.parseInt(fromPage);
             to = Integer.parseInt(toPage);
             if (from > pageCount) {
-                mTvFromPage.setError("fromPage greater than total pages!");
+                mTvFromPage.setError(getString(R.string.err_from_page_too_big));
                 mButtonSave.setEnabled(false);
                 return;
             }
             if (from == 0) {
-                mTvFromPage.setError("fromPage must be greater than 0 !");
+                mTvFromPage.setError(getString(R.string.err_from_page_greater_than_zero));
                 mButtonSave.setEnabled(false);
                 return;
             }
             if (to > pageCount) {
-                mTvToPage.setError("toPage greater than total pages!");
+                mTvToPage.setError(getString(R.string.err_to_page_too_big));
                 mButtonSave.setEnabled(false);
                 return;
             }
             if (to == 0) {
-                mTvToPage.setError("toPage must be greater than 0 !");
+                mTvToPage.setError(getString(R.string.err_to_page_greater_than_zero));
                 mButtonSave.setEnabled(false);
                 return;
             }
             if (to - from +1 <=0) {
-                mTvFromPage.setError("pages to read must be positive!");
-                mTvToPage.setError("pages to read must be positive!");
+                mTvFromPage.setError(getString(R.string.err_pages_to_read_positive));
+                mTvToPage.setError(getString(R.string.err_pages_to_read_positive));
                 mButtonSave.setEnabled(false);
                 return;
             } else {

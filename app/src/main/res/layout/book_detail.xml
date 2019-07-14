@@ -21,7 +21,7 @@
             app:layout_collapseMode="pin"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/MyToolbarTheme"
-            app:title="Modify"
+            app:title="@string/title_modify"
             app:elevation="40dp"/>
 
     </android.support.design.widget.AppBarLayout>

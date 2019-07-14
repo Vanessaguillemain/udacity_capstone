@@ -4,9 +4,20 @@
     <string name="tab_today_title">Today</string>
     <string name="tab_planning_title">Planning</string>
 
+    <!-- SCREEN BOOK DETAIL -->
     <string name="label_hour">h</string>
     <string name="label_minute">m</string>
-
+    <string name="title_create">Create</string>
+    <string name="title_modify">Modify</string>
+    <string name="err_title_required">Title is required !</string>
+    <string name="err_date_before_today">Date is before Today !</string>
+    <string name="err_date_from_after_to">Date From is after date To !</string>
+    <string name="err_date_to_before_from">Date To is before date From !</string>
+    <string name="err_from_page_too_big">From page is greater than total pages !</string>
+    <string name="err_to_page_too_big">To page is greater than total pages !</string>
+    <string name="err_from_page_greater_than_zero">From page has to be greater than 0 !</string>
+    <string name="err_to_page_greater_than_zero">To page has to be greater than 0 !</string>
+    <string name="err_pages_to_read_positive">Pages to read has to be greater than 0 !</string>
 
     <string name="lorem_ipsum_20">Ut enim bene Cato in perfecto et spectato viro.</string>
 

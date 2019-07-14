@@ -59,7 +59,7 @@ public class TabBooksFragment extends Fragment implements BooksRecyclerViewAdapt
 
         Intent myIntent = new Intent(getActivity(), BookDetailActivity.class);
         myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF);
-        myIntent.putExtra("BOOK", item);
+        myIntent.putExtra(Utils.INTENT_KEY_BOOK, item);
 
         getActivity().startActivity(myIntent);
     }
