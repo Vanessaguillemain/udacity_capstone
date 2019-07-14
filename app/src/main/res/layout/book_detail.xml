@@ -160,7 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/border_margin"
             android:text="I want to plan reading : "/>
-
+        <!-- from date -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -181,7 +181,15 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:background="@drawable/ic_calendar"/>
+            <TextView
+                android:id="@+id/labelErrorFromDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:text="From is after To"
+                android:visibility="invisible"/>
         </LinearLayout>
+        <!-- to date -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -192,6 +200,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="To date : "/>
+            <TextView
+                android:id="@+id/labelSelectToDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick a date"/>
+            <Button
+                android:id="@+id/btnCalendarTo"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/ic_calendar"/>
+            <TextView
+                android:id="@+id/labelErrorToDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:text="To is before from"
+                android:visibility="invisible"/>
         </LinearLayout>
 
         <!-- FREQUENCY -->

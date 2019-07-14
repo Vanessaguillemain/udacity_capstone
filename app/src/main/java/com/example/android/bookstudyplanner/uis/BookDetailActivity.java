@@ -46,31 +46,25 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private final String BUNDLE_KEY_TEXT_TITLE = "BUNDLE_KEY_TEXT_TITLE";
+    private final String BUNDLE_KEY_TEXT_FROM_DATE = "BUNDLE_KEY_TEXT_FROM_DATE";
+    private final String BUNDLE_KEY_TEXT_TO_DATE = "BUNDLE_KEY_TEXT_TO_DATE";
 
-    @BindView(R.id.tvTitle)
-     TextView mTvTitle;
-    @BindView(R.id.valuePageCount)
-     TextView mValuePageCount;
-    @BindView(R.id.tvFromPage)
-     TextView mTvFromPage;
-    @BindView(R.id.tvToPage)
-     TextView mTvToPage;
-    @BindView(R.id.valueNbPagesToRead)
-     TextView mValueNbPagesToRead;
-    @BindView(R.id.labelNbPagesToRead)
-     TextView mLabelNbPagesToRead;
-    @BindView(R.id.valueTimeEstimated)
-     TextView mValueTimeEstimated;
-    @BindView(R.id.buttonSave)
-     Button mButtonSave;
-    @BindView(R.id.buttonDelete)
-     Button mButtonDelete;
-    @BindView(R.id.labelSelectFromDate)
-    TextView mLabelSelectFromDate;
-    @BindView(R.id.btnCalendarFrom)
-    Button mButtonCalendarFrom;
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    @BindView(R.id.tvTitle) TextView mTvTitle;
+    @BindView(R.id.valuePageCount) TextView mValuePageCount;
+    @BindView(R.id.tvFromPage) TextView mTvFromPage;
+    @BindView(R.id.tvToPage) TextView mTvToPage;
+    @BindView(R.id.valueNbPagesToRead) TextView mValueNbPagesToRead;
+    @BindView(R.id.labelNbPagesToRead) TextView mLabelNbPagesToRead;
+    @BindView(R.id.valueTimeEstimated) TextView mValueTimeEstimated;
+    @BindView(R.id.buttonSave) Button mButtonSave;
+    @BindView(R.id.buttonDelete) Button mButtonDelete;
+    @BindView(R.id.labelErrorFromDate) TextView mLabelErrorFromDate;
+    @BindView(R.id.labelErrorToDate) TextView mLabelErrorToDate;
+    @BindView(R.id.labelSelectFromDate) TextView mLabelSelectFromDate;
+    @BindView(R.id.labelSelectToDate) TextView mLabelSelectToDate;
+    @BindView(R.id.btnCalendarFrom) Button mButtonCalendarFrom;
+    @BindView(R.id.btnCalendarTo) Button mButtonCalendarTo;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
 
     private int mCalculatedPageCount;
     private DatePickerDialog datePickerDialog;
@@ -84,7 +78,10 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private int monthTo;
     private int dayOfMonthTo;
     private Calendar calendar;
-    private DatePickerDialog.OnDateSetListener mDateSetListener;
+    private Date mBeginDate;
+    private Date mEndDate;
+    private DatePickerDialog.OnDateSetListener mDateFromSetListener;
+    private DatePickerDialog.OnDateSetListener mDateToSetListener;
 
     // Constant for default book id to be used when not in update mode
     private static final int DEFAULT_BOOK_ID = -1;
@@ -105,13 +102,19 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         // recovering the instance state
         if (savedInstanceState != null) {
             mTvTitle.setText(savedInstanceState.getString(BUNDLE_KEY_TEXT_TITLE));
+            String sBegin = savedInstanceState.getString(BUNDLE_KEY_TEXT_FROM_DATE);
+            String sEnd = savedInstanceState.getString(BUNDLE_KEY_TEXT_TO_DATE);
+            //Save locally the dates to avoid them to be wipe off by data base values
+            mBeginDate = Utils.getDateFromFormatedDate(sBegin, BookDetailActivity.this);
+            mEndDate = Utils.getDateFromFormatedDate(sEnd, BookDetailActivity.this);
+            mLabelSelectFromDate.setText(sBegin);
+            mLabelSelectToDate.setText(sEnd);
         }
 
         Intent intent = getIntent();
         if(intent != null) {
             String action = intent.getStringExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION);
 
-            // int tabPosition = intent.getIntExtra(Utils.INTENT_KEY_TAB_POSITION, -1);
             if (Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF.equals(action)) {
                 //TODO test if null
                 BookEntity book = intent.getParcelableExtra("BOOK");
@@ -153,6 +156,22 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         } else {
             mTvToPage.setText(String.valueOf(item.getToPageNb()));
         }
+        //If mBeginDate is not null, it has been initialized in savednstanceSTate
+        if(mBeginDate == null) {
+            mBeginDate = item.getBeginDate();
+            if (mBeginDate != null) {
+                String sBegin = Utils.getFormatedDateFromDate(mBeginDate, BookDetailActivity.this);
+                mLabelSelectFromDate.setText(sBegin);
+            }
+        }
+        //If mEndDate is not null, it has been initialized in savednstanceSTate
+        if(mEndDate == null) {
+            mEndDate = item.getEndDate();
+            if (mEndDate != null) {
+                String sEnd = Utils.getFormatedDateFromDate(mEndDate, BookDetailActivity.this);
+                mLabelSelectToDate.setText(sEnd);
+            }
+        }
     }
 
     /**
@@ -179,6 +198,12 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 onDateFromButtonClicked();
             }
         });
+        mButtonCalendarTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onDateToButtonClicked();
+            }
+        });
 
         mTvTitle.addTextChangedListener(new TextWatcher() {
             @Override
@@ -199,23 +224,83 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         mTvFromPage.addTextChangedListener(this);
         mTvToPage.addTextChangedListener(this);
         mValuePageCount.addTextChangedListener(this);
-
-        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        
+        mDateFromSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Date chosenDate = Utils.getDateFromDatePicker(view);
+                mBeginDate = chosenDate;
                 String formatedDate = Utils.getFormatedDateFromDatePicker(view, BookDetailActivity.this);
+                mLabelSelectFromDate.setText(formatedDate);
+                yearFrom = year;
+                monthFrom = month + 1;
+                dayOfMonthFrom = dayOfMonth;
                 if(dateIsBeforeToday(chosenDate)) {
-                    mLabelSelectFromDate.setText("date before today!");
-                    mLabelSelectFromDate.setError("date before today!");
+                    mLabelSelectFromDate.setError("");
+                    mLabelErrorFromDate.setVisibility(View.VISIBLE);
+                    mLabelErrorFromDate.setText("date before today!");
+                    if(!dateIsBeforeToday(mEndDate)) {
+                        mLabelErrorToDate.setVisibility(View.INVISIBLE);
+                        mLabelSelectToDate.setError(null);
+                    }
                     mButtonSave.setEnabled(false);
                     return;
                 } else {
-                    mLabelSelectFromDate.setError(null);
-                    yearFrom = year;
-                    monthFrom = month + 1;
-                    dayOfMonthFrom = dayOfMonth;
-                    mLabelSelectFromDate.setText(formatedDate);
+                    if(!Utils.dateOneIsBeforeDateTwo(chosenDate, mEndDate)) {
+                        mLabelSelectFromDate.setError("");
+                        mLabelErrorFromDate.setVisibility(View.VISIBLE);
+                        mLabelErrorFromDate.setText("From is after To");
+                        mButtonSave.setEnabled(false);
+                        return;
+                    } else {
+                        mLabelSelectFromDate.setError(null);
+                        mLabelErrorFromDate.setVisibility(View.INVISIBLE);
+                        mButtonSave.setEnabled(true);
+                    }
+                }
+            }
+        };
+
+        mDateToSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                Date chosenDate = Utils.getDateFromDatePicker(view);
+                mEndDate = chosenDate;
+                String formatedDate = Utils.getFormatedDateFromDatePicker(view, BookDetailActivity.this);
+                mLabelSelectToDate.setText(formatedDate);
+                yearTo = year;
+                monthTo = month + 1;
+                dayOfMonthTo = dayOfMonth;
+
+                if(dateIsBeforeToday(chosenDate)) {
+                    mLabelSelectToDate.setError("");
+                    mLabelErrorToDate.setVisibility(View.VISIBLE);
+                    mLabelErrorToDate.setText("date before today!");
+                    if(!dateIsBeforeToday(mBeginDate)) {
+                        mLabelErrorFromDate.setVisibility(View.INVISIBLE);
+                        mLabelSelectFromDate.setError(null);
+                    }
+
+                    mButtonSave.setEnabled(false);
+                    return;
+                } else {
+                    if(!Utils.dateOneIsBeforeDateTwo(mBeginDate, chosenDate)) {
+                        mLabelSelectToDate.setError("");
+                        mLabelErrorToDate.setVisibility(View.VISIBLE);
+                        mLabelErrorToDate.setText("To before from");
+                        mButtonSave.setEnabled(false);
+                        return;
+                    } else {
+                        mLabelSelectToDate.setError(null);
+                        if(dateIsBeforeToday(mBeginDate)) {
+                            mButtonSave.setEnabled(false);
+                        } else {
+                            mLabelErrorFromDate.setVisibility(View.INVISIBLE);
+                            mLabelSelectFromDate.setError(null);
+                        }
+                        mLabelErrorToDate.setVisibility(View.INVISIBLE);
+                        mButtonSave.setEnabled(true);
+                    }
                 }
             }
         };
@@ -225,12 +310,82 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+    }
 
+    private boolean datesValidation(String origin, DatePicker view, int year, int month, int dayOfMonth) {
+        Date chosenDate = Utils.getDateFromDatePicker(view);
+        String formatedDate = Utils.getFormatedDateFromDatePicker(view, BookDetailActivity.this);
+
+        if(origin.equals("BEGIN")) {
+            mBeginDate = chosenDate;
+            mLabelSelectFromDate.setText(formatedDate);
+            if(dateIsBeforeToday(chosenDate)) {
+                mLabelSelectFromDate.setError("");
+                mLabelErrorFromDate.setVisibility(View.VISIBLE);
+                mLabelErrorFromDate.setText("date before today!");
+                mLabelErrorToDate.setVisibility(View.INVISIBLE);
+                mLabelSelectToDate.setError(null);
+                mButtonSave.setEnabled(false);
+                return false;
+            } else {
+                if(!Utils.dateOneIsBeforeDateTwo(chosenDate, mEndDate)) {
+                    mLabelSelectFromDate.setError("");
+                    mLabelErrorFromDate.setVisibility(View.VISIBLE);
+                    mLabelErrorFromDate.setText("From is after To");
+                    mButtonSave.setEnabled(false);
+                    return false;
+                } else {
+                    mLabelSelectFromDate.setError(null);
+                    yearFrom = year;
+                    monthFrom = month + 1;
+                    dayOfMonthFrom = dayOfMonth;
+                    //mLabelSelectFromDate.setText(formatedDate);
+                    mLabelErrorFromDate.setVisibility(View.INVISIBLE);
+                    mButtonSave.setEnabled(true);
+                }
+            }
+        } else {
+            mEndDate = chosenDate;
+            mLabelSelectToDate.setText(formatedDate);
+            if(dateIsBeforeToday(chosenDate)) {
+                mLabelSelectToDate.setError("");
+                mLabelErrorToDate.setVisibility(View.VISIBLE);
+                mLabelErrorToDate.setText("date before today!");
+                mLabelErrorFromDate.setVisibility(View.INVISIBLE);
+                mLabelSelectFromDate.setError(null);
+                mButtonSave.setEnabled(false);
+                return false;
+            }else {
+                if(!Utils.dateOneIsBeforeDateTwo(mBeginDate, chosenDate)) {
+                    mLabelSelectToDate.setError("");
+                    mLabelErrorToDate.setVisibility(View.VISIBLE);
+                    mLabelErrorToDate.setText("To before from");
+                    mButtonSave.setEnabled(false);
+                    return false;
+                } else {
+                    if(!dateIsBeforeToday(mBeginDate)) {
+                        mLabelErrorFromDate.setVisibility(View.INVISIBLE);
+                        mLabelSelectFromDate.setError(null);
+                    }
+                    mLabelSelectToDate.setError(null);
+                    yearTo = year;
+                    monthTo = month + 1;
+                    dayOfMonthTo = dayOfMonth;
+                    //mLabelSelectToDate.setText(formatedDate);
+                    mLabelErrorToDate.setVisibility(View.INVISIBLE);
+                    mButtonSave.setEnabled(true);
+                }
+            }
+        }
+
+        return true;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(BUNDLE_KEY_TEXT_TITLE, mTvTitle.getText().toString());
+        outState.putString(BUNDLE_KEY_TEXT_FROM_DATE, mLabelSelectFromDate.getText().toString());
+        outState.putString(BUNDLE_KEY_TEXT_TO_DATE, mLabelSelectToDate.getText().toString());
         super.onSaveInstanceState(outState);
     }
 
@@ -240,6 +395,16 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
      */
     public void onSaveButtonClicked() {
 
+        Date beginDate = Utils.getDateFromFormatedDate(mLabelSelectFromDate.getText().toString(), BookDetailActivity.this);
+        Date endDate = Utils.getDateFromFormatedDate(mLabelSelectToDate.getText().toString(), BookDetailActivity.this);
+        boolean intervaleOk = Utils.dateOneIsBeforeDateTwo(beginDate, endDate);
+        if(!intervaleOk) {
+            mLabelErrorToDate.setVisibility(View.VISIBLE);
+            mLabelErrorToDate.setText("date before From!");
+            mLabelSelectToDate.setError("");
+            mButtonSave.setEnabled(false);
+            return;
+        }
         String title = mTvTitle.getText().toString();
         String toPage = mTvToPage.getText().toString();
         String fromPage = mTvFromPage.getText().toString();
@@ -248,8 +413,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         Integer fromPageNb = Integer.parseInt(fromPage);
         Integer toPageNb = Integer.parseInt(toPage);
         Integer nbPagesToRead = toPageNb - fromPageNb +1;
-        Date beginDate = null;
-        Date endDate = null;
+
         String weekPlanning = null;
         Integer nbPagesRead = null;
         Integer readTimeInSeconds = null;
@@ -283,7 +447,19 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         int d = (dayOfMonthFrom != 0) ? dayOfMonthFrom:dayOfMonth;
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(BookDetailActivity.this, android.R.style.Theme_Black,
-                mDateSetListener, y, m, d);
+                mDateFromSetListener, y, m, d);
+
+        datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        datePickerDialog.show();
+    }
+
+    public void onDateToButtonClicked() {
+        int y = (yearTo != 0) ? yearTo:year;
+        int m = (monthTo != 0) ? monthTo-1:month;
+        int d = (dayOfMonthTo != 0) ? dayOfMonthTo:dayOfMonth;
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(BookDetailActivity.this, android.R.style.Theme_Black,
+                mDateToSetListener, y, m, d);
 
         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         datePickerDialog.show();
@@ -316,14 +492,6 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         int pageCount;
         int from;
         int to;
-
-        /*
-        String title = mTvTitle.getText().toString();
-        if( title.length() == 0 ) {
-            mTvTitle.setError("Title is required!");
-            mButtonSave.setEnabled(false);
-            return;
-        }*/
 
         if(fromPage.length() > 0 && toPage.length() > 0 && pageCountStr.length() > 0) {
             pageCount = Integer.parseInt(pageCountStr);
