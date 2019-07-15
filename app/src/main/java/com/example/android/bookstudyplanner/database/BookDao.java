@@ -21,7 +21,7 @@ public interface BookDao {
     LiveData<List<BookEntity>> loadAllBooks();
 
     @Insert
-    void insertBook(BookEntity bookEntry);
+    long insertBook(BookEntity bookEntry);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateBook(BookEntity bookEntry);

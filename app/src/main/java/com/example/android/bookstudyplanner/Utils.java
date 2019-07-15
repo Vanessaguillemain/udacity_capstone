@@ -163,6 +163,21 @@ public class Utils {
         return null;
     }
 
+    public static int[] getTabWeekPlanningFromString(String sWeekPlanning) {
+        if (sWeekPlanning != null) {
+            int[] tab = new int[7];
+            for(int i = 0; i< sWeekPlanning.length(); i++) {
+                if(sWeekPlanning.charAt(i)=='0') {
+                    tab[i] =0;
+                } else {
+                    tab[i] =1;
+                }
+            }
+            return tab;
+        }
+        return null;
+    }
+
     public static Date addDays(Date date, int days) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);

@@ -33,6 +33,9 @@ public interface PlanningDao {
     @Delete
     void deletePlanning(PlanningEntity planningEntity);
 
+    @Query("DELETE FROM planning WHERE bookId = :bookId AND date >= :date")
+    void deletePlanningByBookIdAfterIncludeDate(int bookId, Date date);
+
     @Query("DELETE FROM planning WHERE bookId = :bookId")
     void deletePlanningByBookId(int bookId);
 

@@ -28,6 +28,7 @@ import com.example.android.bookstudyplanner.database.AddBookViewModelFactory;
 import com.example.android.bookstudyplanner.database.AppDatabase;
 import com.example.android.bookstudyplanner.database.AppExecutor;
 import com.example.android.bookstudyplanner.database.BookEntity;
+import com.example.android.bookstudyplanner.database.PlanningEntity;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -53,6 +54,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private final String BUNDLE_KEY_TEXT_FROM_DATE = "BUNDLE_KEY_TEXT_FROM_DATE";
     private final String BUNDLE_KEY_TEXT_TO_DATE = "BUNDLE_KEY_TEXT_TO_DATE";
     private final String STRING_NUMBER_PAGE_NULL = "0";
+    private final String STRING_DEFAULT_WEEK_PLANNING = "1111100";
 
     @BindView(R.id.tvTitle) TextView mTvTitle;
     @BindView(R.id.valuePageCount) TextView mValuePageCount;
@@ -202,6 +204,13 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 dayOfMonthTo = Utils.getDayFromDate(mEndDate);
             }
         }
+        if(item.getWeekPlanning() != null) {
+            mWeekPlanning = item.getWeekPlanning();
+            mTabWeekPlanning = Utils.getTabWeekPlanningFromString(mWeekPlanning);
+            //set checkboxes
+            setChekBoxes(mTabWeekPlanning);
+        }
+
     }
 
     /**
@@ -402,17 +411,14 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         Integer toPageNb = Integer.parseInt(toPage);
         Integer nbPagesToRead = toPageNb - fromPageNb +1;
 
-        String weekPlanning = mWeekPlanning;
         Integer nbPagesRead = null;
         Integer readTimeInSeconds = null;
         Integer nbSecondsByPage = null;
-
-        //Planning calculation
-        List<Date> planning = Utils.getPlanning(mBeginDate, mEndDate, mTabWeekPlanning, mTotalDaysByWeek);
+        final Boolean newBook = (mBookId == DEFAULT_BOOK_ID);
 
         //Book Entity
         final BookEntity book = new BookEntity(ISBN_ABSENT_VALUE,  title,  pageCount,  fromPageNb,  toPageNb, nbPagesToRead,
-                beginDate, endDate, weekPlanning, nbPagesRead, readTimeInSeconds, nbSecondsByPage);
+                beginDate, endDate, mWeekPlanning, nbPagesRead, readTimeInSeconds, nbSecondsByPage);
 
             AppExecutor.getInstance().diskIO().execute(new Runnable() {
             @Override
@@ -421,7 +427,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 // Otherwise update it. Call finish in any case
                 if (mBookId == DEFAULT_BOOK_ID) {
                     // insert new book
-                    mDb.bookDao().insertBook(book);
+                    mBookId = (int)(mDb.bookDao().insertBook(book));
                 } else {
                     //update book
                     book.setId(mBookId);
@@ -430,6 +436,28 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 finish();
             }
         });
+
+        //Planning calculation and insertion
+        final List<Date> planning = Utils.getPlanning(mBeginDate, mEndDate, mTabWeekPlanning, mTotalDaysByWeek);
+        AppExecutor.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                if(!newBook) {
+                    //Delete all previous planning before inserting new plannings
+                    Date firstDate = planning.get(0);
+                    mDb.planningDao().deletePlanningByBookIdAfterIncludeDate(mBookId, firstDate);
+                }
+                //inserting new planning
+                for(Date d : planning) {
+                    PlanningEntity planning = new PlanningEntity(d, mBookId, false);
+                    mDb.planningDao().insertPlanning(planning);
+                }
+                finish();
+            }
+        });
+
+
+
     }
 
     public void onDateFromButtonClicked() {
@@ -569,6 +597,16 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         if(mTotalDaysByWeek > 0) {
             setNbPagesAverage();
         }
+    }
+
+    private void setChekBoxes(int[] tabPlanning) {
+        mCbx1.setChecked(tabPlanning[0]==1);
+        mCbx2.setChecked(tabPlanning[1]==1);
+        mCbx3.setChecked(tabPlanning[2]==1);
+        mCbx4.setChecked(tabPlanning[3]==1);
+        mCbx5.setChecked(tabPlanning[4]==1);
+        mCbx6.setChecked(tabPlanning[5]==1);
+        mCbx7.setChecked(tabPlanning[6]==1);
 
     }
 }
