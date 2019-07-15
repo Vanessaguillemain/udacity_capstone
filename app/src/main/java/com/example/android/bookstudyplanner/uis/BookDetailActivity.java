@@ -31,6 +31,7 @@ import com.example.android.bookstudyplanner.database.BookEntity;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -92,7 +93,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private Date mEndDate;
     private DatePickerDialog.OnDateSetListener mDateFromSetListener;
     private DatePickerDialog.OnDateSetListener mDateToSetListener;
-    private int mTotalDays = 5;
+    private int mTotalDaysByWeek = 5;
     private String mWeekPlanning;
     private int mTabWeekPlanning[] = {1,1,1,1,1,0,0};
     private int mNbPagesToRead;
@@ -352,7 +353,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     }
 
     private void setNbPagesAverage() {
-        int result = Utils.calculateNbPagesAverage(mNbPagesToRead, mBeginDate, mEndDate, mTabWeekPlanning, mTotalDays);
+        int result = Utils.calculateNbPagesAverage(mNbPagesToRead, mBeginDate, mEndDate, mTabWeekPlanning, mTotalDaysByWeek);
         if (result == Utils.ERROR_NB_PAGES_AVERAGE) {
             mAboutNbPages.setText("ERROR_NB_PAGES_AVERAGE");
         } else {
@@ -401,10 +402,13 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         Integer toPageNb = Integer.parseInt(toPage);
         Integer nbPagesToRead = toPageNb - fromPageNb +1;
 
-        String weekPlanning = null;
+        String weekPlanning = mWeekPlanning;
         Integer nbPagesRead = null;
         Integer readTimeInSeconds = null;
         Integer nbSecondsByPage = null;
+
+        //Planning calculation
+        List<Date> planning = Utils.getPlanning(mBeginDate, mEndDate, mTabWeekPlanning, mTotalDaysByWeek);
 
         //Book Entity
         final BookEntity book = new BookEntity(ISBN_ABSENT_VALUE,  title,  pageCount,  fromPageNb,  toPageNb, nbPagesToRead,
@@ -536,14 +540,14 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        mTotalDays = 0;
-        mTotalDays += (mCbx1.isChecked())? 1:0;
-        mTotalDays += (mCbx2.isChecked())? 1:0;
-        mTotalDays += (mCbx3.isChecked())? 1:0;
-        mTotalDays += (mCbx4.isChecked())? 1:0;
-        mTotalDays += (mCbx5.isChecked())? 1:0;
-        mTotalDays += (mCbx6.isChecked())? 1:0;
-        mTotalDays += (mCbx7.isChecked())? 1:0;
+        mTotalDaysByWeek = 0;
+        mTotalDaysByWeek += (mCbx1.isChecked())? 1:0;
+        mTotalDaysByWeek += (mCbx2.isChecked())? 1:0;
+        mTotalDaysByWeek += (mCbx3.isChecked())? 1:0;
+        mTotalDaysByWeek += (mCbx4.isChecked())? 1:0;
+        mTotalDaysByWeek += (mCbx5.isChecked())? 1:0;
+        mTotalDaysByWeek += (mCbx6.isChecked())? 1:0;
+        mTotalDaysByWeek += (mCbx7.isChecked())? 1:0;
 
         mTabWeekPlanning[0] = (mCbx1.isChecked())? 1:0;
         mTabWeekPlanning[1] = (mCbx2.isChecked())? 1:0;
@@ -562,7 +566,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         mWeekPlanning += (mCbx6.isChecked())? "1":"0";
         mWeekPlanning += (mCbx7.isChecked())? "1":"0";
 
-        if(mTotalDays > 0) {
+        if(mTotalDaysByWeek > 0) {
             setNbPagesAverage();
         }
 

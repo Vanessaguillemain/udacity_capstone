@@ -8,8 +8,10 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -120,9 +122,9 @@ public class Utils {
     }
 
     public static int calculateNbPagesAverage(int pagesToRead, Date fromDate, Date toDate, int[] weekPlanning, int nbDaysAWeek) {
-        if(pagesToRead >0 && fromDate != null && toDate != null) {
+        if(pagesToRead >0 && fromDate != null && toDate != null && nbDaysAWeek > 0) {
             int nbTotalDays = daysBetweenDatesIncluded(fromDate, toDate);
-            int nbWeeks = entireWeeksBetweenDates(fromDate, toDate);
+            int nbWeeks = (int)nbTotalDays/7;
 
             int indexFirstDay = getMyDayOfWeek(fromDate)-2; //-2 because Monday is 0 in weekPlanning[] and 2 in Calendar.MONDAY
             int nbDaysToReadDuringWeeks = nbDaysAWeek * nbWeeks;
@@ -140,6 +142,38 @@ public class Utils {
         return ERROR_NB_PAGES_AVERAGE;
     }
 
+    public static List<Date> getPlanning(Date fromDate, Date toDate, int[] weekPlanning, int nbDaysAWeek) {
+        if(fromDate != null && toDate != null) {
+            List<Date> planning = new ArrayList<Date>();
+            if (nbDaysAWeek == 0) {
+                return planning;
+            }
+            Date currentDate = fromDate;
+            int i = getMyDayOfWeek(fromDate) - 2; //-2 because Monday is 0 in weekPlanning[] and 2 in Calendar.MONDAY
+            while (currentDate.compareTo(toDate) <= 0) {
+                int index = i % 7;
+                if (weekPlanning[index] == 1) {
+                    planning.add(currentDate);
+                }
+                currentDate = dateAfter(currentDate);
+                i++;
+            }
+            return planning;
+        }
+        return null;
+    }
+
+    public static Date addDays(Date date, int days) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, days); //minus number would decrement the days
+        return cal.getTime();
+    }
+
+    public static Date dateAfter(Date date) {
+        return addDays(date, 1);
+    }
+
     /**
      * Gives the index of the Day (Calendar.DAY_OF_WEEK ) for the date given.
      * @param date : the date whe want to know the day of week
@@ -153,7 +187,8 @@ public class Utils {
 
     public static int daysBetweenDatesIncluded(Date date1, Date date2 ){
         long diff = date2.getTime()-date1.getTime();
-        return (int)diff/DURATION_OF_DAY_IN_MILISEC +1;
+        long temp = diff/DURATION_OF_DAY_IN_MILISEC;
+        return (int)temp +1;
     }
 
     public static int entireWeeksBetweenDates(Date date1, Date date2 ){
