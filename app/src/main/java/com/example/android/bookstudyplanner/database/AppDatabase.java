@@ -13,7 +13,7 @@ import android.util.Log;
  * Created by vanessa on 10/07/2019.
  */
 
-@Database(entities = {BookEntity.class}, version = 2, exportSchema = false)
+@Database(entities = {BookEntity.class, PlanningEntity.class}, version = 3, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -28,7 +28,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 Log.d(LOG_TAG, "Creating new database instance");
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         AppDatabase.class, AppDatabase.DATABASE_NAME)
-                        .addMigrations(MIGRATION_1_2)
+                        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                         .build();
             }
         }
@@ -37,6 +37,7 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public abstract BookDao bookDao();
+    public abstract PlanningDao planningDao();
 
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
@@ -50,6 +51,13 @@ public abstract class AppDatabase extends RoomDatabase {
             database.execSQL("ALTER TABLE book ADD COLUMN nbPagesRead INTEGER");
             database.execSQL("ALTER TABLE book ADD COLUMN readTimeInSeconds INTEGER");
             database.execSQL("ALTER TABLE book ADD COLUMN nbSecondsByPage INTEGER");
+        }
+    };
+
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE planning (date INTEGER NOT NULL, bookId INTEGER NOT NULL, done INTEGER NOT NULL, PRIMARY KEY(date, bookId))");
         }
     };
 
