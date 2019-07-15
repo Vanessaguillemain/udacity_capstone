@@ -8,6 +8,8 @@
     <dimen name="fab_margin_mini">24dp</dimen>
     <dimen name="border_margin">16dp</dimen>
 
+    <dimen name="check_day_size">30dp</dimen>
+
     <dimen name="standard_60">60dp</dimen>
     <dimen name="standard_110">110dp</dimen>
 

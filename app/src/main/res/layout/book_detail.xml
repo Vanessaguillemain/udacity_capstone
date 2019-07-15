@@ -76,7 +76,8 @@
             <EditText
                 android:id="@+id/valuePageCount"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="number"/>
         </LinearLayout>
 
         <!-- WANT TO READ -->
@@ -120,6 +121,7 @@
                 android:id="@+id/tvFromPage"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 tools:text="220"/>
             <TextView
                 android:id="@+id/labelToPage"
@@ -131,6 +133,7 @@
                 android:id="@+id/tvToPage"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 tools:text="250"/>
         </LinearLayout>
 
@@ -228,6 +231,109 @@
             android:layout_marginStart="@dimen/border_margin"
             android:text="Read Freaquency for this book : "/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/border_margin"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cbx1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/radiobtn_bck"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:text="Mo" />
+
+            <CheckBox
+                android:id="@+id/cbx2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/radiobtn_bck"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:text="Tu" />
+
+            <CheckBox
+                android:id="@+id/cbx3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/radiobtn_bck"
+                android:checked="true"
+                android:gravity="center"
+                android:button="@null"
+                android:text="We" />
+
+            <CheckBox
+                android:id="@+id/cbx4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/radiobtn_bck"
+                android:checked="true"
+                android:gravity="center"
+                android:button="@null"
+                android:text="Th" />
+
+            <CheckBox
+                android:id="@+id/cbx5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/radiobtn_bck"
+                android:checked="true"
+                android:gravity="center"
+                android:button="@null"
+                android:text="Fr" />
+            <CheckBox
+                android:id="@+id/cbx6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/radiobtn_bck"
+                android:gravity="center"
+                android:button="@null"
+                android:text="Sa" />
+            <CheckBox
+                android:id="@+id/cbx7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/radiobtn_bck"
+                android:gravity="center"
+                android:button="@null"
+                android:text="Su" />
+
+        </LinearLayout>
+
+        <!-- ESTIMATION -->
+        <TextView
+            android:id="@+id/labelEstimation"
+            style="@style/SubtitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/border_margin"
+            android:text="Estimation : "/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/border_margin"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="About : "/>
+            <TextView
+                android:id="@+id/aboutNbPages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+         </LinearLayout>
 
         <!-- BUTTONS -->
         <LinearLayout

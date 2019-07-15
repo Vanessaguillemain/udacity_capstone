@@ -24,8 +24,11 @@ public class Utils {
     public static final String INTENT_KEY_BOOK_DETAIL_ACTION = "INTENT_KEY_BOOK_DETAIL_ACTION";
     public static final String INTENT_VAL_BOOK_DETAIL_ACTION_CREATE = "INTENT_VAL_BOOK_DETAIL_ACTION_CREATE";
     public static final String INTENT_VAL_BOOK_DETAIL_ACTION_MODIF = "INTENT_VAL_BOOK_DETAIL_ACTION_MODIF";
-
+    public static final String WEEK_EMPTY = "0000000";
     public static final String INTENT_KEY_BOOK = "INTENT_KEY_BOOK";
+    public static final int ERROR_NB_PAGES_AVERAGE =-1;
+    public static final String ERROR_NB_SECONDS_A_DAY = "ERROR_NB_SECONDS_A_DAY";
+    private static int DURATION_OF_DAY_IN_MILISEC = 1000 * 60 * 60 * 24;
 
     public static void tostL(Context c, String msg) {
         Toast.makeText(c, msg, Toast.LENGTH_LONG).show();
@@ -114,5 +117,64 @@ public class Utils {
             //noinspection deprecation
             return context.getResources().getConfiguration().locale;
         }
+    }
+
+    public static int calculateNbPagesAverage(int pagesToRead, Date fromDate, Date toDate, int[] weekPlanning, int nbDaysAWeek) {
+        if(pagesToRead >0 && fromDate != null && toDate != null) {
+            int nbTotalDays = daysBetweenDatesIncluded(fromDate, toDate);
+            int nbWeeks = entireWeeksBetweenDates(fromDate, toDate);
+
+            int indexFirstDay = getMyDayOfWeek(fromDate)-2; //-2 because Monday is 0 in weekPlanning[] and 2 in Calendar.MONDAY
+            int nbDaysToReadDuringWeeks = nbDaysAWeek * nbWeeks;
+            int nbDaysLeft = nbTotalDays - nbWeeks*7;
+            int nbDaysLeftToRead = 0;
+            for(int i = indexFirstDay; i< indexFirstDay+nbDaysLeft;i++) {
+                int index = i%7;
+                if(weekPlanning[index] == 1) nbDaysLeftToRead++;
+            }
+            int nbTotalDaysToRead = nbDaysToReadDuringWeeks + nbDaysLeftToRead;
+
+            if(nbTotalDaysToRead > 0)
+                return (int) Math.ceil((float)pagesToRead/nbTotalDaysToRead);
+        }
+        return ERROR_NB_PAGES_AVERAGE;
+    }
+
+    /**
+     * Gives the index of the Day (Calendar.DAY_OF_WEEK ) for the date given.
+     * @param date : the date whe want to know the day of week
+     * @return Calendar.DAY_OF_WEEK for the date
+     */
+    private static int getMyDayOfWeek(Date date) {
+        Calendar calendarFrom = Calendar.getInstance();
+        calendarFrom.setTime(date);
+        return calendarFrom.get(Calendar.DAY_OF_WEEK);
+    }
+
+    public static int daysBetweenDatesIncluded(Date date1, Date date2 ){
+        long diff = date2.getTime()-date1.getTime();
+        return (int)diff/DURATION_OF_DAY_IN_MILISEC +1;
+    }
+
+    public static int entireWeeksBetweenDates(Date date1, Date date2 ){
+        int days = daysBetweenDatesIncluded(date1, date2);
+        return (int)days/7;
+    }
+
+    public static String secondsToText(int seconds){
+        if(seconds >= 24*3600) {
+            return ERROR_NB_SECONDS_A_DAY;
+        }
+        int hours = (int)seconds/3600;
+        int minutes = (seconds-hours*3600)/60;
+        String result ="";
+        if(hours>0) {
+            result = hours+"h";
+        }
+        if(minutes >0) {
+            if (minutes<10) result += "0";
+            result += minutes + "min";
+        }
+        return result;
     }
 }

@@ -16,6 +16,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
@@ -34,13 +36,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.example.android.bookstudyplanner.Utils.dateIsBeforeToday;
+import static com.example.android.bookstudyplanner.Utils.secondsToText;
 import static com.example.android.bookstudyplanner.database.DatabaseUtils.ISBN_ABSENT_VALUE;
 
 /**
  * Created by vanessa on 09/07/2019.
  */
 
-public class BookDetailActivity extends AppCompatActivity implements TextWatcher{
+public class BookDetailActivity extends AppCompatActivity implements TextWatcher, CompoundButton.OnCheckedChangeListener{
 
     // Constant for logging
     private static final String TAG = BookDetailActivity.class.getSimpleName();
@@ -66,6 +69,14 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     @BindView(R.id.btnCalendarFrom) Button mButtonCalendarFrom;
     @BindView(R.id.btnCalendarTo) Button mButtonCalendarTo;
     @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.cbx1) CheckBox mCbx1;
+    @BindView(R.id.cbx2) CheckBox mCbx2;
+    @BindView(R.id.cbx3) CheckBox mCbx3;
+    @BindView(R.id.cbx4) CheckBox mCbx4;
+    @BindView(R.id.cbx5) CheckBox mCbx5;
+    @BindView(R.id.cbx6) CheckBox mCbx6;
+    @BindView(R.id.cbx7) CheckBox mCbx7;
+    @BindView(R.id.aboutNbPages) TextView mAboutNbPages;
 
     private int year;
     private int month;
@@ -81,6 +92,11 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private Date mEndDate;
     private DatePickerDialog.OnDateSetListener mDateFromSetListener;
     private DatePickerDialog.OnDateSetListener mDateToSetListener;
+    private int mTotalDays = 5;
+    private String mWeekPlanning;
+    private int mTabWeekPlanning[] = {1,1,1,1,1,0,0};
+    private int mNbPagesToRead;
+    private int mAvgNbSecByPage;
 
     // Constant for default book id to be used when not in update mode
     private static final int DEFAULT_BOOK_ID = -1;
@@ -136,9 +152,9 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                         viewModel.getBook().removeObserver(this);
                         Log.d(TAG, "Receiving database update from LiveData");
                         fillLayoutFields(book);
+                        setNbPagesAverage();
                     }
                 });
-
             } else {
                 mButtonDelete.setVisibility(View.GONE);
                 mToolbar.setTitle(getString(R.string.title_create));
@@ -269,6 +285,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                         mLabelSelectFromDate.setError(null);
                         mLabelErrorFromDate.setVisibility(View.INVISIBLE);
                         mButtonSave.setEnabled(true);
+                        setNbPagesAverage();
                     }
                 }
             }
@@ -313,16 +330,42 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                         }
                         mLabelErrorToDate.setVisibility(View.INVISIBLE);
                         mButtonSave.setEnabled(true);
+                        setNbPagesAverage();
                     }
                 }
             }
         };
+
+        mCbx1.setOnCheckedChangeListener(this);
+        mCbx2.setOnCheckedChangeListener(this);
+        mCbx3.setOnCheckedChangeListener(this);
+        mCbx4.setOnCheckedChangeListener(this);
+        mCbx5.setOnCheckedChangeListener(this);
+        mCbx6.setOnCheckedChangeListener(this);
+        mCbx7.setOnCheckedChangeListener(this);
 
         //init Fields
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    private void setNbPagesAverage() {
+        int result = Utils.calculateNbPagesAverage(mNbPagesToRead, mBeginDate, mEndDate, mTabWeekPlanning, mTotalDays);
+        if (result == Utils.ERROR_NB_PAGES_AVERAGE) {
+            mAboutNbPages.setText("ERROR_NB_PAGES_AVERAGE");
+        } else {
+            int seconds = mAvgNbSecByPage*result;
+            String text = secondsToText(seconds);
+            if(text == Utils.ERROR_NB_SECONDS_A_DAY) {
+                mAboutNbPages.setText(getString(R.string.err_read_time_greater_than_day));
+                mButtonSave.setEnabled(false);
+            } else {
+                mAboutNbPages.setText(String.valueOf(result) + " " +getString (R.string.label_pages)+ " (" + text + ")" +getString (R.string.label_per_day));
+                mButtonSave.setEnabled(true);
+            }
+        }
     }
 
     @Override
@@ -438,7 +481,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         int to;
 
         if(fromPage.length() > 0 && toPage.length() > 0 && pageCountStr.length() > 0) {
-            pageCount = Integer.parseInt(pageCountStr);
+            pageCount = Integer.parseInt(pageCountStr);//TODO TESTER pas de string
             from = Integer.parseInt(fromPage);
             to = Integer.parseInt(toPage);
             if (from > pageCount) {
@@ -471,20 +514,56 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 mTvToPage.setError(null);
             }
             mButtonSave.setEnabled(true);
-            int nbPagesToRead = to-from+1;
-            mValueNbPagesToRead.setText(String.valueOf(nbPagesToRead));
+            mNbPagesToRead = to-from+1;
+            mValueNbPagesToRead.setText(String.valueOf(mNbPagesToRead));
             Resources res = getResources();
-            int avg_nb_sec_by_page = res.getInteger(R.integer.avg_nb_sec_by_page);
-            int total = avg_nb_sec_by_page*nbPagesToRead;
+            mAvgNbSecByPage = res.getInteger(R.integer.avg_nb_sec_by_page);
+            int total = mAvgNbSecByPage*mNbPagesToRead;
             String time = Utils.getTime(total, getString(R.string.label_hour), getString(R.string.label_minute));
 
             mValueTimeEstimated.setText(time);
             mValueTimeEstimated.setVisibility(View.VISIBLE);
             mValueNbPagesToRead.setVisibility(View.VISIBLE);
             mLabelNbPagesToRead.setVisibility(View.VISIBLE);
+
+            setNbPagesAverage();
+
         } else {
             mValueNbPagesToRead.setVisibility(View.INVISIBLE);
             mLabelNbPagesToRead.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        mTotalDays = 0;
+        mTotalDays += (mCbx1.isChecked())? 1:0;
+        mTotalDays += (mCbx2.isChecked())? 1:0;
+        mTotalDays += (mCbx3.isChecked())? 1:0;
+        mTotalDays += (mCbx4.isChecked())? 1:0;
+        mTotalDays += (mCbx5.isChecked())? 1:0;
+        mTotalDays += (mCbx6.isChecked())? 1:0;
+        mTotalDays += (mCbx7.isChecked())? 1:0;
+
+        mTabWeekPlanning[0] = (mCbx1.isChecked())? 1:0;
+        mTabWeekPlanning[1] = (mCbx2.isChecked())? 1:0;
+        mTabWeekPlanning[2] = (mCbx3.isChecked())? 1:0;
+        mTabWeekPlanning[3] = (mCbx4.isChecked())? 1:0;
+        mTabWeekPlanning[4] = (mCbx5.isChecked())? 1:0;
+        mTabWeekPlanning[5] = (mCbx6.isChecked())? 1:0;
+        mTabWeekPlanning[6] = (mCbx7.isChecked())? 1:0;
+
+        mWeekPlanning = "";
+        mWeekPlanning += (mCbx1.isChecked())? "1":"0";
+        mWeekPlanning += (mCbx2.isChecked())? "1":"0";
+        mWeekPlanning += (mCbx3.isChecked())? "1":"0";
+        mWeekPlanning += (mCbx4.isChecked())? "1":"0";
+        mWeekPlanning += (mCbx5.isChecked())? "1":"0";
+        mWeekPlanning += (mCbx6.isChecked())? "1":"0";
+        mWeekPlanning += (mCbx7.isChecked())? "1":"0";
+
+        if(mTotalDays > 0) {
+            setNbPagesAverage();
         }
 
     }
