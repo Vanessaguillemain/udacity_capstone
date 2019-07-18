@@ -23,7 +23,32 @@
     <string name="err_read_time_greater_than_day">Your reading time exceeds 24h/day !</string>
 
     <string name="lorem_ipsum_20">Ut enim bene Cato in perfecto et spectato viro.</string>
-
+    <string name="b_detail_title">Title :</string>
+    <string name="hint_title">Title</string>
+    <string name="b_detail_total_pages">Total pages :</string>
+    <string name="b_detail_i_want_to_read">I want to read :</string>
+    <string name="b_detail_pages">Pages</string>
+    <string name="b_detail_from_page">From page :</string>
+    <string name="b_detail_to_page">To page :</string>
+    <string name="b_detail_estimated_time">Estimated time :</string>
+    <string name="b_detail_plan_reading">I want to plan reading :</string>
+    <string name="b_detail_from_date">From date :</string>
+    <string name="b_detail_pick_a_date">Pick a date</string>
+    <string name="b_detail_from_after_to">From is after To</string>
+    <string name="b_detail_to_date">To date :</string>
+    <string name="b_detail_to_before_from">To is before from</string>
+    <string name="b_detail_read_freaquency">Read Freaquency for this book :</string>
+    <string name="b_detail_monday">Mo</string>
+    <string name="b_detail_tuesday">Tu</string>
+    <string name="b_detail_wednesday">We</string>
+    <string name="b_detail_thursday">Th</string>
+    <string name="b_detail_friday">Fr</string>
+    <string name="b_detail_saturday">Sa</string>
+    <string name="b_detail_sunday">Su</string>
+    <string name="b_detail_estimation">Estimation :</string>
+    <string name="b_detail_about">About :</string>
+    <string name="b_detail_submit">Submit</string>
+    <string name="b_detail_delete">Delete</string>
 
 
 </resources>

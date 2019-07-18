@@ -50,13 +50,13 @@
                 android:id="@+id/labelTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Title : "/>
+                android:text="@string/b_detail_title"/>
 
             <EditText
                 android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Title"
+                android:hint="@string/hint_title"
                 android:inputType="text"
                 />
         </LinearLayout>
@@ -77,7 +77,7 @@
                 style="@style/SubtitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total pages : " />
+                android:text="@string/b_detail_total_pages" />
             <EditText
                 android:id="@+id/valuePageCount"
                 android:layout_width="match_parent"
@@ -97,7 +97,7 @@
                 style="@style/SubtitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="I want to read : " />
+                android:text="@string/b_detail_i_want_to_read" />
             <TextView
                 android:id="@+id/valueNbPagesToRead"
                 android:layout_width="wrap_content"
@@ -108,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="invisible"
-                android:text=" Pages"/>
+                android:text="@string/b_detail_pages"/>
         </LinearLayout>
 
         <!-- FROM PAGE TO PAGE -->
@@ -121,7 +121,7 @@
                 android:id="@+id/labelFromPage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="From page : "/>
+                android:text="@string/b_detail_from_page"/>
             <EditText
                 android:id="@+id/tvFromPage"
                 android:layout_width="80dp"
@@ -132,7 +132,7 @@
                 android:id="@+id/labelToPage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="To page : "/>
+                android:text="@string/b_detail_to_page"/>
 
             <EditText
                 android:id="@+id/tvToPage"
@@ -152,7 +152,7 @@
                 android:id="@+id/labelEstimated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Estimated time : "/>
+                android:text="@string/b_detail_estimated_time"/>
             <TextView
                 android:id="@+id/valueTimeEstimated"
                 android:layout_width="wrap_content"
@@ -167,7 +167,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/border_margin"
-            android:text="I want to plan reading : "/>
+            android:text="@string/b_detail_plan_reading"/>
         <!-- from date -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -178,12 +178,12 @@
                 android:id="@+id/labelFromDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="From date : "/>
+                android:text="@string/b_detail_from_date"/>
             <TextView
                 android:id="@+id/labelSelectFromDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pick a date"/>
+                android:text="@string/b_detail_pick_a_date"/>
             <Button
                 android:id="@+id/btnCalendarFrom"
                 android:layout_width="20dp"
@@ -194,7 +194,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/red"
-                android:text="From is after To"
+                android:text="@string/b_detail_from_after_to"
                 android:visibility="invisible"/>
         </LinearLayout>
         <!-- to date -->
@@ -207,12 +207,12 @@
                 android:id="@+id/labelToDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="To date : "/>
+                android:text="@string/b_detail_to_date"/>
             <TextView
                 android:id="@+id/labelSelectToDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pick a date"/>
+                android:text="@string/b_detail_pick_a_date"/>
             <Button
                 android:id="@+id/btnCalendarTo"
                 android:layout_width="20dp"
@@ -223,7 +223,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/red"
-                android:text="To is before from"
+                android:text="@string/b_detail_to_before_from"
                 android:visibility="invisible"/>
         </LinearLayout>
 
@@ -234,7 +234,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/border_margin"
-            android:text="Read Freaquency for this book : "/>
+            android:text="@string/b_detail_read_freaquency"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -250,7 +250,7 @@
                 android:button="@null"
                 android:checked="true"
                 android:gravity="center"
-                android:text="Mo" />
+                android:text="@string/b_detail_monday" />
 
             <CheckBox
                 android:id="@+id/cbx2"
@@ -261,7 +261,7 @@
                 android:button="@null"
                 android:checked="true"
                 android:gravity="center"
-                android:text="Tu" />
+                android:text="@string/b_detail_tuesday" />
 
             <CheckBox
                 android:id="@+id/cbx3"
@@ -272,7 +272,7 @@
                 android:checked="true"
                 android:gravity="center"
                 android:button="@null"
-                android:text="We" />
+                android:text="@string/b_detail_wednesday" />
 
             <CheckBox
                 android:id="@+id/cbx4"
@@ -283,7 +283,7 @@
                 android:checked="true"
                 android:gravity="center"
                 android:button="@null"
-                android:text="Th" />
+                android:text="@string/b_detail_thursday" />
 
             <CheckBox
                 android:id="@+id/cbx5"
@@ -294,7 +294,7 @@
                 android:checked="true"
                 android:gravity="center"
                 android:button="@null"
-                android:text="Fr" />
+                android:text="@string/b_detail_friday" />
             <CheckBox
                 android:id="@+id/cbx6"
                 android:layout_width="wrap_content"
@@ -303,7 +303,7 @@
                 android:background="@drawable/radiobtn_bck"
                 android:gravity="center"
                 android:button="@null"
-                android:text="Sa" />
+                android:text="@string/b_detail_saturday" />
             <CheckBox
                 android:id="@+id/cbx7"
                 android:layout_width="wrap_content"
@@ -312,7 +312,7 @@
                 android:background="@drawable/radiobtn_bck"
                 android:gravity="center"
                 android:button="@null"
-                android:text="Su" />
+                android:text="@string/b_detail_sunday" />
 
         </LinearLayout>
 
@@ -323,7 +323,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/border_margin"
-            android:text="Estimation : "/>
+            android:text="@string/b_detail_estimation"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -333,7 +333,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="About : "/>
+                android:text="@string/b_detail_about"/>
             <TextView
                 android:id="@+id/aboutNbPages"
                 android:layout_width="wrap_content"
@@ -354,7 +354,7 @@
                 android:layout_weight="1"
                 android:elevation="4dp"
                 android:theme="@style/DetailButton"
-                android:text="Submit"/>
+                android:text="@string/b_detail_submit"/>
 
             <Button
                 android:id="@+id/buttonDelete"
@@ -362,7 +362,7 @@
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:elevation="4dp"
-                android:text="Delete"
+                android:text="@string/b_detail_delete"
                 android:theme="@style/DetailButton"/>
         </LinearLayout>
     </LinearLayout>
