@@ -56,7 +56,7 @@ public class Utils {
         int month = datePicker.getMonth();
         int year =  datePicker.getYear();
         Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
+        calendar.set(year, month, day, 0, 0, 0);
         return calendar.getTime();
     }
 
@@ -99,13 +99,20 @@ public class Utils {
     }
 
     public static boolean dateIsBeforeToday(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        Date today = calendar.getTime();
-        int compare = today.compareTo(date);
-        if (compare <= 0) return false;
-        return true;
+
+            Date today = getToday();
+            int compare = today.compareTo(date);
+            if (compare <= 0) return false;
+            return true;
     }
 
+    /**
+     * Uses Date.compareTo() to compare the 2 dates in parameters.
+     * @param dateOne : the date supposed to be before dateTwo
+     * @param dateTwo : the date supposed to be after dateOne
+     * @return <code>true</code> if dateOne is before dateTwo, or the same date.
+     * @exception NullPointerException if <code>dateOne</code> or <code>dateTwo</code> is null.
+     */
     public static boolean dateOneIsBeforeDateTwo(Date dateOne, Date dateTwo) {
         int compare = dateOne.compareTo(dateTwo);
         if (compare <= 0) return true;
@@ -142,7 +149,22 @@ public class Utils {
         return ERROR_NB_PAGES_AVERAGE;
     }
 
+    /**
+     * Calculate the date of current day, without current hours.minutes...
+     * To be able to compare with date picked.
+     * @return the date of current day, without current hours.minutes...
+     */
+    public static Date getToday() {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        cal.set(year, month, day,0,0,0);
+        return cal.getTime();
+    }
+
     public static List<Date> getPlanning(Date fromDate, Date toDate, int[] weekPlanning, int nbDaysAWeek) {
+        //todo : le planning retourné était de taille nulle
         if(fromDate != null && toDate != null) {
             List<Date> planning = new ArrayList<Date>();
             if (nbDaysAWeek == 0) {
@@ -176,6 +198,22 @@ public class Utils {
             return tab;
         }
         return null;
+    }
+
+    public static String getStringWeekPlanningFromTab(int[] tabWeekPlanning) {
+        String sWeekPlanning = "";
+        for(int i=0; i<7; i++) {
+            sWeekPlanning += (tabWeekPlanning[i] == 1) ? "1" : "0";
+        }
+        return sWeekPlanning;
+    }
+
+    public static int getNbTotalWeekPlanningFromTab(int[] tabWeekPlanning) {
+        int total = 0;
+        for(int i=0; i<7; i++) {
+            total += (tabWeekPlanning[i] == 1) ? 1 : 0;
+        }
+        return total;
     }
 
     public static Date addDays(Date date, int days) {

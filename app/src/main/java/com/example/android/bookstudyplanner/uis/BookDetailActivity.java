@@ -95,9 +95,9 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private Date mEndDate;
     private DatePickerDialog.OnDateSetListener mDateFromSetListener;
     private DatePickerDialog.OnDateSetListener mDateToSetListener;
-    private int mTotalDaysByWeek = 5;
+    private int mTotalDaysByWeek = 0;
     private String mWeekPlanning;
-    private int mTabWeekPlanning[] = {1,1,1,1,1,0,0};
+    private int mTabWeekPlanning[] ;
     private int mNbPagesToRead;
     private int mAvgNbSecByPage;
 
@@ -162,7 +162,11 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 mButtonDelete.setVisibility(View.GONE);
                 mToolbar.setTitle(getString(R.string.title_create));
                 mButtonSave.setEnabled(false);
-            }
+                mTabWeekPlanning = new int[]{1,1,1,1,1,0,0};
+                mWeekPlanning = "1111100"; //TODO
+                mTotalDaysByWeek = 5;
+
+        }
         }
     }
 
@@ -204,12 +208,16 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 dayOfMonthTo = Utils.getDayFromDate(mEndDate);
             }
         }
-        if(item.getWeekPlanning() != null) {
-            mWeekPlanning = item.getWeekPlanning();
+        mWeekPlanning = item.getWeekPlanning();
+        if(mWeekPlanning != null) {
             mTabWeekPlanning = Utils.getTabWeekPlanningFromString(mWeekPlanning);
-            //set checkboxes
-            setChekBoxes(mTabWeekPlanning);
+        } else {
+            mTabWeekPlanning = new int[]{1,1,1,1,1,0,0};
+            mWeekPlanning = "1111100";
         }
+        mTotalDaysByWeek = Utils.getNbTotalWeekPlanningFromTab(mTabWeekPlanning);
+        //set checkboxes
+        setCheckBoxes(mTabWeekPlanning);
 
     }
 
@@ -256,6 +264,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                     mTvTitle.setError(getString(R.string.err_title_required));
                     mButtonSave.setEnabled(false);
                     return;
+                } else {
+                    //TODO : tester si les autres champs permettent de réactiver submit
                 }
             }
         });
@@ -274,18 +284,20 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 yearFrom = year;
                 monthFrom = month;
                 dayOfMonthFrom = dayOfMonth;
+
                 if(dateIsBeforeToday(chosenDate)) {
                     mLabelSelectFromDate.setError("");
                     mLabelErrorFromDate.setVisibility(View.VISIBLE);
                     mLabelErrorFromDate.setText(getString(R.string.err_date_before_today));
-                    if(!dateIsBeforeToday(mEndDate)) {
+                    if(mEndDate != null && !dateIsBeforeToday(mEndDate)) {
                         mLabelErrorToDate.setVisibility(View.INVISIBLE);
                         mLabelSelectToDate.setError(null);
                     }
                     mButtonSave.setEnabled(false);
                     return;
                 } else {
-                    if(!Utils.dateOneIsBeforeDateTwo(chosenDate, mEndDate)) {
+                    //TODO test the 2 dates are not null
+                    if(mEndDate!=null && !Utils.dateOneIsBeforeDateTwo(chosenDate, mEndDate)) {
                         mLabelSelectFromDate.setError("");
                         mLabelErrorFromDate.setVisibility(View.VISIBLE);
                         mLabelErrorFromDate.setText(getString(R.string.err_date_from_after_to));
@@ -316,7 +328,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                     mLabelSelectToDate.setError("");
                     mLabelErrorToDate.setVisibility(View.VISIBLE);
                     mLabelErrorToDate.setText(getString(R.string.err_date_before_today));
-                    if(!dateIsBeforeToday(mBeginDate)) {
+                    if(mBeginDate != null && !dateIsBeforeToday(mBeginDate)) {
                         mLabelErrorFromDate.setVisibility(View.INVISIBLE);
                         mLabelSelectFromDate.setError(null);
                     }
@@ -324,23 +336,33 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                     mButtonSave.setEnabled(false);
                     return;
                 } else {
-                    if(!Utils.dateOneIsBeforeDateTwo(mBeginDate, chosenDate)) {
-                        mLabelSelectToDate.setError("");
-                        mLabelErrorToDate.setVisibility(View.VISIBLE);
-                        mLabelErrorToDate.setText(getString(R.string.err_date_to_before_from));
-                        mButtonSave.setEnabled(false);
-                        return;
-                    } else {
-                        mLabelSelectToDate.setError(null);
-                        if(dateIsBeforeToday(mBeginDate)) {
+                    if(mBeginDate!=null) {
+                        //TODO test the 2 dates are not null
+                        //TODO test if mBeginDate not null. Change all algo (if and else)
+                        if (!Utils.dateOneIsBeforeDateTwo(mBeginDate, chosenDate)) {
+                            mLabelSelectToDate.setError("");
+                            mLabelErrorToDate.setVisibility(View.VISIBLE);
+                            mLabelErrorToDate.setText(getString(R.string.err_date_to_before_from));
                             mButtonSave.setEnabled(false);
+                            return;
                         } else {
-                            mLabelErrorFromDate.setVisibility(View.INVISIBLE);
-                            mLabelSelectFromDate.setError(null);
+                            mLabelSelectToDate.setError(null);
+                            if (dateIsBeforeToday(mBeginDate)) {
+                                mButtonSave.setEnabled(false);
+                            } else {
+                                mLabelErrorFromDate.setVisibility(View.INVISIBLE);
+                                mLabelSelectFromDate.setError(null);
+                            }
+                            mLabelErrorToDate.setVisibility(View.INVISIBLE);
+                            mButtonSave.setEnabled(true);
+                            setNbPagesAverage();
                         }
+                    } else {
+                        mLabelErrorFromDate.setVisibility(View.INVISIBLE);//TODO verifier si utile ici
+                        mLabelSelectFromDate.setError(null);//TODO verifier si utile ici
+                        mLabelSelectToDate.setError(null);
                         mLabelErrorToDate.setVisibility(View.INVISIBLE);
                         mButtonSave.setEnabled(true);
-                        setNbPagesAverage();
                     }
                 }
             }
@@ -364,7 +386,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private void setNbPagesAverage() {
         int result = Utils.calculateNbPagesAverage(mNbPagesToRead, mBeginDate, mEndDate, mTabWeekPlanning, mTotalDaysByWeek);
         if (result == Utils.ERROR_NB_PAGES_AVERAGE) {
-            mAboutNbPages.setText("ERROR_NB_PAGES_AVERAGE");
+            mAboutNbPages.setText("");
         } else {
             int seconds = mAvgNbSecByPage*result;
             String text = secondsToText(seconds);
@@ -394,6 +416,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
         Date beginDate = Utils.getDateFromFormatedDate(mLabelSelectFromDate.getText().toString(), BookDetailActivity.this);
         Date endDate = Utils.getDateFromFormatedDate(mLabelSelectToDate.getText().toString(), BookDetailActivity.this);
+        //TODO test the 2 dates are not null 19/07/19
         boolean intervaleOk = Utils.dateOneIsBeforeDateTwo(beginDate, endDate);
         if(!intervaleOk) {
             mLabelErrorToDate.setVisibility(View.VISIBLE);
@@ -416,6 +439,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         Integer nbSecondsByPage = null;
         final Boolean newBook = (mBookId == DEFAULT_BOOK_ID);
 
+        mWeekPlanning = Utils.getStringWeekPlanningFromTab(mTabWeekPlanning);
         //Book Entity
         final BookEntity book = new BookEntity(ISBN_ABSENT_VALUE,  title,  pageCount,  fromPageNb,  toPageNb, nbPagesToRead,
                 beginDate, endDate, mWeekPlanning, nbPagesRead, readTimeInSeconds, nbSecondsByPage);
@@ -568,38 +592,52 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        mTotalDaysByWeek = 0;
-        mTotalDaysByWeek += (mCbx1.isChecked())? 1:0;
-        mTotalDaysByWeek += (mCbx2.isChecked())? 1:0;
-        mTotalDaysByWeek += (mCbx3.isChecked())? 1:0;
-        mTotalDaysByWeek += (mCbx4.isChecked())? 1:0;
-        mTotalDaysByWeek += (mCbx5.isChecked())? 1:0;
-        mTotalDaysByWeek += (mCbx6.isChecked())? 1:0;
-        mTotalDaysByWeek += (mCbx7.isChecked())? 1:0;
 
-        mTabWeekPlanning[0] = (mCbx1.isChecked())? 1:0;
-        mTabWeekPlanning[1] = (mCbx2.isChecked())? 1:0;
-        mTabWeekPlanning[2] = (mCbx3.isChecked())? 1:0;
-        mTabWeekPlanning[3] = (mCbx4.isChecked())? 1:0;
-        mTabWeekPlanning[4] = (mCbx5.isChecked())? 1:0;
-        mTabWeekPlanning[5] = (mCbx6.isChecked())? 1:0;
-        mTabWeekPlanning[6] = (mCbx7.isChecked())? 1:0;
-
-        mWeekPlanning = "";
-        mWeekPlanning += (mCbx1.isChecked())? "1":"0";
-        mWeekPlanning += (mCbx2.isChecked())? "1":"0";
-        mWeekPlanning += (mCbx3.isChecked())? "1":"0";
-        mWeekPlanning += (mCbx4.isChecked())? "1":"0";
-        mWeekPlanning += (mCbx5.isChecked())? "1":"0";
-        mWeekPlanning += (mCbx6.isChecked())? "1":"0";
-        mWeekPlanning += (mCbx7.isChecked())? "1":"0";
+        // Check which checkbox was clicked
+        switch(buttonView.getId()) {
+            case R.id.cbx1:
+                updateTabs(isChecked, 0);
+                break;
+            case R.id.cbx2:
+                updateTabs(isChecked, 1);
+                break;
+            case R.id.cbx3:
+                updateTabs(isChecked, 2);
+                break;
+            case R.id.cbx4:
+                updateTabs(isChecked, 3);
+                break;
+            case R.id.cbx5:
+                updateTabs(isChecked, 4);
+                break;
+            case R.id.cbx6:
+                updateTabs(isChecked, 5);
+                break;
+            case R.id.cbx7:
+                updateTabs(isChecked, 6);
+                break;
+        }
 
         if(mTotalDaysByWeek > 0) {
             setNbPagesAverage();
         }
     }
 
-    private void setChekBoxes(int[] tabPlanning) {
+    private void updateTabs(boolean isChecked, int index) {
+        if (isChecked) {
+            if (mTabWeekPlanning[index] == 0) {
+                mTotalDaysByWeek += 1;
+                mTabWeekPlanning[index] = 1;
+            }
+        } else {
+            if (mTabWeekPlanning[index] == 1) {
+                mTotalDaysByWeek -= 1;
+                mTabWeekPlanning[index] = 0;
+            }
+        }
+    }
+
+    private void setCheckBoxes(int[] tabPlanning) {
         mCbx1.setChecked(tabPlanning[0]==1);
         mCbx2.setChecked(tabPlanning[1]==1);
         mCbx3.setChecked(tabPlanning[2]==1);
@@ -607,6 +645,5 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         mCbx5.setChecked(tabPlanning[4]==1);
         mCbx6.setChecked(tabPlanning[5]==1);
         mCbx7.setChecked(tabPlanning[6]==1);
-
     }
 }
