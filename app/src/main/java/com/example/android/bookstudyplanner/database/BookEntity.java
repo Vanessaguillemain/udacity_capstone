@@ -255,10 +255,14 @@ public class BookEntity implements Parcelable   {
     @Override
     public String toString() {
         return "BookEntity{" +
-                "id=" + id +
-                ", isbn=" + isbn +
-                ", title='" + title + '\'' +
+                "title='" + title + '\'' +
                 ", pageCount=" + pageCount +
+                ", fromPageNb=" + fromPageNb +
+                ", toPageNb=" + toPageNb +
+                ", nbPagesToRead=" + nbPagesToRead +
+                ", beginDate=" + beginDate +
+                ", endDate=" + endDate +
+                ", weekPlanning='" + weekPlanning + '\'' +
                 '}';
     }
 }

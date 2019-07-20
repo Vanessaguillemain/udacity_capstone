@@ -2,19 +2,65 @@ package com.example.android.bookstudyplanner.uis;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.bookstudyplanner.R;
+import com.example.android.bookstudyplanner.Utils;
+import com.example.android.bookstudyplanner.database.BookEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by vanessa on 08/07/2019.
  */
 
-public class TabTodayFragment extends Fragment {
+public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapter.ItemClickListener {
+
+    TodayRecyclerViewAdapter todayRecyclerViewAdapter;
+    ArrayList<BookEntity> bookEntities = new ArrayList<>();
+    public void setBookEntities(ArrayList<BookEntity> bookEntities) {
+        this.bookEntities = bookEntities;
+    }
+
+    public void setBooksToAdapter(List<BookEntity> books) {
+        if (todayRecyclerViewAdapter != null) {
+            todayRecyclerViewAdapter.setBooks(books);
+        } else {
+            bookEntities.addAll(books);
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_today, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_today, container, false);
+
+        // set up the RecyclerView
+        RecyclerView recyclerView = rootView.findViewById(R.id.rvToday);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        todayRecyclerViewAdapter = new TodayRecyclerViewAdapter(getActivity(), bookEntities);
+        todayRecyclerViewAdapter.setClickListener(this);
+        recyclerView.setAdapter(todayRecyclerViewAdapter);
+
+        return rootView;
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        BookEntity item = todayRecyclerViewAdapter.getItem(position);
+
+        Utils.tostS(getActivity(), "you clicked on" + position + " title=" + item.getTitle());
+
+        /*
+        Intent myIntent = new Intent(getActivity(), BookDetailActivity.class);
+        myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF);
+        myIntent.putExtra(Utils.INTENT_KEY_BOOK, item);
+
+        getActivity().startActivity(myIntent);*/
+
     }
 }

@@ -16,32 +16,32 @@ import java.util.List;
  * Created by vanessa on 10/07/2019.
  */
 
-public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecyclerViewAdapter.BooksViewHolder> {
+public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecyclerViewAdapter.TodayViewHolder> {
 
     private List<BookEntity> mDataBookEntities;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    BooksRecyclerViewAdapter(Context context, List<BookEntity> dataBookEntities) {
+    TodayRecyclerViewAdapter(Context context, List<BookEntity> dataBookEntities) {
         this.mInflater = LayoutInflater.from(context);
         this.mDataBookEntities = dataBookEntities;
     }
 
     // inflates the row layout from xml when needed
     @Override
-    public BooksViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.rv_books_item, parent, false);
-        return new BooksViewHolder(view);
+    public TodayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = mInflater.inflate(R.layout.rv_today_item, parent, false);
+        return new TodayViewHolder(view);
     }
 
     // binds the data to the TextView in each row
     @Override
-    public void onBindViewHolder(BooksViewHolder holder, int position) {
+    public void onBindViewHolder(TodayViewHolder holder, int position) {
         BookEntity book = mDataBookEntities.get(position);
         holder.tvBookTitle.setText(book.getTitle());
-        holder.tvBookId.setText(String.valueOf(book.getId()));
-        holder.tvBookPageCount.setText(String.valueOf(book.getPageCount()));
+        holder.tvBookPageCount.setText(String.valueOf(book.getNbPagesToRead()));
+        holder.tvBookMinuteCount.setText("TODO");//TODO
     }
 
     // total number of rows
@@ -64,16 +64,16 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 
 
     // stores and recycles views as they are scrolled off screen
-    public class BooksViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class TodayViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvBookTitle;
-        TextView tvBookId;
         TextView tvBookPageCount;
+        TextView tvBookMinuteCount;
 
-        BooksViewHolder(View itemView) {
+        TodayViewHolder(View itemView) {
             super(itemView);
-            tvBookTitle = itemView.findViewById(R.id.tvBookTitle_books);
-            tvBookId = itemView.findViewById(R.id.tvBookId_books);
-            tvBookPageCount = itemView.findViewById(R.id.tvBookPageCount_books);
+            tvBookTitle = itemView.findViewById(R.id.tvBookTitle_today);
+            tvBookPageCount = itemView.findViewById(R.id.tvBookPagesCount_today);
+            tvBookMinuteCount = itemView.findViewById(R.id.tvBookMinutesCount_today);
             itemView.setOnClickListener(this);
         }
 

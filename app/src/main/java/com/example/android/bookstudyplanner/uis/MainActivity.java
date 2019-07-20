@@ -57,7 +57,10 @@ public class MainActivity extends AppCompatActivity {
     // Member variable for the Database
     private AppDatabase mDb;
     private ArrayList<BookEntity> bookEntities = new ArrayList<>();
+    private ArrayList<BookEntity> bookTodayEntities = new ArrayList<>();
     private TabBooksFragment tabBooksFragment;
+    private TabTodayFragment tabTodayFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +77,11 @@ public class MainActivity extends AppCompatActivity {
         tabBooksFragment = new TabBooksFragment();
         tabBooksFragment.setBookEntities(bookEntities);
 
+        tabTodayFragment = new TabTodayFragment();
+        tabTodayFragment.setBookEntities(bookTodayEntities);
+
         adapter.addFragment(tabBooksFragment, getString(R.string.tab_books_title));
-        adapter.addFragment(new TabTodayFragment(), getString(R.string.tab_today_title));
+        adapter.addFragment(tabTodayFragment, getString(R.string.tab_today_title));
         adapter.addFragment(new TabPlanningFragment(), getString(R.string.tab_planning_title));
 
         viewPager.setAdapter(adapter);
@@ -131,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //retrieveBooks();
     }
 
     private void setUpViewModel() {
@@ -139,11 +144,20 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getBooks().observe(this, new Observer<List<BookEntity>>() {
             @Override
             public void onChanged(@Nullable List<BookEntity> books) {
-                Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
-               // mAdapter.setTasks(taskEntries);
+                Log.d(TAG, "Updating list of books from LiveData in ViewModel");
                 tabBooksFragment.setBooksToAdapter(books);
                 bookEntities.clear();
                 bookEntities.addAll(books);
+            }
+        });
+
+        viewModel.getTodays().observe(this, new Observer<List<BookEntity>>() {
+            @Override
+            public void onChanged(@Nullable List<BookEntity> todays) {
+                Log.d(TAG, "Updating list of today books from LiveData in ViewModel");
+                tabTodayFragment.setBooksToAdapter(todays);
+                bookTodayEntities.clear();
+                bookTodayEntities.addAll(todays);
             }
         });
     }

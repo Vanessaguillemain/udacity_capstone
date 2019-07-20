@@ -26,7 +26,6 @@ public class Utils {
     public static final String INTENT_KEY_BOOK_DETAIL_ACTION = "INTENT_KEY_BOOK_DETAIL_ACTION";
     public static final String INTENT_VAL_BOOK_DETAIL_ACTION_CREATE = "INTENT_VAL_BOOK_DETAIL_ACTION_CREATE";
     public static final String INTENT_VAL_BOOK_DETAIL_ACTION_MODIF = "INTENT_VAL_BOOK_DETAIL_ACTION_MODIF";
-    public static final String WEEK_EMPTY = "0000000";
     public static final String INTENT_KEY_BOOK = "INTENT_KEY_BOOK";
     public static final int ERROR_NB_PAGES_AVERAGE =-1;
     public static final int ERROR_NB_DAYS_TO_READ_ZERO =-2;
@@ -58,7 +57,10 @@ public class Utils {
         int year =  datePicker.getYear();
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, 0, 0, 0);
-        return calendar.getTime();
+        //divide by 1000 to avoid milliseconds
+        long lDate = calendar.getTime().getTime()/1000;
+        Date d = new Date(lDate*1000);
+        return d;
     }
 
     public static String getFormatedDateFromDatePicker(DatePicker datePicker, Context context){
@@ -100,7 +102,6 @@ public class Utils {
     }
 
     public static boolean dateIsBeforeToday(Date date) {
-
             Date today = getToday();
             int compare = today.compareTo(date);
             if (compare <= 0) return false;
@@ -164,7 +165,10 @@ public class Utils {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
         cal.set(year, month, day,0,0,0);
-        return cal.getTime();
+        // divide by 1000 to avoid milliseconds
+        long lToday = cal.getTime().getTime()/1000;
+        Date d = new Date(lToday*1000);
+        return d;
     }
 
     public static List<Date> getPlanning(Date fromDate, Date toDate, int[] weekPlanning, int nbDaysAWeek) {
@@ -250,11 +254,6 @@ public class Utils {
         long diff = lDate2-lDate1;
         long temp = diff/DURATION_OF_DAY_IN_SEC;
         return (int)temp +1;
-    }
-
-    public static int entireWeeksBetweenDates(Date date1, Date date2 ){
-        int days = daysBetweenDatesIncluded(date1, date2);
-        return (int)days/7;
     }
 
     public static String secondsToText(int seconds){

@@ -101,6 +101,13 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private int mNbPagesToRead;
     private int mAvgNbSecByPage;
 
+    //boolean
+    private boolean mTitleValid = false;
+    private boolean mPagesToReadValid = false;
+    private boolean mFromBeforeTo = false;
+    private boolean mDatesToFromValid = false;
+    private boolean mPlanningValid = false;
+
     // Constant for default book id to be used when not in update mode
     private static final int DEFAULT_BOOK_ID = -1;
 
@@ -163,16 +170,17 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 mToolbar.setTitle(getString(R.string.title_create));
                 mButtonSave.setEnabled(false);
                 mTabWeekPlanning = new int[]{1,1,1,1,1,0,0};
-                mWeekPlanning = "1111100"; //TODO
+                mWeekPlanning = STRING_DEFAULT_WEEK_PLANNING;
                 mTotalDaysByWeek = 5;
-
-        }
+                mPlanningValid = true;
+            }
         }
     }
 
     private void fillLayoutFields(BookEntity item) {
         mTvTitle.setText(item.getTitle());
         mValuePageCount.setText(String.valueOf(item.getPageCount()));
+        mTitleValid = true;
         if(item.getNbPagesToRead() != null) {
             mValueNbPagesToRead.setText(String.valueOf(item.getNbPagesToRead()));
         }
@@ -186,6 +194,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         } else {
             mTvToPage.setText(String.valueOf(item.getToPageNb()));
         }
+        mPagesToReadValid = true;
         //If mBeginDate is not null, it has been initialized in savednstanceSTate
         if(mBeginDate == null) {
             mBeginDate = item.getBeginDate();
@@ -197,7 +206,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 dayOfMonthFrom = Utils.getDayFromDate(mBeginDate);
             }
         }
-        //If mEndDate is not null, it has been initialized in savednstanceSTate
+        //If mEndDate is not null, it has been initialized in savedInstanceState
         if(mEndDate == null) {
             mEndDate = item.getEndDate();
             if (mEndDate != null) {
@@ -208,17 +217,19 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 dayOfMonthTo = Utils.getDayFromDate(mEndDate);
             }
         }
+        mDatesToFromValid = true;
         mWeekPlanning = item.getWeekPlanning();
         if(mWeekPlanning != null) {
             mTabWeekPlanning = Utils.getTabWeekPlanningFromString(mWeekPlanning);
+            mTotalDaysByWeek = Utils.getNbTotalWeekPlanningFromTab(mTabWeekPlanning);
         } else {
             mTabWeekPlanning = new int[]{1,1,1,1,1,0,0};
-            mWeekPlanning = "1111100";
+            mWeekPlanning = STRING_DEFAULT_WEEK_PLANNING;
+            mTotalDaysByWeek = 5;
         }
-        mTotalDaysByWeek = Utils.getNbTotalWeekPlanningFromTab(mTabWeekPlanning);
+        mPlanningValid = true;
         //set checkboxes
         setCheckBoxes(mTabWeekPlanning);
-
     }
 
     /**
@@ -262,11 +273,11 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             public void afterTextChanged(Editable s) {
                 if( s.length() == 0 ) {
                     mTvTitle.setError(getString(R.string.err_title_required));
-                    mButtonSave.setEnabled(false);
-                    return;
+                    mTitleValid = false;
                 } else {
-                    //TODO : tester si les autres champs permettent de réactiver submit
+                    mTitleValid = true;
                 }
+                setButtonSaveState();
             }
         });
 
@@ -289,27 +300,34 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                     mLabelSelectFromDate.setError("");
                     mLabelErrorFromDate.setVisibility(View.VISIBLE);
                     mLabelErrorFromDate.setText(getString(R.string.err_date_before_today));
-                    if(mEndDate != null && !dateIsBeforeToday(mEndDate)) {
-                        mLabelErrorToDate.setVisibility(View.INVISIBLE);
-                        mLabelSelectToDate.setError(null);
-                    }
+                    mDatesToFromValid = false;
                     mButtonSave.setEnabled(false);
-                    return;
+                    mAboutNbPages.setText("");
                 } else {
-                    //TODO test the 2 dates are not null
-                    if(mEndDate!=null && !Utils.dateOneIsBeforeDateTwo(chosenDate, mEndDate)) {
-                        mLabelSelectFromDate.setError("");
-                        mLabelErrorFromDate.setVisibility(View.VISIBLE);
-                        mLabelErrorFromDate.setText(getString(R.string.err_date_from_after_to));
-                        mButtonSave.setEnabled(false);
-                        return;
+                    if(mEndDate!=null) {
+                        if (!Utils.dateOneIsBeforeDateTwo(chosenDate, mEndDate)) {
+                            mFromBeforeTo = false;
+                            mLabelSelectFromDate.setError("");
+                            mLabelErrorFromDate.setVisibility(View.VISIBLE);
+                            mLabelErrorFromDate.setText(getString(R.string.err_date_from_after_to));
+                            mDatesToFromValid = false;
+                            mAboutNbPages.setText("");
+                        } else {
+                            mFromBeforeTo = true;
+                            mLabelSelectFromDate.setError(null);
+                            mLabelErrorFromDate.setVisibility(View.GONE);
+                            mLabelSelectToDate.setError(null);
+                            mLabelErrorToDate.setVisibility(View.GONE);
+                            mDatesToFromValid = true;
+                            setNbPagesAverage();
+                        }
                     } else {
                         mLabelSelectFromDate.setError(null);
-                        mLabelErrorFromDate.setVisibility(View.INVISIBLE);
-                        mButtonSave.setEnabled(true);
-                        setNbPagesAverage();
+                        mLabelErrorFromDate.setVisibility(View.GONE);
+                        mDatesToFromValid = false;
                     }
                 }
+                setButtonSaveState();
             }
         };
 
@@ -328,43 +346,40 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                     mLabelSelectToDate.setError("");
                     mLabelErrorToDate.setVisibility(View.VISIBLE);
                     mLabelErrorToDate.setText(getString(R.string.err_date_before_today));
-                    if(mBeginDate != null && !dateIsBeforeToday(mBeginDate)) {
-                        mLabelErrorFromDate.setVisibility(View.INVISIBLE);
-                        mLabelSelectFromDate.setError(null);
-                    }
-
+                    mDatesToFromValid = false;
                     mButtonSave.setEnabled(false);
-                    return;
+                    mAboutNbPages.setText("");
+                    //return;
                 } else {
                     if(mBeginDate!=null) {
-                        //TODO test the 2 dates are not null
-                        //TODO test if mBeginDate not null. Change all algo (if and else)
                         if (!Utils.dateOneIsBeforeDateTwo(mBeginDate, chosenDate)) {
+                            mFromBeforeTo = false;
                             mLabelSelectToDate.setError("");
                             mLabelErrorToDate.setVisibility(View.VISIBLE);
                             mLabelErrorToDate.setText(getString(R.string.err_date_to_before_from));
-                            mButtonSave.setEnabled(false);
-                            return;
+                            mDatesToFromValid = false;
+                            mAboutNbPages.setText("");
                         } else {
+                            mFromBeforeTo = true;
+                            mDatesToFromValid = true;
                             mLabelSelectToDate.setError(null);
                             if (dateIsBeforeToday(mBeginDate)) {
-                                mButtonSave.setEnabled(false);
+                                mDatesToFromValid = false;
+                                mAboutNbPages.setText("");
                             } else {
-                                mLabelErrorFromDate.setVisibility(View.INVISIBLE);
+                                mLabelErrorFromDate.setVisibility(View.GONE);
                                 mLabelSelectFromDate.setError(null);
                             }
-                            mLabelErrorToDate.setVisibility(View.INVISIBLE);
-                            mButtonSave.setEnabled(true);
+                            mLabelErrorToDate.setVisibility(View.GONE);
                             setNbPagesAverage();
                         }
                     } else {
-                        mLabelErrorFromDate.setVisibility(View.INVISIBLE);//TODO verifier si utile ici
-                        mLabelSelectFromDate.setError(null);//TODO verifier si utile ici
                         mLabelSelectToDate.setError(null);
-                        mLabelErrorToDate.setVisibility(View.INVISIBLE);
-                        mButtonSave.setEnabled(true);
+                        mLabelErrorToDate.setVisibility(View.GONE);
+                        mDatesToFromValid = false;
                     }
                 }
+                setButtonSaveState();
             }
         };
 
@@ -383,19 +398,34 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
     }
 
+    private void setButtonSaveState() {
+        if(mTitleValid && mPagesToReadValid && mDatesToFromValid && mPlanningValid) {
+            mButtonSave.setEnabled(true);
+        } else {
+            mButtonSave.setEnabled(false);
+        }
+    }
     private void setNbPagesAverage() {
         int result = Utils.calculateNbPagesAverage(mNbPagesToRead, mBeginDate, mEndDate, mTabWeekPlanning, mTotalDaysByWeek);
         if (result == Utils.ERROR_NB_PAGES_AVERAGE) {
             mAboutNbPages.setText("");
+            mPagesToReadValid = false;
+            mButtonSave.setEnabled(false);
+        } else if (result == Utils.ERROR_NB_DAYS_TO_READ_ZERO) {
+            mAboutNbPages.setText("ZERO days of reading");
+            mPagesToReadValid = false;
+            mButtonSave.setEnabled(false);
         } else {
             int seconds = mAvgNbSecByPage*result;
             String text = secondsToText(seconds);
             if(text == Utils.ERROR_NB_SECONDS_A_DAY) {
                 mAboutNbPages.setText(getString(R.string.err_read_time_greater_than_day));
+                mPagesToReadValid = false;
                 mButtonSave.setEnabled(false);
             } else {
                 mAboutNbPages.setText(String.valueOf(result) + " " +getString (R.string.label_pages)+ " (" + text + ")" +getString (R.string.label_per_day));
-                mButtonSave.setEnabled(true);
+                mPagesToReadValid = true;
+                setButtonSaveState();
             }
         }
     }
@@ -537,39 +567,45 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         int to;
 
         if(fromPage.length() > 0 && toPage.length() > 0 && pageCountStr.length() > 0) {
-            pageCount = Integer.parseInt(pageCountStr);//TODO TESTER pas de string
+            pageCount = Integer.parseInt(pageCountStr);
             from = Integer.parseInt(fromPage);
             to = Integer.parseInt(toPage);
             if (from > pageCount) {
                 mTvFromPage.setError(getString(R.string.err_from_page_too_big));
                 mButtonSave.setEnabled(false);
+                mPagesToReadValid = false;
                 return;
             }
             if (from == 0) {
                 mTvFromPage.setError(getString(R.string.err_from_page_greater_than_zero));
                 mButtonSave.setEnabled(false);
+                mPagesToReadValid = false;
                 return;
             }
             if (to > pageCount) {
                 mTvToPage.setError(getString(R.string.err_to_page_too_big));
                 mButtonSave.setEnabled(false);
+                mPagesToReadValid = false;
                 return;
             }
             if (to == 0) {
                 mTvToPage.setError(getString(R.string.err_to_page_greater_than_zero));
                 mButtonSave.setEnabled(false);
+                mPagesToReadValid = false;
                 return;
             }
             if (to - from +1 <=0) {
                 mTvFromPage.setError(getString(R.string.err_pages_to_read_positive));
                 mTvToPage.setError(getString(R.string.err_pages_to_read_positive));
                 mButtonSave.setEnabled(false);
+                mPagesToReadValid = false;
                 return;
             } else {
                 mTvFromPage.setError(null);
                 mTvToPage.setError(null);
             }
-            mButtonSave.setEnabled(true);
+            //mButtonSave.setEnabled(true);
+            mPagesToReadValid = true;
             mNbPagesToRead = to-from+1;
             mValueNbPagesToRead.setText(String.valueOf(mNbPagesToRead));
             Resources res = getResources();
@@ -583,11 +619,13 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             mLabelNbPagesToRead.setVisibility(View.VISIBLE);
 
             setNbPagesAverage();
-
+            setButtonSaveState();
         } else {
             mValueNbPagesToRead.setVisibility(View.INVISIBLE);
             mLabelNbPagesToRead.setVisibility(View.INVISIBLE);
+            mPagesToReadValid = false;
         }
+
     }
 
     @Override
@@ -596,34 +634,40 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         // Check which checkbox was clicked
         switch(buttonView.getId()) {
             case R.id.cbx1:
-                updateTabs(isChecked, 0);
+                updatePlanningDatas(isChecked, 0);
                 break;
             case R.id.cbx2:
-                updateTabs(isChecked, 1);
+                updatePlanningDatas(isChecked, 1);
                 break;
             case R.id.cbx3:
-                updateTabs(isChecked, 2);
+                updatePlanningDatas(isChecked, 2);
                 break;
             case R.id.cbx4:
-                updateTabs(isChecked, 3);
+                updatePlanningDatas(isChecked, 3);
                 break;
             case R.id.cbx5:
-                updateTabs(isChecked, 4);
+                updatePlanningDatas(isChecked, 4);
                 break;
             case R.id.cbx6:
-                updateTabs(isChecked, 5);
+                updatePlanningDatas(isChecked, 5);
                 break;
             case R.id.cbx7:
-                updateTabs(isChecked, 6);
+                updatePlanningDatas(isChecked, 6);
                 break;
         }
 
         if(mTotalDaysByWeek > 0) {
             setNbPagesAverage();
+            mPlanningValid = true;
+            setButtonSaveState();
+        } else {
+            mPlanningValid = false;
+            mAboutNbPages.setText("ZERO days of reading");
+            mButtonSave.setEnabled(false);
         }
     }
 
-    private void updateTabs(boolean isChecked, int index) {
+    private void updatePlanningDatas(boolean isChecked, int index) {
         if (isChecked) {
             if (mTabWeekPlanning[index] == 0) {
                 mTotalDaysByWeek += 1;

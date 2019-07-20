@@ -6,6 +6,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.RoomWarnings;
 import android.arch.persistence.room.Update;
 
 import java.util.Date;
@@ -19,7 +20,11 @@ import java.util.List;
 public interface PlanningDao {
 
     @Query("SELECT * FROM planning WHERE date = :date")
-    LiveData<List<PlanningEntity>> loadAllBooksForDate(Date date);
+    LiveData<List<PlanningEntity>> loadAllPlanningsForDate(Date date);
+
+    @Query("SELECT b.id, b.nbPagesToRead, b.title, b.isbn, b.pageCount FROM book b, planning p WHERE p.bookId=b.id and p.date = :date")
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
+    LiveData<List<BookEntity>> loadAllBooksForDate(Date date);
 
     @Query("SELECT * FROM planning WHERE bookId = :bookId")
     LiveData<List<PlanningEntity>> loadAllDatesForBook(int bookId);
