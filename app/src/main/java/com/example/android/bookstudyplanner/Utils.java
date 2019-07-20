@@ -29,8 +29,9 @@ public class Utils {
     public static final String WEEK_EMPTY = "0000000";
     public static final String INTENT_KEY_BOOK = "INTENT_KEY_BOOK";
     public static final int ERROR_NB_PAGES_AVERAGE =-1;
+    public static final int ERROR_NB_DAYS_TO_READ_ZERO =-2;
     public static final String ERROR_NB_SECONDS_A_DAY = "ERROR_NB_SECONDS_A_DAY";
-    private static int DURATION_OF_DAY_IN_MILISEC = 1000 * 60 * 60 * 24;
+    private static int DURATION_OF_DAY_IN_SEC = 60 * 60 * 24;
 
     public static void tostL(Context c, String msg) {
         Toast.makeText(c, msg, Toast.LENGTH_LONG).show();
@@ -143,8 +144,11 @@ public class Utils {
             }
             int nbTotalDaysToRead = nbDaysToReadDuringWeeks + nbDaysLeftToRead;
 
-            if(nbTotalDaysToRead > 0)
-                return (int) Math.ceil((float)pagesToRead/nbTotalDaysToRead);
+            if(nbTotalDaysToRead > 0) {
+                return (int) Math.ceil((float) pagesToRead / nbTotalDaysToRead);
+            } else {
+                return ERROR_NB_DAYS_TO_READ_ZERO;
+            }
         }
         return ERROR_NB_PAGES_AVERAGE;
     }
@@ -164,7 +168,7 @@ public class Utils {
     }
 
     public static List<Date> getPlanning(Date fromDate, Date toDate, int[] weekPlanning, int nbDaysAWeek) {
-        //todo : le planning retourné était de taille nulle
+        //todo : le planning retourné était de taille nulle, voir pourquoi
         if(fromDate != null && toDate != null) {
             List<Date> planning = new ArrayList<Date>();
             if (nbDaysAWeek == 0) {
@@ -239,8 +243,12 @@ public class Utils {
     }
 
     public static int daysBetweenDatesIncluded(Date date1, Date date2 ){
-        long diff = date2.getTime()-date1.getTime();
-        long temp = diff/DURATION_OF_DAY_IN_MILISEC;
+        //divide by 1000 because date.getTime() have milliseconds that causes
+        //wrong calculation just for some milliseconds of differences
+        long lDate1 = date1.getTime()/1000;
+        long lDate2 = date2.getTime()/1000;
+        long diff = lDate2-lDate1;
+        long temp = diff/DURATION_OF_DAY_IN_SEC;
         return (int)temp +1;
     }
 
