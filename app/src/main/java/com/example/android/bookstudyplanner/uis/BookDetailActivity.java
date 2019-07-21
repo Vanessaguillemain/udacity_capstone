@@ -505,7 +505,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 }
                 //inserting new planning
                 for(Date d : planning) {
-                    PlanningEntity planning = new PlanningEntity(d, mBookId, false, mNbPagesToReadByDay, 0, null);
+                    PlanningEntity planning = new PlanningEntity(d, mBookId, false, mNbPagesToReadByDay, mNbPagesToReadByDay*mAvgNbSecByPage/60, null);
                     mDb.planningDao().insertPlanning(planning);
                 }
                 finish();
