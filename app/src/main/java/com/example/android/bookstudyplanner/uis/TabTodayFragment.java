@@ -3,7 +3,6 @@ package com.example.android.bookstudyplanner.uis;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
 import com.example.android.bookstudyplanner.database.BookEntity;
+import com.example.android.bookstudyplanner.database.PlanningEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +23,16 @@ import java.util.List;
 public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapter.ItemClickListener {
 
     TodayRecyclerViewAdapter todayRecyclerViewAdapter;
-    ArrayList<BookEntity> bookEntities = new ArrayList<>();
-    public void setBookEntities(ArrayList<BookEntity> bookEntities) {
-        this.bookEntities = bookEntities;
+    ArrayList<PlanningEntity> planningEntities = new ArrayList<>();
+    public void setPlanningEntities(ArrayList<PlanningEntity> planningEntities) {
+        this.planningEntities = planningEntities;
     }
 
-    public void setBooksToAdapter(List<BookEntity> books) {
+    public void setPlanningsToAdapter(List<PlanningEntity> plannings) {
         if (todayRecyclerViewAdapter != null) {
-            todayRecyclerViewAdapter.setBooks(books);
+            todayRecyclerViewAdapter.setPlannings(plannings);
         } else {
-            bookEntities.addAll(books);
+            planningEntities.addAll(plannings);
         }
     }
 
@@ -43,7 +43,7 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
         // set up the RecyclerView
         RecyclerView recyclerView = rootView.findViewById(R.id.rvToday);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        todayRecyclerViewAdapter = new TodayRecyclerViewAdapter(getActivity(), bookEntities);
+        todayRecyclerViewAdapter = new TodayRecyclerViewAdapter(getActivity(), planningEntities);
         todayRecyclerViewAdapter.setClickListener(this);
         recyclerView.setAdapter(todayRecyclerViewAdapter);
 
@@ -52,7 +52,7 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
 
     @Override
     public void onItemClick(View view, int position) {
-        BookEntity item = todayRecyclerViewAdapter.getItem(position);
+        PlanningEntity item = todayRecyclerViewAdapter.getItem(position);
 
         Utils.tostS(getActivity(), "you clicked on" + position + " title=" + item.getTitle());
 

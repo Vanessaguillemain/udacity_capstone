@@ -13,7 +13,7 @@ import android.util.Log;
  * Created by vanessa on 10/07/2019.
  */
 
-@Database(entities = {BookEntity.class, PlanningEntity.class}, version = 3, exportSchema = false)
+@Database(entities = {BookEntity.class, PlanningEntity.class}, version = 5, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -28,7 +28,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 Log.d(LOG_TAG, "Creating new database instance");
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         AppDatabase.class, AppDatabase.DATABASE_NAME)
-                        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                        .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                         .build();
             }
         }
@@ -58,6 +58,21 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE planning (date INTEGER NOT NULL, bookId INTEGER NOT NULL, done INTEGER NOT NULL, PRIMARY KEY(date, bookId))");
+        }
+    };
+
+    static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE planning ADD COLUMN nbPagesToRead INTEGER DEFAULT -1 NOT NULL");
+            database.execSQL("ALTER TABLE planning ADD COLUMN nbMinutesReading INTEGER");
+        }
+    };
+
+    static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE planning ADD COLUMN title TEXT");
         }
     };
 

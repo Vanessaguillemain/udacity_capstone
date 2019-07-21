@@ -20,21 +20,21 @@ public class MainViewModel extends AndroidViewModel {
     private static final String TAG = MainViewModel.class.getSimpleName();
 
     private LiveData<List<BookEntity>> books;
-    private LiveData<List<BookEntity>> todays;
+    private LiveData<List<PlanningEntity>> todays;
 
     public MainViewModel(Application application) {
         super(application);
         AppDatabase database = AppDatabase.getInstance(this.getApplication());
         Log.d(TAG, "Actively retrieving the books from the DataBase");
         books = database.bookDao().loadAllBooks();
-        todays = database.planningDao().loadAllBooksForDate(Utils.getToday());
+        todays = database.planningDao().loadAllPlanningsForDate(Utils.getToday());
     }
 
     public LiveData<List<BookEntity>> getBooks() {
         return books;
     }
 
-    public LiveData<List<BookEntity>> getTodays() {
+    public LiveData<List<PlanningEntity>> getTodays() {
         return todays;
     }
 }

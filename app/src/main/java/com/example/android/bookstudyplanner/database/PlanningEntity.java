@@ -1,7 +1,7 @@
 package com.example.android.bookstudyplanner.database;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.support.annotation.NonNull;
 
 import java.util.Date;
@@ -17,11 +17,29 @@ public class PlanningEntity {
     private int bookId;
     @NonNull
     private boolean done;
+    @NonNull
+    private Integer nbPagesToRead;
+    private Integer nbMinutesReading;
 
-    public PlanningEntity(Date date, int bookId, boolean done) {
+    private String title;
+
+    @Ignore
+    public PlanningEntity(Date date, int bookId, boolean done, Integer nbPagesToRead, Integer nbMinutesReading) {
         this.date = date;
         this.bookId = bookId;
         this.done = done;
+        this.nbPagesToRead = nbPagesToRead;
+        this.nbMinutesReading = nbMinutesReading;
+    }
+
+
+    public PlanningEntity(Date date, int bookId, boolean done, Integer nbPagesToRead, Integer nbMinutesReading, String title) {
+        this.date = date;
+        this.bookId = bookId;
+        this.done = done;
+        this.nbPagesToRead = nbPagesToRead;
+        this.nbMinutesReading = nbMinutesReading;
+        this.title = title;
     }
 
     public Date getDate() {
@@ -46,5 +64,29 @@ public class PlanningEntity {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public Integer getNbPagesToRead() {
+        return nbPagesToRead;
+    }
+
+    public void setNbPagesToRead(Integer nbPagesToRead) {
+        this.nbPagesToRead = nbPagesToRead;
+    }
+
+    public Integer getNbMinutesReading() {
+        return nbMinutesReading;
+    }
+
+    public void setNbMinutesReading(Integer nbMinutesReading) {
+        this.nbMinutesReading = nbMinutesReading;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

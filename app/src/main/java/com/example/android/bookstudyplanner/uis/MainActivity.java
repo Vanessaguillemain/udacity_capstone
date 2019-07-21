@@ -20,6 +20,7 @@ import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
 import com.example.android.bookstudyplanner.database.AppDatabase;
 import com.example.android.bookstudyplanner.database.BookEntity;
+import com.example.android.bookstudyplanner.database.PlanningEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     // Member variable for the Database
     private AppDatabase mDb;
     private ArrayList<BookEntity> bookEntities = new ArrayList<>();
-    private ArrayList<BookEntity> bookTodayEntities = new ArrayList<>();
+    private ArrayList<PlanningEntity> planningTodayEntities = new ArrayList<>();
     private TabBooksFragment tabBooksFragment;
     private TabTodayFragment tabTodayFragment;
 
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         tabBooksFragment.setBookEntities(bookEntities);
 
         tabTodayFragment = new TabTodayFragment();
-        tabTodayFragment.setBookEntities(bookTodayEntities);
+        tabTodayFragment.setPlanningEntities(planningTodayEntities);
 
         adapter.addFragment(tabBooksFragment, getString(R.string.tab_books_title));
         adapter.addFragment(tabTodayFragment, getString(R.string.tab_today_title));
@@ -151,13 +152,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        viewModel.getTodays().observe(this, new Observer<List<BookEntity>>() {
+        viewModel.getTodays().observe(this, new Observer<List<PlanningEntity>>() {
             @Override
-            public void onChanged(@Nullable List<BookEntity> todays) {
+            public void onChanged(@Nullable List<PlanningEntity> todays) {
                 Log.d(TAG, "Updating list of today books from LiveData in ViewModel");
-                tabTodayFragment.setBooksToAdapter(todays);
-                bookTodayEntities.clear();
-                bookTodayEntities.addAll(todays);
+                tabTodayFragment.setPlanningsToAdapter(todays);
+                planningTodayEntities.clear();
+                planningTodayEntities.addAll(todays);
             }
         });
     }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.database.BookEntity;
+import com.example.android.bookstudyplanner.database.PlanningEntity;
 
 import java.util.List;
 
@@ -18,14 +19,14 @@ import java.util.List;
 
 public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecyclerViewAdapter.TodayViewHolder> {
 
-    private List<BookEntity> mDataBookEntities;
+    private List<PlanningEntity> mDataPlanningEntities;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    TodayRecyclerViewAdapter(Context context, List<BookEntity> dataBookEntities) {
+    TodayRecyclerViewAdapter(Context context, List<PlanningEntity> dataBookEntities) {
         this.mInflater = LayoutInflater.from(context);
-        this.mDataBookEntities = dataBookEntities;
+        this.mDataPlanningEntities = dataBookEntities;
     }
 
     // inflates the row layout from xml when needed
@@ -38,27 +39,27 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(TodayViewHolder holder, int position) {
-        BookEntity book = mDataBookEntities.get(position);
-        holder.tvBookTitle.setText(book.getTitle());
-        holder.tvBookPageCount.setText(String.valueOf(book.getNbPagesToRead()));
-        holder.tvBookMinuteCount.setText("TODO");//TODO
+        PlanningEntity planning = mDataPlanningEntities.get(position);
+        holder.tvBookTitle.setText(planning.getTitle());
+        holder.tvBookPageCount.setText(String.valueOf(planning.getNbPagesToRead()));
+        holder.tvBookMinuteCount.setText("TODO");//TODO PLANNING
     }
 
     // total number of rows
     @Override
     public int getItemCount() {
-        if (mDataBookEntities == null) {
+        if (mDataPlanningEntities == null) {
             return 0;
         }
-        return mDataBookEntities.size();
+        return mDataPlanningEntities.size();
     }
 
     /**
      * When data changes, this method updates the list of taskEntries
      * and notifies the adapter to use the new values on it
      */
-    public void setBooks(List<BookEntity> books) {
-        mDataBookEntities = books;
+    public void setPlannings(List<PlanningEntity> plannings) {
+        mDataPlanningEntities = plannings;
         notifyDataSetChanged();
     }
 
@@ -84,8 +85,8 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
     }
 
     // convenience method for getting data at click position
-    BookEntity getItem(int id) {
-        return mDataBookEntities.get(id);
+    PlanningEntity getItem(int id) {
+        return mDataPlanningEntities.get(id);
     }
 
     // allows clicks events to be caught

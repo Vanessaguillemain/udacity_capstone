@@ -19,12 +19,9 @@ import java.util.List;
 @Dao
 public interface PlanningDao {
 
-    @Query("SELECT * FROM planning WHERE date = :date")
-    LiveData<List<PlanningEntity>> loadAllPlanningsForDate(Date date);
-
-    @Query("SELECT b.id, b.nbPagesToRead, b.title, b.isbn, b.pageCount FROM book b, planning p WHERE p.bookId=b.id and p.date = :date")
+    @Query("SELECT p.bookId, p.date, p.done, p.nbPagesToRead, p.nbMinutesReading, b.title FROM book b, planning p WHERE p.bookId=b.id and p.date = :date")
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
-    LiveData<List<BookEntity>> loadAllBooksForDate(Date date);
+    LiveData<List<PlanningEntity>> loadAllPlanningsForDate(Date date);
 
     @Query("SELECT * FROM planning WHERE bookId = :bookId")
     LiveData<List<PlanningEntity>> loadAllDatesForBook(int bookId);

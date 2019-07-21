@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -99,6 +100,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private String mWeekPlanning;
     private int mTabWeekPlanning[] ;
     private int mNbPagesToRead;
+    private int mNbPagesToReadByDay;
     private int mAvgNbSecByPage;
 
     //boolean
@@ -406,24 +408,24 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         }
     }
     private void setNbPagesAverage() {
-        int result = Utils.calculateNbPagesAverage(mNbPagesToRead, mBeginDate, mEndDate, mTabWeekPlanning, mTotalDaysByWeek);
-        if (result == Utils.ERROR_NB_PAGES_AVERAGE) {
+        mNbPagesToReadByDay = Utils.calculateNbPagesAverage(mNbPagesToRead, mBeginDate, mEndDate, mTabWeekPlanning, mTotalDaysByWeek);
+        if (mNbPagesToReadByDay == Utils.ERROR_NB_PAGES_AVERAGE) {
             mAboutNbPages.setText("");
             mPagesToReadValid = false;
             mButtonSave.setEnabled(false);
-        } else if (result == Utils.ERROR_NB_DAYS_TO_READ_ZERO) {
+        } else if (mNbPagesToReadByDay == Utils.ERROR_NB_DAYS_TO_READ_ZERO) {
             mAboutNbPages.setText("ZERO days of reading");
             mPagesToReadValid = false;
             mButtonSave.setEnabled(false);
         } else {
-            int seconds = mAvgNbSecByPage*result;
+            int seconds = mAvgNbSecByPage*mNbPagesToReadByDay;
             String text = secondsToText(seconds);
             if(text == Utils.ERROR_NB_SECONDS_A_DAY) {
                 mAboutNbPages.setText(getString(R.string.err_read_time_greater_than_day));
                 mPagesToReadValid = false;
                 mButtonSave.setEnabled(false);
             } else {
-                mAboutNbPages.setText(String.valueOf(result) + " " +getString (R.string.label_pages)+ " (" + text + ")" +getString (R.string.label_per_day));
+                mAboutNbPages.setText(String.valueOf(mNbPagesToReadByDay) + " " +getString (R.string.label_pages)+ " (" + text + ")" +getString (R.string.label_per_day));
                 mPagesToReadValid = true;
                 setButtonSaveState();
             }
@@ -462,7 +464,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
         Integer fromPageNb = Integer.parseInt(fromPage);
         Integer toPageNb = Integer.parseInt(toPage);
-        Integer nbPagesToRead = toPageNb - fromPageNb +1;
+        final Integer nbPagesToRead = toPageNb - fromPageNb +1;
 
         Integer nbPagesRead = null;
         Integer readTimeInSeconds = null;
@@ -503,15 +505,12 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 }
                 //inserting new planning
                 for(Date d : planning) {
-                    PlanningEntity planning = new PlanningEntity(d, mBookId, false);
+                    PlanningEntity planning = new PlanningEntity(d, mBookId, false, mNbPagesToReadByDay, 0, null);
                     mDb.planningDao().insertPlanning(planning);
                 }
                 finish();
             }
         });
-
-
-
     }
 
     public void onDateFromButtonClicked() {
