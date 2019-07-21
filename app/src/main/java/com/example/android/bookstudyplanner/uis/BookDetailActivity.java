@@ -363,7 +363,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                             mFromBeforeTo = true;
                             mDatesToFromValid = true;
                             mLabelSelectToDate.setError(null);
-                            if (dateIsBeforeToday(mBeginDate)) {
+                            if ((mBookId == DEFAULT_BOOK_ID) && dateIsBeforeToday(mBeginDate)) {
                                 mDatesToFromValid = false;
                                 mAboutNbPages.setText("");
                             } else {
