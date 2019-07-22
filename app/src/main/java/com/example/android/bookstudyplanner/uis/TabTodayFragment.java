@@ -1,19 +1,29 @@
 package com.example.android.bookstudyplanner.uis;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.android.bookstudyplanner.R;
+import com.example.android.bookstudyplanner.UpdatePlanningViewModel;
 import com.example.android.bookstudyplanner.Utils;
-import com.example.android.bookstudyplanner.database.BookEntity;
+import com.example.android.bookstudyplanner.database.AppDatabase;
+import com.example.android.bookstudyplanner.database.AppExecutor;
 import com.example.android.bookstudyplanner.database.PlanningEntity;
+import com.example.android.bookstudyplanner.database.UpdatePlanningViewModelFactory;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,8 +32,14 @@ import java.util.List;
 
 public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapter.ItemClickListener {
 
+    // Constant for logging
+    private static final String TAG = TabTodayFragment.class.getSimpleName();
+
     TodayRecyclerViewAdapter todayRecyclerViewAdapter;
     ArrayList<PlanningEntity> planningEntities = new ArrayList<>();
+
+    private AppDatabase mDb;
+
     public void setPlanningEntities(ArrayList<PlanningEntity> planningEntities) {
         this.planningEntities = planningEntities;
     }
@@ -40,6 +56,8 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_today, container, false);
 
+        mDb = AppDatabase.getInstance(getActivity().getApplicationContext());
+
         // set up the RecyclerView
         RecyclerView recyclerView = rootView.findViewById(R.id.rvToday);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -52,16 +70,47 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
 
     @Override
     public void onItemClick(View view, int position) {
-        PlanningEntity item = todayRecyclerViewAdapter.getItem(position);
+        PlanningEntity planning = todayRecyclerViewAdapter.getItem(position);
 
-        Utils.tostS(getActivity(), "you clicked on" + position + " title=" + item.getTitle());
+        if(view.getId() == R.id.btnDone) {
 
-        /*
-        Intent myIntent = new Intent(getActivity(), BookDetailActivity.class);
-        myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF);
-        myIntent.putExtra(Utils.INTENT_KEY_BOOK, item);
+            int mBookId = planning.getBookId();
+            Date mDate = planning.getDate();
 
-        getActivity().startActivity(myIntent);*/
+            UpdatePlanningViewModelFactory factory = new UpdatePlanningViewModelFactory(mDb, mBookId, mDate);
+            final UpdatePlanningViewModel viewModel = ViewModelProviders.of(this, factory).get(UpdatePlanningViewModel.class);
+
+            viewModel.getPlanning().observe(this, new Observer<PlanningEntity>() {
+                @Override
+                public void onChanged(@Nullable PlanningEntity planning) {
+                    viewModel.getPlanning().removeObserver(this);
+                    Log.d(TAG, "Receiving database update from LiveData");
+                }
+            });
+
+            TextView count = view.getRootView().findViewById(R.id.tvBookPagesCount_today);
+            TextView min = view.getRootView().findViewById(R.id.tvBookMinutesCount_today);
+
+            int pagesCount = Integer.parseInt(count.getText().toString());
+            int minutes = planning.getNbMinutesReading();
+            if(min.getText() == "") {
+                minutes = Integer.parseInt(min.getText().toString());
+            }
+
+            //PlanningEntity
+            final PlanningEntity planning2 = new PlanningEntity(mDate, mBookId, true, pagesCount, minutes);
+            AppExecutor.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    //update
+                    mDb.planningDao().updatePlanning(planning2);
+                }
+            });
+
+            Button b = view.getRootView().findViewById(R.id.btnDone);
+            b.setEnabled(false);
+
+        }
 
     }
 }

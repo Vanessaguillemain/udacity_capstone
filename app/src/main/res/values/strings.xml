@@ -49,6 +49,7 @@
     <string name="b_detail_about">About :</string>
     <string name="b_detail_submit">Submit</string>
     <string name="b_detail_delete">Delete</string>
+    <string name="today_label_minutes">minutes</string>
 
 
 </resources>

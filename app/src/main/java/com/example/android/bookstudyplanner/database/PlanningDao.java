@@ -23,6 +23,10 @@ public interface PlanningDao {
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     LiveData<List<PlanningEntity>> loadAllPlanningsForDate(Date date);
 
+    @Query("SELECT p.bookId, p.date, p.done, p.nbPagesToRead, p.nbMinutesReading, b.title FROM book b, planning p WHERE p.bookId=b.id and p.date = :date and p.bookId = :bookId")
+    LiveData<PlanningEntity> loadPlanningsForBookAndDate(int bookId, Date date);
+
+
     @Query("SELECT * FROM planning WHERE bookId = :bookId")
     LiveData<List<PlanningEntity>> loadAllDatesForBook(int bookId);
 

@@ -5,10 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.android.bookstudyplanner.R;
-import com.example.android.bookstudyplanner.database.BookEntity;
 import com.example.android.bookstudyplanner.database.PlanningEntity;
 
 import java.util.List;
@@ -41,8 +41,17 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
     public void onBindViewHolder(TodayViewHolder holder, int position) {
         PlanningEntity planning = mDataPlanningEntities.get(position);
         holder.tvBookTitle.setText(planning.getTitle());
-        holder.tvBookPageCount.setText(String.valueOf(planning.getNbPagesToRead()));
-        holder.tvBookMinuteCount.setText("TODO");//TODO PLANNING
+        if(planning.isDone()) {
+            holder.btnDone.setEnabled(false);
+            holder.tvBookPageCount.setEnabled(false);
+            holder.tvBookPageCount.setText(String.valueOf(planning.getNbPagesToRead()));
+            holder.tvBookMinuteCount.setText(String.valueOf(planning.getNbMinutesReading()));
+            holder.tvBookMinuteCount.setEnabled(false);
+        } else {
+            holder.btnDone.setEnabled(true);
+            holder.tvBookMinuteCount.setHint(String.valueOf(planning.getNbMinutesReading()));
+            holder.tvBookPageCount.setText(String.valueOf(planning.getNbPagesToRead()));
+        }
     }
 
     // total number of rows
@@ -69,13 +78,15 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
         TextView tvBookTitle;
         TextView tvBookPageCount;
         TextView tvBookMinuteCount;
+        Button btnDone;
 
         TodayViewHolder(View itemView) {
             super(itemView);
             tvBookTitle = itemView.findViewById(R.id.tvBookTitle_today);
             tvBookPageCount = itemView.findViewById(R.id.tvBookPagesCount_today);
             tvBookMinuteCount = itemView.findViewById(R.id.tvBookMinutesCount_today);
-            itemView.setOnClickListener(this);
+            btnDone = itemView.findViewById(R.id.btnDone);
+            btnDone.setOnClickListener(this);
         }
 
         @Override
