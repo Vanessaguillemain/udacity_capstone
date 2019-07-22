@@ -13,4 +13,6 @@
     <dimen name="standard_60">60dp</dimen>
     <dimen name="standard_110">110dp</dimen>
 
+    <dimen name="main_tv_error_text_size">22sp</dimen>
+    <dimen name="main_tv_error_padding">16dp</dimen>
 </resources>

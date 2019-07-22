@@ -36,30 +36,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:elevation="20dp"
         android:background="@color/white"
+        android:elevation="16dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/border_margin"
             android:layout_marginEnd="@dimen/border_margin"
+            android:layout_marginStart="@dimen/border_margin"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/labelSearch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/b_search_title"/>
+                android:text="@string/b_search_title" />
 
             <EditText
                 android:id="@+id/editTextSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/b_search_hint"
-                android:inputType="text"
-                />
+                android:inputType="text" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_error_message_display"
+            android:textSize="@dimen/main_tv_error_text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/main_tv_error_padding"
+            android:text="@string/error_no_internet"
+            android:visibility="gone" />
+
     </LinearLayout>
 </LinearLayout>
 </ScrollView>

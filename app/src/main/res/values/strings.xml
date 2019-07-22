@@ -55,4 +55,11 @@
     <string name="title_search">Search</string>
     <string name="b_search_title">Title, ISBN&#8230; : </string>
     <string name="b_search_hint">Title, ISBN&#8230; </string>
+    <string name="permission_error_occurred">Permission error occurred!</string>
+    <string name="permission_dialog_title">Permissions needed</string>
+    <string name="permission_dialog_msg">This app needs permissions to retrieve data. You can grant them in app settings.</string>
+    <string name="permission_dialog_positive_button">GOTO SETTINGS</string>
+    <string name="permission_dialog_negative_button">Cancel</string>
+    <string name="error_no_internet">You are not connected to Internet. Check and try later please.</string>
+
 </resources>
