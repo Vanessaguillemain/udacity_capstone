@@ -195,7 +195,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openEditBook(){
-        int tab_position = tabLayout.getSelectedTabPosition();
         Intent myIntent = new Intent(MainActivity.this, BookDetailActivity.class);
         myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_CREATE);
 
@@ -204,6 +203,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openSearchBook(){
-        Toast.makeText(this,"open search", Toast.LENGTH_SHORT).show();
+
+        //Toast.makeText(this,"open search", Toast.LENGTH_SHORT).show();
+        Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
+        MainActivity.this.startActivity(myIntent);
+        closeSubMenusFab();
+
     }
 }

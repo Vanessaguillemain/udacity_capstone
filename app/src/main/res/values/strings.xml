@@ -51,5 +51,8 @@
     <string name="b_detail_delete">Delete</string>
     <string name="today_label_minutes">minutes</string>
 
-
+    <!-- SCREEN BOOK SEARCH -->
+    <string name="title_search">Search</string>
+    <string name="b_search_title">Title, ISBN&#8230; : </string>
+    <string name="b_search_hint">Title, ISBN&#8230; </string>
 </resources>

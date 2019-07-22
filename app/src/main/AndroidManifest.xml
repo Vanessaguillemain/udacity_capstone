@@ -23,6 +23,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".uis.MainActivity" />
         </activity>
+        <activity
+            android:name=".uis.SearchActivity"
+            android:parentActivityName=".uis.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".uis.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
