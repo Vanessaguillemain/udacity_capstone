@@ -71,11 +71,18 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(searchRecyclerViewAdapter);
 
-
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searchBooks(query);
+                mInternetAvailable = isOnline(SearchActivity.this);
+                if (mInternetAvailable) {
+                    hideErrorMessageInternet();
+                    searchBooks(query);
+                } else {
+                    showErrorMessageInternet();
+                    volumeList.clear();
+                    mRecyclerView.getAdapter().notifyDataSetChanged();
+                }
 
                 InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -89,16 +96,14 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
             }
         });
 
+        manageInternetConnection();
 
-        mInternetAvailable = isOnline(this);
-        if (mInternetAvailable) {
-            Utils.tostS(SearchActivity.this, "internet OK");
-            hideErrorMessageInternet();
-            //populateRecyclerView();//TODO
-        } else {
-            showErrorMessageInternet();
-            Utils.tostS(SearchActivity.this, "internet KO");
-        }
+        mErrorMessageDisplay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                manageInternetConnection();
+            }
+        });
 
         //checks permissions before loading Data
         requestPermissionsAndLoadData(savedInstanceState);//TODO
@@ -112,7 +117,14 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         }
     }
 
-
+    private void manageInternetConnection() {
+        mInternetAvailable = isOnline(this);
+        if (mInternetAvailable) {
+            hideErrorMessageInternet();
+        } else {
+            showErrorMessageInternet();
+        }
+    }
 
     public void searchBooks(String query) {
         if (query.equalsIgnoreCase(latestQuery)) {

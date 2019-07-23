@@ -130,7 +130,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
             } else {
                 Log.d(TAG, "no image");//TODO
-                Picasso.with(itemView.getContext()).load(R.drawable.book).into((ImageView) ivBookImage);
+                //Picasso.with(itemView.getContext()).load(R.drawable.book).into((ImageView) ivBookImage);
+                Picasso.with(itemView.getContext()).load(R.drawable.photobook).into((ImageView) ivBookImage);
             }
 
             Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
