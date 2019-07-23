@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -11,11 +12,10 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,23 +46,38 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
     private static final String TAG = SearchActivity.class.getSimpleName();
 
     //layout elements
-    @BindView(R.id.tv_error_message_display)
-    TextView mErrorMessageDisplay;
+    @BindView(R.id.tv_error_message_display) TextView mErrorMessageDisplay;
+    @BindView(R.id.search_view) SearchView mSearchView;
+    @BindView(R.id.books_grid) RecyclerView mRecyclerView;
 
-    @BindView(R.id.search_view)
-    SearchView mSearchView;
     private boolean mInternetAvailable = false;
 
     //elements for search
     private SearchTask searchTask;
     private List<Volume> volumeList = new ArrayList<>();
     private String latestQuery;
+    private SearchRecyclerViewAdapter mSearchRecyclerViewAdapter;
+    SearchRecyclerViewAdapter searchRecyclerViewAdapter2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_search);
         ButterKnife.bind(this);
+
+        // set up the RecyclerView
+        /*
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        mSearchRecyclerViewAdapter = new SearchRecyclerViewAdapter(this, volumeList);
+        mSearchRecyclerViewAdapter.setClickListener(this);
+        mRecyclerView.setAdapter(mSearchRecyclerViewAdapter);*/
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 2 : 3);
+        //SearchRecyclerViewAdapter2 adapter = new SearchRecyclerViewAdapter2(this, volumeList, gridLayoutManager.getSpanCount());
+        searchRecyclerViewAdapter2 = new SearchRecyclerViewAdapter(this, volumeList, 1);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
+        mRecyclerView.setAdapter(searchRecyclerViewAdapter2);
+
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -92,6 +107,16 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         requestPermissionsAndLoadData(savedInstanceState);//TODO
     }
 
+    public void setVolumesToAdapter(List<Volume> volumes) {
+        if (searchRecyclerViewAdapter2 != null) {
+            searchRecyclerViewAdapter2.setVolumes(volumes);
+        } else {
+            volumeList.addAll(volumes);
+        }
+    }
+
+
+
     public void searchBooks(String query) {
         if (query.equalsIgnoreCase(latestQuery)) {
             return;
@@ -108,14 +133,13 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
     @Override
     public void onSearching() {
         volumeList.clear();
+        mRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
     @Override
     public void onResult(List<Volume> volumes) {
         volumeList = volumes;
-        for(Volume v:volumes) {
-            Log.d(TAG, v.toString());
-        }
+        searchRecyclerViewAdapter2.setVolumes(volumes);
     }
 
     /**

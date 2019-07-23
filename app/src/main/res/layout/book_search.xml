@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/light_grey">
-
-<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_grey"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:background="@color/light_grey">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -57,6 +52,12 @@
             android:text="@string/error_no_internet"
             android:visibility="gone" />
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/books_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="4dp" />
+
     </LinearLayout>
 </LinearLayout>
-</ScrollView>
