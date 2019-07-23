@@ -25,6 +25,7 @@ public class Utils {
 
     public static final String INTENT_KEY_BOOK_DETAIL_ACTION = "INTENT_KEY_BOOK_DETAIL_ACTION";
     public static final String INTENT_VAL_BOOK_DETAIL_ACTION_CREATE = "INTENT_VAL_BOOK_DETAIL_ACTION_CREATE";
+    public static final String INTENT_VAL_BOOK_DETAIL_ACTION_FROM_SEARCH = "INTENT_VAL_BOOK_DETAIL_ACTION_FROM_SEARCH";
     public static final String INTENT_VAL_BOOK_DETAIL_ACTION_MODIF = "INTENT_VAL_BOOK_DETAIL_ACTION_MODIF";
     public static final String INTENT_KEY_BOOK = "INTENT_KEY_BOOK";
     public static final int ERROR_NB_PAGES_AVERAGE =-1;

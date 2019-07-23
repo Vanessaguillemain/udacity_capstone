@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bookstudyplanner.AddBookViewModel;
@@ -29,7 +30,9 @@ import com.example.android.bookstudyplanner.database.AddBookViewModelFactory;
 import com.example.android.bookstudyplanner.database.AppDatabase;
 import com.example.android.bookstudyplanner.database.AppExecutor;
 import com.example.android.bookstudyplanner.database.BookEntity;
+import com.example.android.bookstudyplanner.database.GoogleBookMetaData;
 import com.example.android.bookstudyplanner.database.PlanningEntity;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -54,9 +57,12 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private final String BUNDLE_KEY_TEXT_TITLE = "BUNDLE_KEY_TEXT_TITLE";
     private final String BUNDLE_KEY_TEXT_FROM_DATE = "BUNDLE_KEY_TEXT_FROM_DATE";
     private final String BUNDLE_KEY_TEXT_TO_DATE = "BUNDLE_KEY_TEXT_TO_DATE";
+    private final String BUNDLE_KEY_IMAGE_LINK = "BUNDLE_KEY_IMAGE_LINK";
+
     private final String STRING_NUMBER_PAGE_NULL = "0";
     private final String STRING_DEFAULT_WEEK_PLANNING = "1111100";
 
+    @BindView(R.id.imageBook_detail) ImageView mImageBook;
     @BindView(R.id.tvTitle) TextView mTvTitle;
     @BindView(R.id.valuePageCount) TextView mValuePageCount;
     @BindView(R.id.tvFromPage) TextView mTvFromPage;
@@ -102,6 +108,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private int mNbPagesToRead;
     private int mNbPagesToReadByDay;
     private int mAvgNbSecByPage;
+    private String mImageLink;
 
     //boolean
     private boolean mTitleValid = false;
@@ -129,28 +136,38 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         // recovering the instance state
         if (savedInstanceState != null) {
             mTvTitle.setText(savedInstanceState.getString(BUNDLE_KEY_TEXT_TITLE));
+            String defaultDate = getResources().getString(R.string.b_detail_pick_a_date);
+
             String sBegin = savedInstanceState.getString(BUNDLE_KEY_TEXT_FROM_DATE);
             String sEnd = savedInstanceState.getString(BUNDLE_KEY_TEXT_TO_DATE);
+            mImageLink = savedInstanceState.getString(BUNDLE_KEY_IMAGE_LINK);
+
             //Save locally the dates to avoid them to be wipe off by data base values
-            mBeginDate = Utils.getDateFromFormatedDate(sBegin, BookDetailActivity.this);
-            yearFrom = Utils.getYearFromDate(mBeginDate);
-            monthFrom = Utils.getMonthFromDate(mBeginDate);
-            dayOfMonthFrom = Utils.getDayFromDate(mBeginDate);
+            if(sBegin != defaultDate) {
+                mBeginDate = Utils.getDateFromFormatedDate(sBegin, BookDetailActivity.this);
+                yearFrom = Utils.getYearFromDate(mBeginDate);
+                monthFrom = Utils.getMonthFromDate(mBeginDate);
+                dayOfMonthFrom = Utils.getDayFromDate(mBeginDate);
+            }
 
-            mEndDate = Utils.getDateFromFormatedDate(sEnd, BookDetailActivity.this);
-            yearTo = Utils.getYearFromDate(mEndDate);
-            monthTo = Utils.getMonthFromDate(mEndDate);
-            dayOfMonthTo = Utils.getDayFromDate(mEndDate);
-
+            if(sEnd != defaultDate) {
+                mEndDate = Utils.getDateFromFormatedDate(sEnd, BookDetailActivity.this);
+                yearTo = Utils.getYearFromDate(mEndDate);
+                monthTo = Utils.getMonthFromDate(mEndDate);
+                dayOfMonthTo = Utils.getDayFromDate(mEndDate);
+            }
             mLabelSelectFromDate.setText(sBegin);
             mLabelSelectToDate.setText(sEnd);
+            if(mImageLink != null) {
+                Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
+            }
         }
 
         Intent intent = getIntent();
         if(intent != null) {
             String action = intent.getStringExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION);
 
-            if (Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF.equals(action)) {
+           if (Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF.equals(action)) {
                 //TODO test if null
                 BookEntity book = intent.getParcelableExtra(Utils.INTENT_KEY_BOOK);
                 mBookId = book.getId();
@@ -175,7 +192,17 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 mWeekPlanning = STRING_DEFAULT_WEEK_PLANNING;
                 mTotalDaysByWeek = 5;
                 mPlanningValid = true;
-            }
+               if (Utils.INTENT_VAL_BOOK_DETAIL_ACTION_FROM_SEARCH.equals(action)) {
+                   Bundle metaData = intent.getBundleExtra("metadata");
+                   String title = metaData.getString(GoogleBookMetaData.TITLE);
+                   int pageCount = metaData.getInt(GoogleBookMetaData.PAGE_COUNT);
+                   mImageLink = metaData.getString(GoogleBookMetaData.IMAGE);
+                   mTvTitle.setText(title);
+                   mValuePageCount.setText(String.valueOf(pageCount));
+                   Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
+               }
+
+           }
         }
     }
 
@@ -437,6 +464,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         outState.putString(BUNDLE_KEY_TEXT_TITLE, mTvTitle.getText().toString());
         outState.putString(BUNDLE_KEY_TEXT_FROM_DATE, mLabelSelectFromDate.getText().toString());
         outState.putString(BUNDLE_KEY_TEXT_TO_DATE, mLabelSelectToDate.getText().toString());
+        outState.putString(BUNDLE_KEY_IMAGE_LINK, mImageLink);
+
         super.onSaveInstanceState(outState);
     }
 

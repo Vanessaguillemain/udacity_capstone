@@ -1,6 +1,7 @@
 package com.example.android.bookstudyplanner.uis;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -46,7 +47,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     public SearchBookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.rv_search_item, parent, false);
         return new SearchBookViewHolder(parent);
-        //return new SearchBookViewHolder(view);
     }
 
     @Override
@@ -130,7 +130,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
             } else {
                 Log.d(TAG, "no image");//TODO
-                //Picasso.with(itemView.getContext()).load(R.drawable.book).into((ImageView) ivBookImage);
                 Picasso.with(itemView.getContext()).load(R.drawable.photobook).into((ImageView) ivBookImage);
             }
 
@@ -169,44 +168,19 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             Bundle metadata = new Bundle();
 
             int i = getAdapterPosition();
-            Utils.tostS(v.getContext(), "position=" + i);
 
             Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
-            Volume.SaleInfo saleInfo = volume.getSaleInfo();
 
             if (volumeInfo != null) {
-                Volume.VolumeInfo.ImageLinks imageLinks = volumeInfo.getImageLinks();
                 if (volumeInfo.getTitle() != null) {
                     metadata.putString(GoogleBookMetaData.TITLE, volumeInfo.getTitle());
                 }
-                if (volumeInfo.getSubtitle() != null) {
-                    metadata.putString(GoogleBookMetaData.SUBTITLE, volumeInfo.getSubtitle());
-                }
-                if (volumeInfo.getDescription() != null) {
-                    metadata.putString(GoogleBookMetaData.DESCRIPTION, volumeInfo.getDescription());
-                }
-                if (volumeInfo.getPublisher() != null) {
-                    metadata.putString(GoogleBookMetaData.PUBLISHER, volumeInfo.getPublisher());
-                }
-                if (volumeInfo.getAuthors() != null) {
-                    metadata.putStringArray(GoogleBookMetaData.AUTHORS, volumeInfo.getAuthors().toArray(new String[volumeInfo.getAuthors().size()]));
-                }
-                if (volumeInfo.getPublishedDate() != null) {
-                    metadata.putString(GoogleBookMetaData.PUBLISHED_DATE, volumeInfo.getPublishedDate());
-                }
-                if (saleInfo != null) {
-                    Volume.SaleInfo.RetailPrice retailPrice = saleInfo.getRetailPrice();
-                    Volume.SaleInfo.ListPrice listPrice = saleInfo.getListPrice();
-                    if (retailPrice != null) {
-                        metadata.putDouble(GoogleBookMetaData.RETAIL_PRICE, retailPrice.getAmount());
-                        metadata.putString(GoogleBookMetaData.RETAIL_PRICE_CURRENCY_CODE, retailPrice.getCurrencyCode());
-                    }
-                    if (listPrice != null) {
-                        metadata.putDouble(GoogleBookMetaData.LIST_PRICE, listPrice.getAmount());
-                        metadata.putString(GoogleBookMetaData.LIST_PRICE_CURRENCY_CODE, listPrice.getCurrencyCode());
-                    }
+                if (volumeInfo.getPageCount() != null) {
+                    metadata.putInt(GoogleBookMetaData.PAGE_COUNT, volumeInfo.getPageCount());
                 }
 
+
+                Volume.VolumeInfo.ImageLinks imageLinks = volumeInfo.getImageLinks();
                 if (imageLinks != null) {
                     String image = null;
                     if (imageLinks.getExtraLarge() != null) {
@@ -229,7 +203,10 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             }
 
             Context context = itemView.getContext();
-            //context.startActivity(new Intent(context, BookDetailActivity.class).putExtra("metadata", metadata)); //TODO
+            Intent myIntent = new Intent(context, BookDetailActivity.class);
+            myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_FROM_SEARCH);
+            myIntent.putExtra("metadata", metadata);//TODO
+            context.startActivity(myIntent);
         }
 
     }
