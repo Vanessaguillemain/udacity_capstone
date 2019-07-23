@@ -105,16 +105,8 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
             }
         });
 
-        //checks permissions before loading Data
-        requestPermissionsAndLoadData(savedInstanceState);//TODO
-    }
-
-    public void setVolumesToAdapter(List<Volume> volumes) {
-        if (searchRecyclerViewAdapter != null) {
-            searchRecyclerViewAdapter.setVolumes(volumes);
-        } else {
-            volumeList.addAll(volumes);
-        }
+        //checks permissions
+        requestPermissions(savedInstanceState);
     }
 
     private void manageInternetConnection() {
@@ -161,7 +153,6 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
      */
     private void hideErrorMessageInternet() {
         mErrorMessageDisplay.setVisibility(View.GONE);
-        //mRvFilmPosters.setVisibility(View.VISIBLE);//TODO
     }
 
     /**
@@ -169,11 +160,10 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
      */
     private void showErrorMessageInternet() {
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
-        //mRvFilmPosters.setVisibility(View.GONE);//TODO
     }
 
 
-    private void requestPermissionsAndLoadData(final Bundle bundle) {
+    private void requestPermissions(final Bundle bundle) {
         Dexter.withActivity(this)
                 .withPermissions(
                         Manifest.permission.INTERNET,
@@ -181,12 +171,6 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        // check if all permissions are granted
-                        if (report.areAllPermissionsGranted()) {
-                            Utils.tostS(SearchActivity.this, "areAllPermissionsGranted");
-                            //loadData(bundle);//TODO
-                        }
-
                         // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             // show alert dialog navigating to Settings
