@@ -13,27 +13,30 @@
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        card_view:cardBackgroundColor="@color/cardview_shadow_end_color"
         card_view:cardElevation="@dimen/card_elevation"
-        card_view:cardCornerRadius="4dp">
+        card_view:cardCornerRadius="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/border_margin"
             android:orientation="vertical">
 
             <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/imageBook_search"
-                android:layout_width="120dp"
-                android:layout_height="130dp"
-                android:background="#dedede"
+                android:layout_width="135dp"
+                android:layout_height="202dp"
+                android:background="@color/white"
                 android:orientation="vertical"
-                android:scaleType="fitXY"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="centerCrop"
                 android:layout_margin="4dp"/>
-
             <TextView
                 android:id="@+id/tvBookTitle_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
                 android:textSize="10sp"/>
             <TextView
                 android:id="@+id/tvBookSubTitle_search"
