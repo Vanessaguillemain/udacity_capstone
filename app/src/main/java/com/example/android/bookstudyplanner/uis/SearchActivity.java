@@ -48,6 +48,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
 
     //layout elements
     @BindView(R.id.tv_error_message_display) TextView mErrorMessageDisplay;
+    @BindView(R.id.tv_error_no_book_found) TextView mErrorNoBookFound;
     @BindView(R.id.search_view) SearchView mSearchView;
     @BindView(R.id.books_grid) RecyclerView mRecyclerView;
 
@@ -134,8 +135,13 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
 
     @Override
     public void onResult(List<Volume> volumes) {
-        volumeList = volumes;
-        searchRecyclerViewAdapter.setVolumes(volumes);
+        if(volumes.size() == 0) {
+            mErrorNoBookFound.setVisibility(View.VISIBLE);
+        } else {
+            mErrorNoBookFound.setVisibility(View.GONE);
+            volumeList = volumes;
+            searchRecyclerViewAdapter.setVolumes(volumes);
+        }
     }
 
     /**

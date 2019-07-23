@@ -61,5 +61,6 @@
     <string name="permission_dialog_positive_button">GOTO SETTINGS</string>
     <string name="permission_dialog_negative_button">Cancel</string>
     <string name="error_no_internet">You are not connected to Internet. Check and try later please.</string>
+    <string name="error_no_book_found">Oups! Sorry. No book found. Try another search.</string>
     <string name="API_KEY">AIzaSyC1Eh3z7De2-pcopmEAV49OxjZjUdBAK0I</string>
 </resources>
