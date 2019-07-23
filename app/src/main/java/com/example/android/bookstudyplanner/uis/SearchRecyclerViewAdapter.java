@@ -130,19 +130,29 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
             } else {
                 Log.d(TAG, "no image");//TODO
+                Picasso.with(itemView.getContext()).load(R.drawable.book).into((ImageView) ivBookImage);
             }
 
             Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
 
             if (volumeInfo != null) {
                 if (volumeInfo.getTitle() != null) {
+                    tvBookTitle.setVisibility(View.VISIBLE);
                     tvBookTitle.setText(volumeInfo.getTitle());
+                } else {
+                    tvBookTitle.setVisibility(View.GONE);
                 }
                 if (volumeInfo.getSubtitle() != null) {
+                    tvBookSubTitle.setVisibility(View.VISIBLE);
                     tvBookSubTitle.setText(volumeInfo.getSubtitle());
+                } else {
+                    tvBookSubTitle.setVisibility(View.GONE);
                 }
                 if (volumeInfo.getPageCount() != null) {
+                    tvBookPageCount.setVisibility(View.VISIBLE);
                     tvBookPageCount.setText(volumeInfo.getPageCount());
+                } else {
+                    tvBookPageCount.setVisibility(View.GONE);
                 }
             }
 
@@ -152,12 +162,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             this.spanCount = spanCount;
         }
 
-        /*
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-        }*/
-
         @Override
         public void onClick(View v) {
 
@@ -165,7 +169,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
             int i = getAdapterPosition();
             Utils.tostS(v.getContext(), "position=" + i);
-
 
             Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
             Volume.SaleInfo saleInfo = volume.getSaleInfo();

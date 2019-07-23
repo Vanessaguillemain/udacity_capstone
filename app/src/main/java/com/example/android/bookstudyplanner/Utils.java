@@ -272,4 +272,18 @@ public class Utils {
         }
         return result;
     }
+
+    public static boolean isInteger(String string) {
+        if(string != null && string.length() >0 ) {
+            try {
+                for (int i = 0; i < string.length(); i++) {
+                    Integer.parseInt(String.valueOf(string.charAt(i)), 10);
+                }
+            } catch (NumberFormatException e) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
 }

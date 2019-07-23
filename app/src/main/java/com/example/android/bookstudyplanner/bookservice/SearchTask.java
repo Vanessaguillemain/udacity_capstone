@@ -3,11 +3,11 @@ package com.example.android.bookstudyplanner.bookservice;
 import android.os.AsyncTask;
 
 import com.example.android.bookstudyplanner.BuildConfig;
+import com.example.android.bookstudyplanner.Utils;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.services.books.Books;
 import com.google.api.services.books.model.Volume;
-import com.google.common.primitives.Ints;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -37,7 +37,7 @@ public class SearchTask extends AsyncTask<String, Void, List<Volume>> {
         String query = strings[0];
 
         // If the query seems to be an ISBN we add the isbn special keyword https://developers.google.com/books/docs/v1/using#PerformingSearch
-        if (Ints.tryParse(query) != null && (query.length() == 13 || query.length() == 10)) {
+        if (Utils.isInteger(query) && (query.length() == 13 || query.length() == 10)) {
             query = query.concat("+isbn:" + query);
         }
 
