@@ -16,6 +16,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,8 +57,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
     private SearchTask searchTask;
     private List<Volume> volumeList = new ArrayList<>();
     private String latestQuery;
-    private SearchRecyclerViewAdapter mSearchRecyclerViewAdapter;
-    SearchRecyclerViewAdapter searchRecyclerViewAdapter2;
+    private SearchRecyclerViewAdapter searchRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,24 +65,20 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         setContentView(R.layout.book_search);
         ButterKnife.bind(this);
 
-        // set up the RecyclerView
-        /*
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        mSearchRecyclerViewAdapter = new SearchRecyclerViewAdapter(this, volumeList);
-        mSearchRecyclerViewAdapter.setClickListener(this);
-        mRecyclerView.setAdapter(mSearchRecyclerViewAdapter);*/
-
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 2 : 3);
-        //SearchRecyclerViewAdapter2 adapter = new SearchRecyclerViewAdapter2(this, volumeList, gridLayoutManager.getSpanCount());
-        searchRecyclerViewAdapter2 = new SearchRecyclerViewAdapter(this, volumeList, 1);
+        searchRecyclerViewAdapter = new SearchRecyclerViewAdapter(this, volumeList, 1);
         mRecyclerView.setLayoutManager(gridLayoutManager);
-        mRecyclerView.setAdapter(searchRecyclerViewAdapter2);
+        mRecyclerView.setAdapter(searchRecyclerViewAdapter);
 
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchBooks(query);
+
+                InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
                 return true;
             }
 
@@ -108,8 +104,8 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
     }
 
     public void setVolumesToAdapter(List<Volume> volumes) {
-        if (searchRecyclerViewAdapter2 != null) {
-            searchRecyclerViewAdapter2.setVolumes(volumes);
+        if (searchRecyclerViewAdapter != null) {
+            searchRecyclerViewAdapter.setVolumes(volumes);
         } else {
             volumeList.addAll(volumes);
         }
@@ -139,7 +135,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
     @Override
     public void onResult(List<Volume> volumes) {
         volumeList = volumes;
-        searchRecyclerViewAdapter2.setVolumes(volumes);
+        searchRecyclerViewAdapter.setVolumes(volumes);
     }
 
     /**
