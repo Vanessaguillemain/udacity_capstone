@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +21,8 @@ import android.widget.Toast;
 
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
+import com.example.android.bookstudyplanner.bookservice.SearchTask;
+import com.google.api.services.books.model.Volume;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -27,26 +31,32 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.internal.Util;
 
 /**
  * Created by vanessa on 22/07/2019.
  */
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements SearchTask.SearchListener{
     // Constant for logging
     private static final String TAG = SearchActivity.class.getSimpleName();
 
     //layout elements
     @BindView(R.id.tv_error_message_display)
     TextView mErrorMessageDisplay;
-    @BindView(R.id.editTextSearch)
-    EditText mEditTextSearch;
+
+    @BindView(R.id.search_view)
+    SearchView mSearchView;
     private boolean mInternetAvailable = false;
+
+    //elements for search
+    private SearchTask searchTask;
+    private List<Volume> volumeList = new ArrayList<>();
+    private String latestQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +64,19 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.book_search);
         ButterKnife.bind(this);
 
-        mEditTextSearch.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    // Perform action on key press
-                    Toast.makeText(getApplicationContext(), mEditTextSearch.getText(), Toast.LENGTH_SHORT).show();
-                    return true;
-                }
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchBooks(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
                 return false;
             }
         });
+
 
         mInternetAvailable = isOnline(this);
         if (mInternetAvailable) {
@@ -79,6 +90,32 @@ public class SearchActivity extends AppCompatActivity {
 
         //checks permissions before loading Data
         requestPermissionsAndLoadData(savedInstanceState);//TODO
+    }
+
+    public void searchBooks(String query) {
+        if (query.equalsIgnoreCase(latestQuery)) {
+            return;
+        }
+        if (searchTask != null) {
+            searchTask.cancel(true);
+        }
+        latestQuery = query;
+        searchTask = new SearchTask();
+        searchTask.setSearchListener(this);
+        searchTask.execute(query);
+    }
+
+    @Override
+    public void onSearching() {
+        volumeList.clear();
+    }
+
+    @Override
+    public void onResult(List<Volume> volumes) {
+        volumeList = volumes;
+        for(Volume v:volumes) {
+            Log.d(TAG, v.toString());
+        }
     }
 
     /**
