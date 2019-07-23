@@ -30,7 +30,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     private final int spanCount;
     private List<Volume> mVolumes;
     private LayoutInflater mInflater;
-   //private ItemClickListener mClickListener;
+    private ItemClickListener mClickListener;
 
     public SearchRecyclerViewAdapter(Context context, List<Volume> volumes, int spanCount) {
         this.mVolumes = volumes;
@@ -87,7 +87,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         TextView tvBookPageCount;
 
         public SearchBookViewHolder(ViewGroup viewGroup) {
-        //public SearchBookViewHolder(View viewGroup) {
             super(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.rv_search_item, viewGroup, false));
             ivBookImage = (ImageView) itemView.findViewById(R.id.imageBook_search);
             tvBookTitle = (TextView) itemView.findViewById(R.id.tvBookTitle_search);
@@ -98,9 +97,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
         public void setVolumeInLayout(Volume volume) {
             this.volume = volume;
-
-            System.out.println(volume.getVolumeInfo().getInfoLink());
-
             Volume.VolumeInfo.ImageLinks imageLinks = volume.getVolumeInfo().getImageLinks();
 
             if (imageLinks != null) {
@@ -124,12 +120,9 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
                 }
 
                 imageLink = imageLink.replace("edge=curl", "");
-                System.out.println(imageLink);
-
                 Picasso.with(itemView.getContext()).load(imageLink).into((ImageView) ivBookImage);
 
             } else {
-                Log.d(TAG, "no image");//TODO
                 Picasso.with(itemView.getContext()).load(R.drawable.photobook).into((ImageView) ivBookImage);
             }
 
@@ -155,7 +148,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
                     tvBookPageCount.setVisibility(View.GONE);
                 }
             }
-
         }
 
         public void setSpanCount(int spanCount) {
@@ -163,53 +155,19 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         }
 
         @Override
-        public void onClick(View v) {
-
-            Bundle metadata = new Bundle();
-
-            int i = getAdapterPosition();
-
-            Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
-
-            if (volumeInfo != null) {
-                if (volumeInfo.getTitle() != null) {
-                    metadata.putString(GoogleBookMetaData.TITLE, volumeInfo.getTitle());
-                }
-                if (volumeInfo.getPageCount() != null) {
-                    metadata.putInt(GoogleBookMetaData.PAGE_COUNT, volumeInfo.getPageCount());
-                }
-
-
-                Volume.VolumeInfo.ImageLinks imageLinks = volumeInfo.getImageLinks();
-                if (imageLinks != null) {
-                    String image = null;
-                    if (imageLinks.getExtraLarge() != null) {
-                        image = imageLinks.getExtraLarge();
-                    } else if (imageLinks.getLarge() != null) {
-                        image = imageLinks.getLarge();
-                    } else if (imageLinks.getMedium() != null) {
-                        image = imageLinks.getMedium();
-                    } else if (imageLinks.getSmall() != null) {
-                        image = imageLinks.getSmall();
-                    } else if (imageLinks.getThumbnail() != null) {
-                        image = imageLinks.getThumbnail();
-                    } else if (imageLinks.getSmallThumbnail() != null) {
-                        image = imageLinks.getSmallThumbnail();
-                    }
-                    if (image != null) {
-                        metadata.putString(GoogleBookMetaData.IMAGE, image);
-                    }
-                }
-            }
-
-            Context context = itemView.getContext();
-            Intent myIntent = new Intent(context, BookDetailActivity.class);
-            myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_FROM_SEARCH);
-            myIntent.putExtra("metadata", metadata);//TODO
-            context.startActivity(myIntent);
+        public void onClick(View view) {
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
-
     }
 
+    // allows clicks events to be caught
+    void setClickListener(SearchRecyclerViewAdapter.ItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
+
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
 
 }

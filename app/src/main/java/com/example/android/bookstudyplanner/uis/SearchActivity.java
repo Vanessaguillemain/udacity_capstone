@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
 import com.example.android.bookstudyplanner.bookservice.SearchTask;
+import com.example.android.bookstudyplanner.database.BookEntity;
+import com.example.android.bookstudyplanner.database.GoogleBookMetaData;
 import com.google.api.services.books.model.Volume;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -42,7 +44,7 @@ import butterknife.ButterKnife;
  * Created by vanessa on 22/07/2019.
  */
 
-public class SearchActivity extends AppCompatActivity implements SearchTask.SearchListener{
+public class SearchActivity extends AppCompatActivity implements SearchTask.SearchListener, SearchRecyclerViewAdapter.ItemClickListener{
     // Constant for logging
     private static final String TAG = SearchActivity.class.getSimpleName();
 
@@ -68,6 +70,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 2 : 3);
         searchRecyclerViewAdapter = new SearchRecyclerViewAdapter(this, volumeList, 1);
+        searchRecyclerViewAdapter.setClickListener(this);
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(searchRecyclerViewAdapter);
 
@@ -240,4 +243,46 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         return false;
     }
 
+    @Override
+    public void onItemClick(View view, int position) {
+        Volume volume = searchRecyclerViewAdapter.getItem(position);
+        Bundle metadata = new Bundle();
+        Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
+
+        if (volumeInfo != null) {
+            if (volumeInfo.getTitle() != null) {
+                metadata.putString(GoogleBookMetaData.TITLE, volumeInfo.getTitle());
+            }
+            if (volumeInfo.getPageCount() != null) {
+                metadata.putInt(GoogleBookMetaData.PAGE_COUNT, volumeInfo.getPageCount());
+            }
+
+            Volume.VolumeInfo.ImageLinks imageLinks = volumeInfo.getImageLinks();
+            if (imageLinks != null) {
+                String image = null;
+                if (imageLinks.getExtraLarge() != null) {
+                    image = imageLinks.getExtraLarge();
+                } else if (imageLinks.getLarge() != null) {
+                    image = imageLinks.getLarge();
+                } else if (imageLinks.getMedium() != null) {
+                    image = imageLinks.getMedium();
+                } else if (imageLinks.getSmall() != null) {
+                    image = imageLinks.getSmall();
+                } else if (imageLinks.getThumbnail() != null) {
+                    image = imageLinks.getThumbnail();
+                } else if (imageLinks.getSmallThumbnail() != null) {
+                    image = imageLinks.getSmallThumbnail();
+                }
+                if (image != null) {
+                    metadata.putString(GoogleBookMetaData.IMAGE, image);
+                }
+            }
+        }
+
+        Intent myIntent = new Intent(this, BookDetailActivity.class);
+        myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_FROM_SEARCH);
+        myIntent.putExtra(Utils.INTENT_KEY_METADATA, metadata);
+        startActivity(myIntent);
+        finish();
+    }
 }

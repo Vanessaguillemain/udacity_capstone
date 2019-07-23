@@ -193,7 +193,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 mTotalDaysByWeek = 5;
                 mPlanningValid = true;
                if (Utils.INTENT_VAL_BOOK_DETAIL_ACTION_FROM_SEARCH.equals(action)) {
-                   Bundle metaData = intent.getBundleExtra("metadata");
+                   Bundle metaData = intent.getBundleExtra(Utils.INTENT_KEY_METADATA);
                    String title = metaData.getString(GoogleBookMetaData.TITLE);
                    int pageCount = metaData.getInt(GoogleBookMetaData.PAGE_COUNT);
                    mImageLink = metaData.getString(GoogleBookMetaData.IMAGE);
