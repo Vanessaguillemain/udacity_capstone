@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.database.PlanningEntity;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -41,6 +43,13 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
     public void onBindViewHolder(TodayViewHolder holder, int position) {
         PlanningEntity planning = mDataPlanningEntities.get(position);
         holder.tvBookTitle.setText(planning.getTitle());
+        String imageLink = planning.getImageLink();
+        if(imageLink != null || imageLink != "") {
+            Picasso.with(holder.ivImageBook.getContext()).load(imageLink).into((ImageView) holder.ivImageBook);
+        } else {
+            Picasso.with(holder.ivImageBook.getContext()).load(R.drawable.photobook).into((ImageView) holder.ivImageBook);
+        }
+
         if(planning.isDone()) {
             holder.btnDone.setEnabled(false);
             holder.tvBookPageCount.setEnabled(false);
@@ -75,6 +84,7 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
 
     // stores and recycles views as they are scrolled off screen
     public class TodayViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ImageView ivImageBook;
         TextView tvBookTitle;
         TextView tvBookPageCount;
         TextView tvBookMinuteCount;
@@ -83,6 +93,7 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
         TodayViewHolder(View itemView) {
             super(itemView);
             tvBookTitle = itemView.findViewById(R.id.tvBookTitle_today);
+            ivImageBook = itemView.findViewById(R.id.ivImageBook_today);
             tvBookPageCount = itemView.findViewById(R.id.tvBookPagesCount_today);
             tvBookMinuteCount = itemView.findViewById(R.id.tvBookMinutesCount_today);
             btnDone = itemView.findViewById(R.id.btnDone);

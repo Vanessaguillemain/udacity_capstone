@@ -22,6 +22,7 @@ public class PlanningEntity {
     private Integer nbMinutesReading;
 
     private String title;
+    private String imageLink;
 
     @Ignore
     public PlanningEntity(Date date, int bookId, boolean done, Integer nbPagesToRead, Integer nbMinutesReading) {
@@ -33,13 +34,14 @@ public class PlanningEntity {
     }
 
 
-    public PlanningEntity(Date date, int bookId, boolean done, Integer nbPagesToRead, Integer nbMinutesReading, String title) {
+    public PlanningEntity(Date date, int bookId, boolean done, Integer nbPagesToRead, Integer nbMinutesReading, String title, String imageLink) {
         this.date = date;
         this.bookId = bookId;
         this.done = done;
         this.nbPagesToRead = nbPagesToRead;
         this.nbMinutesReading = nbMinutesReading;
         this.title = title;
+        this.imageLink = imageLink;
     }
 
     public Date getDate() {
@@ -88,5 +90,13 @@ public class PlanningEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 }

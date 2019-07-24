@@ -27,12 +27,13 @@ public class BookEntity implements Parcelable   {
     private Integer nbPagesRead;
     private Integer readTimeInSeconds;
     private Integer nbSecondsByPage;
+    private String imageLink;
 
     @Ignore
     private float percentRead;
 
 
-    public BookEntity(int id, int isbn, String title, int pageCount, Integer fromPageNb, Integer toPageNb, Integer nbPagesToRead, Date beginDate, Date endDate, String weekPlanning, Integer nbPagesRead, Integer readTimeInSeconds, Integer nbSecondsByPage) {
+    public BookEntity(int id, int isbn, String title, int pageCount, Integer fromPageNb, Integer toPageNb, Integer nbPagesToRead, Date beginDate, Date endDate, String weekPlanning, Integer nbPagesRead, Integer readTimeInSeconds, Integer nbSecondsByPage, String imageLink) {
         this.id = id;
         this.isbn = isbn;
         this.title = title;
@@ -46,9 +47,10 @@ public class BookEntity implements Parcelable   {
         this.nbPagesRead = nbPagesRead;
         this.readTimeInSeconds = readTimeInSeconds;
         this.nbSecondsByPage = nbSecondsByPage;
+        this.imageLink = imageLink;
     }
     @Ignore
-    public BookEntity(int isbn, String title, int pageCount, Integer fromPageNb, Integer toPageNb, Integer nbPagesToRead, Date beginDate, Date endDate, String weekPlanning, Integer nbPagesRead, Integer readTimeInSeconds, Integer nbSecondsByPage) {
+    public BookEntity(int isbn, String title, int pageCount, Integer fromPageNb, Integer toPageNb, Integer nbPagesToRead, Date beginDate, Date endDate, String weekPlanning, Integer nbPagesRead, Integer readTimeInSeconds, Integer nbSecondsByPage, String imageLink) {
         this.isbn = isbn;
         this.title = title;
         this.pageCount = pageCount;
@@ -61,6 +63,7 @@ public class BookEntity implements Parcelable   {
         this.nbPagesRead = nbPagesRead;
         this.readTimeInSeconds = readTimeInSeconds;
         this.nbSecondsByPage = nbSecondsByPage;
+        this.imageLink = imageLink;
     }
 
     @Ignore
@@ -95,6 +98,7 @@ public class BookEntity implements Parcelable   {
         this.nbPagesRead = (Integer)parcel.readSerializable();
         this.readTimeInSeconds = (Integer)parcel.readSerializable();
         this.nbSecondsByPage = (Integer)parcel.readSerializable();
+        this.imageLink = (String)parcel.readSerializable();
     }
 
     @Override
@@ -125,6 +129,7 @@ public class BookEntity implements Parcelable   {
         dest.writeSerializable(nbPagesRead);
         dest.writeSerializable(readTimeInSeconds);
         dest.writeSerializable(nbSecondsByPage);
+        dest.writeSerializable(imageLink);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator<BookEntity>() {
@@ -252,6 +257,15 @@ public class BookEntity implements Parcelable   {
         }
     }
 
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
+    }
+
+
     @Override
     public String toString() {
         return "BookEntity{" +
@@ -262,7 +276,8 @@ public class BookEntity implements Parcelable   {
                 ", nbPagesToRead=" + nbPagesToRead +
                 ", beginDate=" + beginDate +
                 ", endDate=" + endDate +
-                ", weekPlanning='" + weekPlanning + '\'' +
+                ", weekPlanning='" + weekPlanning +
+                ", imageLink='" + imageLink + '\'' +
                 '}';
     }
 }

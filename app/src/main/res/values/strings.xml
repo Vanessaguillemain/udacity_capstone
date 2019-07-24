@@ -50,6 +50,9 @@
     <string name="b_detail_submit">Submit</string>
     <string name="b_detail_delete">Delete</string>
     <string name="today_label_minutes">minutes</string>
+    <string name="b_detail_msg_confirm_delete">Are you sure you want to delete?</string>
+    <string name="b_detail_confirm_delete_yes">Yes delete</string>
+    <string name="b_detail_confirm_delete_no">No</string>
 
     <!-- SCREEN BOOK SEARCH -->
     <string name="title_search">Search</string>

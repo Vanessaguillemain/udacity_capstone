@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -13,6 +14,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -164,6 +166,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             mLabelSelectToDate.setText(sEnd);
             if(mImageLink != null) {
                 Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
+            } else {
+                Picasso.with(this).load(R.drawable.photobook).into((ImageView) mImageBook);
             }
         }
 
@@ -200,13 +204,13 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                    Bundle metaData = intent.getBundleExtra(Utils.INTENT_KEY_METADATA);
                    String title = metaData.getString(GoogleBookMetaData.TITLE);
                    int pageCount = metaData.getInt(GoogleBookMetaData.PAGE_COUNT);
-                   mImageLink = metaData.getString(GoogleBookMetaData.IMAGE);
                    mTvTitle.setText(title);
                    if(pageCount == MyVolume.NO_PAGE_COUNT) {
                        mValuePageCount.setText("");
                    } else {
                        mValuePageCount.setText(String.valueOf(pageCount));
                    }
+                   mImageLink = metaData.getString(GoogleBookMetaData.IMAGE);
                    Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
                }
 
@@ -215,6 +219,13 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     }
 
     private void fillLayoutFields(BookEntity item) {
+        mImageLink = item.getImageLink();
+        if(mImageLink != null) {
+            Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
+        } else {
+            Picasso.with(this).load(R.drawable.photobook).into((ImageView) mImageBook);
+        }
+
         mTvTitle.setText(item.getTitle());
         mValuePageCount.setText(String.valueOf(item.getPageCount()));
         mTitleValid = true;
@@ -514,7 +525,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         mWeekPlanning = Utils.getStringWeekPlanningFromTab(mTabWeekPlanning);
         //Book Entity
         final BookEntity book = new BookEntity(ISBN_ABSENT_VALUE,  title,  pageCount,  fromPageNb,  toPageNb, nbPagesToRead,
-                beginDate, endDate, mWeekPlanning, nbPagesRead, readTimeInSeconds, nbSecondsByPage);
+                beginDate, endDate, mWeekPlanning, nbPagesRead, readTimeInSeconds, nbSecondsByPage, mImageLink);
 
             AppExecutor.getInstance().diskIO().execute(new Runnable() {
             @Override
@@ -547,7 +558,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 }
                 //inserting new planning
                 for(Date d : planning) {
-                    PlanningEntity planning = new PlanningEntity(d, mBookId, false, mNbPagesToReadByDay, mNbPagesToReadByDay*mAvgNbSecByPage/60, null);
+                    PlanningEntity planning = new PlanningEntity(d, mBookId, false, mNbPagesToReadByDay, mNbPagesToReadByDay*mAvgNbSecByPage/60);
                     mDb.planningDao().insertPlanning(planning);
                 }
 
@@ -583,14 +594,23 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     }
 
     public void onDeleteButtonClicked() {
-        //TODO demand validation
-        AppExecutor.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.bookDao().deleteBookById(mBookId);
-                finish();
-            }
-        });
+        new AlertDialog.Builder(this)
+            .setMessage(getResources().getString(R.string.b_detail_msg_confirm_delete))
+            .setCancelable(false)
+            .setPositiveButton(getResources().getString(R.string.b_detail_confirm_delete_yes), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    AppExecutor.getInstance().diskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                        mDb.bookDao().deleteBookById(mBookId);
+                        mDb.planningDao().deletePlanningByBookId(mBookId);
+                        finish();
+                        }
+                    });
+                }
+            })
+            .setNegativeButton(getResources().getString(R.string.b_detail_confirm_delete_no), null)
+            .show();
     }
 
     @Override
