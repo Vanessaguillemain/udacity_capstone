@@ -23,8 +23,8 @@ import android.widget.Toast;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
 import com.example.android.bookstudyplanner.bookservice.SearchTask;
-import com.example.android.bookstudyplanner.database.BookEntity;
 import com.example.android.bookstudyplanner.database.GoogleBookMetaData;
+import com.example.android.bookstudyplanner.entities.MyVolume;
 import com.google.api.services.books.model.Volume;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -58,7 +58,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
 
     //elements for search
     private SearchTask searchTask;
-    private List<Volume> volumeList = new ArrayList<>();
+    private List<MyVolume> myVolumeList = new ArrayList<>();
     private String latestQuery;
     private SearchRecyclerViewAdapter searchRecyclerViewAdapter;
 
@@ -69,10 +69,19 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         ButterKnife.bind(this);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 2 : 3);
-        searchRecyclerViewAdapter = new SearchRecyclerViewAdapter(this, volumeList, 1);
+        searchRecyclerViewAdapter = new SearchRecyclerViewAdapter(this, myVolumeList, 1);
         searchRecyclerViewAdapter.setClickListener(this);
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(searchRecyclerViewAdapter);
+
+        if(savedInstanceState != null) {
+            ArrayList<MyVolume> myVolumeArrayList = new ArrayList<MyVolume>();
+            myVolumeArrayList = savedInstanceState.getParcelableArrayList(Utils.BUNDLE_KEY_VOLUME_LIST);
+            myVolumeList.addAll(myVolumeArrayList);
+            mRecyclerView.getAdapter().notifyDataSetChanged();
+        } else {
+            mSearchView.requestFocus();
+        }
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -83,12 +92,13 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
                     searchBooks(query);
                 } else {
                     showErrorMessageInternet();
-                    volumeList.clear();
+                    myVolumeList.clear();
                     mRecyclerView.getAdapter().notifyDataSetChanged();
                 }
 
                 InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                mSearchView.clearFocus();
 
                 return true;
             }
@@ -136,7 +146,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
 
     @Override
     public void onSearching() {
-        volumeList.clear();
+        myVolumeList.clear();
         mRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
@@ -146,8 +156,13 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
             mErrorNoBookFound.setVisibility(View.VISIBLE);
         } else {
             mErrorNoBookFound.setVisibility(View.GONE);
-            volumeList = volumes;
-            searchRecyclerViewAdapter.setVolumes(volumes);
+            //volumeList = volumes;
+            for(Volume volume:volumes) {
+                MyVolume myVolume = new MyVolume(volume);
+                myVolumeList.add(myVolume);
+            }
+            //searchRecyclerViewAdapter.setVolumes(volumes);
+            searchRecyclerViewAdapter.setVolumes(myVolumeList);
         }
     }
 
@@ -245,39 +260,12 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
 
     @Override
     public void onItemClick(View view, int position) {
-        Volume volume = searchRecyclerViewAdapter.getItem(position);
+        MyVolume volume = searchRecyclerViewAdapter.getItem(position);
         Bundle metadata = new Bundle();
-        Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
 
-        if (volumeInfo != null) {
-            if (volumeInfo.getTitle() != null) {
-                metadata.putString(GoogleBookMetaData.TITLE, volumeInfo.getTitle());
-            }
-            if (volumeInfo.getPageCount() != null) {
-                metadata.putInt(GoogleBookMetaData.PAGE_COUNT, volumeInfo.getPageCount());
-            }
-
-            Volume.VolumeInfo.ImageLinks imageLinks = volumeInfo.getImageLinks();
-            if (imageLinks != null) {
-                String image = null;
-                if (imageLinks.getExtraLarge() != null) {
-                    image = imageLinks.getExtraLarge();
-                } else if (imageLinks.getLarge() != null) {
-                    image = imageLinks.getLarge();
-                } else if (imageLinks.getMedium() != null) {
-                    image = imageLinks.getMedium();
-                } else if (imageLinks.getSmall() != null) {
-                    image = imageLinks.getSmall();
-                } else if (imageLinks.getThumbnail() != null) {
-                    image = imageLinks.getThumbnail();
-                } else if (imageLinks.getSmallThumbnail() != null) {
-                    image = imageLinks.getSmallThumbnail();
-                }
-                if (image != null) {
-                    metadata.putString(GoogleBookMetaData.IMAGE, image);
-                }
-            }
-        }
+        metadata.putString(GoogleBookMetaData.TITLE, volume.getVolumeInfoTitle());
+        metadata.putInt(GoogleBookMetaData.PAGE_COUNT, volume.getVolumeInfoPageCount());
+        metadata.putString(GoogleBookMetaData.IMAGE, volume.getVolumeInfoImageLink());
 
         Intent myIntent = new Intent(this, BookDetailActivity.class);
         myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_FROM_SEARCH);
@@ -285,4 +273,13 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         startActivity(myIntent);
         finish();
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        ArrayList<MyVolume> testing = new ArrayList<MyVolume>();
+        testing.addAll(myVolumeList);
+        outState.putParcelableArrayList(Utils.BUNDLE_KEY_VOLUME_LIST, testing);
+        super.onSaveInstanceState(outState);
+    }
+
 }

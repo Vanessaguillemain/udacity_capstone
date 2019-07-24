@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
 import com.example.android.bookstudyplanner.database.GoogleBookMetaData;
+import com.example.android.bookstudyplanner.entities.MyVolume;
 import com.google.api.services.books.model.Volume;
 import com.squareup.picasso.Picasso;
 
@@ -28,17 +29,17 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     private static final String TAG = SearchRecyclerViewAdapter.class.getSimpleName();
 
     private final int spanCount;
-    private List<Volume> mVolumes;
+    private List<MyVolume> mVolumes;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
-    public SearchRecyclerViewAdapter(Context context, List<Volume> volumes, int spanCount) {
+    public SearchRecyclerViewAdapter(Context context, List<MyVolume> volumes, int spanCount) {
         this.mVolumes = volumes;
         this.spanCount = spanCount;
         this.mInflater = LayoutInflater.from(context);
     }
 
-    public void setVolumes(List<Volume> volumes) {
+    public void setVolumes(List<MyVolume> volumes) {
         mVolumes = volumes;
         notifyDataSetChanged();
     }
@@ -61,7 +62,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     }
 
     // convenience method for getting data at click position
-    Volume getItem(int id) {
+    MyVolume getItem(int id) {
         return mVolumes.get(id);
     }
 
@@ -79,7 +80,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     //****************************************************
 
     public class SearchBookViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private Volume volume;
+        private MyVolume volume;
         private int spanCount;
         ImageView ivBookImage;
         TextView tvBookTitle;
@@ -95,59 +96,34 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             itemView.setOnClickListener(this);
         }
 
-        public void setVolumeInLayout(Volume volume) {
+        public void setVolumeInLayout(MyVolume volume) {
             this.volume = volume;
-            Volume.VolumeInfo.ImageLinks imageLinks = volume.getVolumeInfo().getImageLinks();
 
-            if (imageLinks != null) {
-                String medium = imageLinks.getMedium();
-                String large = imageLinks.getLarge();
-                String small = imageLinks.getSmall();
-                String thumbnail = imageLinks.getThumbnail();
-                String smallThumbnail = imageLinks.getSmallThumbnail();
-
-                String imageLink = "";
-                if (large != null) {
-                    imageLink = large;
-                } else if (medium != null) {
-                    imageLink = medium;
-                } else if (small != null) {
-                    imageLink = small;
-                } else if (thumbnail != null) {
-                    imageLink = thumbnail;
-                } else if (smallThumbnail != null) {
-                    imageLink = smallThumbnail;
-                }
-
-                imageLink = imageLink.replace("edge=curl", "");
+            String imageLink = volume.getVolumeInfoImageLink();
+            if(imageLink != null || imageLink != "") {
                 Picasso.with(itemView.getContext()).load(imageLink).into((ImageView) ivBookImage);
-
             } else {
                 Picasso.with(itemView.getContext()).load(R.drawable.photobook).into((ImageView) ivBookImage);
             }
-
-            Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
-
-            if (volumeInfo != null) {
-                if (volumeInfo.getTitle() != null) {
-                    tvBookTitle.setVisibility(View.VISIBLE);
-                    tvBookTitle.setText(volumeInfo.getTitle());
-                } else {
-                    tvBookTitle.setVisibility(View.GONE);
-                }
-                if (volumeInfo.getSubtitle() != null) {
-                    tvBookSubTitle.setVisibility(View.VISIBLE);
-                    tvBookSubTitle.setText(volumeInfo.getSubtitle());
-                } else {
-                    tvBookSubTitle.setVisibility(View.GONE);
-                }
-                if (volumeInfo.getPageCount() != null) {
-                    tvBookPageCount.setVisibility(View.VISIBLE);
-                    tvBookPageCount.setText(String.valueOf(volumeInfo.getPageCount())+ " pages");//TODO
-                } else {
-                    tvBookPageCount.setVisibility(View.GONE);
-                }
+            if (volume.getVolumeInfoTitle() != null) {
+                tvBookTitle.setVisibility(View.VISIBLE);
+                tvBookTitle.setText(volume.getVolumeInfoTitle());
+            } else {
+                tvBookTitle.setVisibility(View.GONE);
             }
+            if (volume.getVolumeInfoSubtitle() != null) {
+                tvBookSubTitle.setVisibility(View.VISIBLE);
+                tvBookSubTitle.setText(volume.getVolumeInfoSubtitle());
+            } else {
+                tvBookSubTitle.setVisibility(View.GONE);
+            }
+            if (volume.getVolumeInfoPageCount() != null) {
+                tvBookPageCount.setVisibility(View.VISIBLE);
+                tvBookPageCount.setText(String.valueOf(volume.getVolumeInfoPageCount())+ " pages");//TODO
+            } else {
+                tvBookPageCount.setVisibility(View.GONE);
+            }
+
         }
 
         public void setSpanCount(int spanCount) {
