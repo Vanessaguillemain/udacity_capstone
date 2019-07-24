@@ -83,32 +83,20 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         if(savedInstanceState != null) {
             ArrayList<MyVolume> myVolumeArrayList = new ArrayList<MyVolume>();
             myVolumeArrayList = savedInstanceState.getParcelableArrayList(Utils.BUNDLE_KEY_VOLUME_LIST);
+            boolean msgNoBook = savedInstanceState.getBoolean(Utils.BUNDLE_KEY_ERROR_NO_BOOK_FOUND);
+            boolean msgIsbnInvalid = savedInstanceState.getBoolean(Utils.BUNDLE_KEY_ERROR_ISBN);
+            if(msgIsbnInvalid) {
+                mErrorISBNInvalid.setVisibility(View.VISIBLE);
+            }
+            if(msgNoBook) {
+                mErrorNoBookFound.setVisibility(View.VISIBLE);
+            }
             myVolumeList.addAll(myVolumeArrayList);
             mRecyclerView.getAdapter().notifyDataSetChanged();
         } else {
             mSearchView.requestFocus();
         }
 
-        /*
-        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                mErrorISBNInvalid.setVisibility(View.GONE);
-                mErrorNoBookFound.setVisibility(View.GONE);
-                return false;
-            }
-        });
-        int searchCloseButtonId = mSearchView.getContext().getResources()
-                .getIdentifier("android:id/search_close_btn", null, null);
-        ImageView closeButton = (ImageView) this.mSearchView.findViewById(searchCloseButtonId);
-        // Set on click listener
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mErrorISBNInvalid.setVisibility(View.GONE);
-                mErrorNoBookFound.setVisibility(View.GONE);
-            }
-        });*/
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -335,6 +323,16 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         ArrayList<MyVolume> testing = new ArrayList<MyVolume>();
         testing.addAll(myVolumeList);
         outState.putParcelableArrayList(Utils.BUNDLE_KEY_VOLUME_LIST, testing);
+        if(mErrorISBNInvalid.getVisibility() == View.VISIBLE) {
+            outState.putBoolean(Utils.BUNDLE_KEY_ERROR_ISBN, true);
+        } else {
+            outState.putBoolean(Utils.BUNDLE_KEY_ERROR_ISBN, false);
+        }
+        if(mErrorNoBookFound.getVisibility() == View.VISIBLE) {
+            outState.putBoolean(Utils.BUNDLE_KEY_ERROR_NO_BOOK_FOUND, true);
+        } else {
+            outState.putBoolean(Utils.BUNDLE_KEY_ERROR_NO_BOOK_FOUND, false);
+        }
         super.onSaveInstanceState(outState);
     }
 

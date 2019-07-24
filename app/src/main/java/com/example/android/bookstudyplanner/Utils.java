@@ -30,6 +30,8 @@ public class Utils {
     public static final String INTENT_KEY_BOOK = "INTENT_KEY_BOOK";
     public static final String INTENT_KEY_METADATA = "INTENT_KEY_METADATA";
     public static final String BUNDLE_KEY_VOLUME_LIST = "BUNDLE_KEY_VOLUME_LIST";
+    public static final String BUNDLE_KEY_ERROR_ISBN = "BUNDLE_KEY_ERROR_ISBN";
+    public static final String BUNDLE_KEY_ERROR_NO_BOOK_FOUND = "BUNDLE_KEY_ERROR_NO_BOOK_FOUND";
     public static final int ERROR_NB_PAGES_AVERAGE =-1;
     public static final int ERROR_NB_DAYS_TO_READ_ZERO =-2;
     public static final String ERROR_NB_SECONDS_A_DAY = "ERROR_NB_SECONDS_A_DAY";
