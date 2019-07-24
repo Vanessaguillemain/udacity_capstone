@@ -15,8 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +56,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
     //layout elements
     @BindView(R.id.tv_error_message_display) TextView mErrorMessageDisplay;
     @BindView(R.id.tv_error_no_book_found) TextView mErrorNoBookFound;
+    @BindView(R.id.tv_error_isbn_invalid) TextView mErrorISBNInvalid;
     @BindView(R.id.search_view) SearchView mSearchView;
     @BindView(R.id.books_grid) RecyclerView mRecyclerView;
 
@@ -86,7 +89,36 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
             mSearchView.requestFocus();
         }
 
+        /*
+        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                mErrorISBNInvalid.setVisibility(View.GONE);
+                mErrorNoBookFound.setVisibility(View.GONE);
+                return false;
+            }
+        });
+        int searchCloseButtonId = mSearchView.getContext().getResources()
+                .getIdentifier("android:id/search_close_btn", null, null);
+        ImageView closeButton = (ImageView) this.mSearchView.findViewById(searchCloseButtonId);
+        // Set on click listener
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mErrorISBNInvalid.setVisibility(View.GONE);
+                mErrorNoBookFound.setVisibility(View.GONE);
+            }
+        });*/
+
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String cs) {
+                if (TextUtils.isEmpty(cs)){
+                    mErrorISBNInvalid.setVisibility(View.GONE);
+                    mErrorNoBookFound.setVisibility(View.GONE);
+                }
+                return false;
+            }
             @Override
             public boolean onQueryTextSubmit(String query) {
                 mInternetAvailable = isOnline(SearchActivity.this);
@@ -104,11 +136,6 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
                 mSearchView.clearFocus();
 
                 return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
             }
         });
 
@@ -138,13 +165,30 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         if (query.equalsIgnoreCase(latestQuery)) {
             return;
         }
-        if (searchTask != null) {
-            searchTask.cancel(true);
+        boolean valid = true;
+        //if it's an ISBN
+        if (Utils.isInteger(query)) {
+            if (query.length() == 13) {
+                valid = Utils.isValidISBN13(query);
+            }
+            if (query.length() == 10) {
+                valid = Utils.isValidISBN10(query);
+            }
         }
-        latestQuery = query;
-        searchTask = new SearchTask();
-        searchTask.setSearchListener(this);
-        searchTask.execute(query);
+        if(valid) {
+            mErrorISBNInvalid.setVisibility(View.GONE);
+            if (searchTask != null) {
+                searchTask.cancel(true);
+            }
+            latestQuery = query;
+            searchTask = new SearchTask();
+            searchTask.setSearchListener(this);
+            searchTask.execute(query);
+        } else {
+            mErrorISBNInvalid.setVisibility(View.VISIBLE);
+            myVolumeList.clear();
+            mRecyclerView.getAdapter().notifyDataSetChanged();
+        }
     }
 
     @Override

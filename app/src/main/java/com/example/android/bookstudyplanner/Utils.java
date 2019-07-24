@@ -289,4 +289,48 @@ public class Utils {
         }
         return false;
     }
+
+    public static boolean isValidISBN13(String string) {
+        int[] validTab = {1,3,1,3,1,3,1,3,1,3,1,3};
+        if(string != null && string.length() ==13 ) {
+            int sum = 0;
+            try {
+                for (int i = 0; i < string.length()-1; i++) {
+                    int digit = Integer.parseInt(String.valueOf(string.charAt(i)), 10);
+                    sum += digit * validTab[i];
+                }
+                int s = sum%10;
+                if(s != 0) {
+                    s = 10-s;
+                }
+                if(s == Integer.parseInt(String.valueOf(string.charAt(12)), 10)) {
+                    return true;
+                }
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    // Returns ISBN error syndrome, zero for a valid ISBN, non-zero for an invalid one.
+    // digits[i] must be between 0 and 10.
+    public static int CheckISBN10(char digits[]){
+        int i, s = 0, t = 0;
+        for (i = 0; i < 10; i++) {
+            t += digits[i];
+            s += t;
+        }
+        return s % 11;
+    }
+
+    public static boolean isValidISBN10(String isbn10) {
+        if(isbn10 != null && isbn10.length() == 10) {
+            char[] tab = isbn10.toCharArray();
+            if(CheckISBN10(tab) == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

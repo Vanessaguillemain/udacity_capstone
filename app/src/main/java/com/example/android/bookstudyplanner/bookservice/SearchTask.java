@@ -38,7 +38,6 @@ public class SearchTask extends AsyncTask<String, Void, List<Volume>> {
 
         // If the query seems to be an ISBN we add the isbn special keyword https://developers.google.com/books/docs/v1/using#PerformingSearch
         if (Utils.isInteger(query) && (query.length() == 13 || query.length() == 10)) {
-            //query = query.concat("+isbn:" + query);
             query = "isbn:" + query;
         }
 
