@@ -16,6 +16,8 @@ public class MyVolume implements Parcelable {
     private String volumeInfoImageLink;
     private Integer volumeInfoPageCount;
 
+    public static final Integer NO_PAGE_COUNT = -1;
+
     // Constructor
     public MyVolume(Volume volume){
         Volume.VolumeInfo info = volume.getVolumeInfo();
@@ -23,8 +25,8 @@ public class MyVolume implements Parcelable {
 
         if(info != null) {
             this.volumeInfoTitle = info.getTitle();
-            this.volumeInfoSubtitle = info.getSubtitle();
-            this.volumeInfoPageCount = info.getPageCount();
+            this.volumeInfoSubtitle = info.getSubtitle()!=null?info.getSubtitle():"";
+            this.volumeInfoPageCount = info.getPageCount()!=null?info.getPageCount():NO_PAGE_COUNT;
 
             Volume.VolumeInfo.ImageLinks imageLinks = info.getImageLinks();
             if (imageLinks != null) {
@@ -55,10 +57,10 @@ public class MyVolume implements Parcelable {
 
     private MyVolume(Parcel in) {
         id = in.readString();
-        volumeInfoTitle = in.readString();
-        volumeInfoSubtitle = in.readString();
-        volumeInfoImageLink = in.readString();
-        volumeInfoPageCount = in.readInt();
+        volumeInfoTitle = (String)in.readSerializable();
+        volumeInfoSubtitle = (String)in.readSerializable();
+        volumeInfoImageLink = (String)in.readSerializable();
+        volumeInfoPageCount = (Integer)in.readSerializable();
     }
 
     // Getter and setter methods
@@ -66,10 +68,10 @@ public class MyVolume implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
-        dest.writeString(volumeInfoTitle);
-        dest.writeString(volumeInfoSubtitle);
-        dest.writeString(volumeInfoImageLink);
-        dest.writeInt(volumeInfoPageCount);
+        dest.writeSerializable(volumeInfoTitle);
+        dest.writeSerializable(volumeInfoSubtitle);
+        dest.writeSerializable(volumeInfoImageLink);
+        dest.writeSerializable(volumeInfoPageCount);
     }
 
     @Override

@@ -34,6 +34,7 @@ import com.example.android.bookstudyplanner.database.AppExecutor;
 import com.example.android.bookstudyplanner.database.BookEntity;
 import com.example.android.bookstudyplanner.database.GoogleBookMetaData;
 import com.example.android.bookstudyplanner.database.PlanningEntity;
+import com.example.android.bookstudyplanner.entities.MyVolume;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -200,7 +201,11 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                    int pageCount = metaData.getInt(GoogleBookMetaData.PAGE_COUNT);
                    mImageLink = metaData.getString(GoogleBookMetaData.IMAGE);
                    mTvTitle.setText(title);
-                   mValuePageCount.setText(String.valueOf(pageCount));
+                   if(pageCount == MyVolume.NO_PAGE_COUNT) {
+                       mValuePageCount.setText("");
+                   } else {
+                       mValuePageCount.setText(String.valueOf(pageCount));
+                   }
                    Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
                }
 
