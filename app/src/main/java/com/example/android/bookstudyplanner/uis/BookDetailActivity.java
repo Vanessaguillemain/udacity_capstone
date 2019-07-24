@@ -517,7 +517,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         Integer toPageNb = Integer.parseInt(toPage);
         final Integer nbPagesToRead = toPageNb - fromPageNb +1;
 
-        Integer nbPagesRead = null;
+        Integer nbPagesRead = 0;
         Integer readTimeInSeconds = null;
         Integer nbSecondsByPage = null;
         final Boolean newBook = (mBookId == DEFAULT_BOOK_ID);
@@ -527,22 +527,22 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         final BookEntity book = new BookEntity(ISBN_ABSENT_VALUE,  title,  pageCount,  fromPageNb,  toPageNb, nbPagesToRead,
                 beginDate, endDate, mWeekPlanning, nbPagesRead, readTimeInSeconds, nbSecondsByPage, mImageLink);
 
-            AppExecutor.getInstance().diskIO().execute(new Runnable() {
+        AppExecutor.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                // insert the book only if mBookId matches DEFAULT_BOOK_ID
-                // Otherwise update it. Call finish in any case
-                if (mBookId == DEFAULT_BOOK_ID) {
-                    // insert new book
-                    mBookId = (int)(mDb.bookDao().insertBook(book));
-                } else {
-                    //update book
-                    book.setId(mBookId);
-                    mDb.bookDao().updateBook(book);
-                }
-                Intent resultIntent = new Intent();
-                setResult(Activity.RESULT_OK, resultIntent);
-                finish();
+            // insert the book only if mBookId matches DEFAULT_BOOK_ID
+            // Otherwise update it. Call finish in any case
+            if (mBookId == DEFAULT_BOOK_ID) {
+                // insert new book
+                mBookId = (int)(mDb.bookDao().insertBook(book));
+            } else {
+                //update book
+                book.setId(mBookId);
+                mDb.bookDao().updateBook(book);
+            }
+            Intent resultIntent = new Intent();
+            setResult(Activity.RESULT_OK, resultIntent);
+            finish();
             }
         });
 
@@ -551,20 +551,20 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         AppExecutor.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                if(!newBook) {
-                    //Delete all previous planning before inserting new plannings
-                    Date firstDate = planning.get(0);
-                    mDb.planningDao().deletePlanningByBookIdAfterIncludeDate(mBookId, firstDate);
-                }
-                //inserting new planning
-                for(Date d : planning) {
-                    PlanningEntity planning = new PlanningEntity(d, mBookId, false, mNbPagesToReadByDay, mNbPagesToReadByDay*mAvgNbSecByPage/60);
-                    mDb.planningDao().insertPlanning(planning);
-                }
+            if(!newBook) {
+                //Delete all previous planning before inserting new plannings
+                Date firstDate = planning.get(0);
+                mDb.planningDao().deletePlanningByBookIdAfterIncludeDate(mBookId, firstDate);
+            }
+            //inserting new planning
+            for(Date d : planning) {
+                PlanningEntity planning = new PlanningEntity(d, mBookId, false, mNbPagesToReadByDay, mNbPagesToReadByDay*mAvgNbSecByPage/60);
+                mDb.planningDao().insertPlanning(planning);
+            }
 
-                Intent resultIntent = new Intent();
-                setResult(Activity.RESULT_OK, resultIntent);
-                finish();
+            Intent resultIntent = new Intent();
+            setResult(Activity.RESULT_OK, resultIntent);
+            finish();
             }
         });
     }

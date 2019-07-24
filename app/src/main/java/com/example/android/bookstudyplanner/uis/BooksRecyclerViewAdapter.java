@@ -5,10 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bookstudyplanner.R;
+import com.example.android.bookstudyplanner.Utils;
 import com.example.android.bookstudyplanner.database.BookEntity;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -39,9 +42,22 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
     @Override
     public void onBindViewHolder(BooksViewHolder holder, int position) {
         BookEntity book = mDataBookEntities.get(position);
-        holder.tvBookTitle.setText(book.getTitle());
-        holder.tvBookId.setText(String.valueOf(book.getId()));
-        holder.tvBookPageCount.setText(String.valueOf(book.getPageCount()));
+        String imageLink = book.getImageLink();
+        Context context = holder.ivImageBooks.getContext();
+        if(imageLink != null && !imageLink.equals("")) {
+            Picasso.with(context).load(imageLink).into((ImageView) holder.ivImageBooks);
+        } else {
+            Picasso.with(context).load(R.drawable.photobook).into((ImageView) holder.ivImageBooks);
+        }
+        String title = book.getTitle();
+        if(title.length()>20) {
+            title = title.substring(0, 19) + "...";
+        }
+        holder.tvBookTitle.setText(title);
+        String formatedDate = Utils.getFormatedDateFromDate(book.getEndDate(), context);
+        holder.tvBookEndDate.setText(formatedDate);
+        holder.tvPagesToRead.setText(String.valueOf(book.getNbPagesToRead()));
+        holder.tvBookProgress.setText(String.valueOf(book.getPercentRead()) + " " + context.getResources().getString(R.string.b_search_label_percent));
     }
 
     // total number of rows
@@ -65,15 +81,19 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
 
     // stores and recycles views as they are scrolled off screen
     public class BooksViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ImageView ivImageBooks;
         TextView tvBookTitle;
-        TextView tvBookId;
-        TextView tvBookPageCount;
+        TextView tvBookEndDate;
+        TextView tvPagesToRead;
+        TextView tvBookProgress;
 
         BooksViewHolder(View itemView) {
             super(itemView);
+            ivImageBooks = itemView.findViewById(R.id.ivImageBook_books);
             tvBookTitle = itemView.findViewById(R.id.tvBookTitle_books);
-            tvBookId = itemView.findViewById(R.id.tvBookId_books);
-            tvBookPageCount = itemView.findViewById(R.id.tvBookPageCount_books);
+            tvBookEndDate = itemView.findViewById(R.id.tvBookEndDate_books);
+            tvPagesToRead = itemView.findViewById(R.id.tvBookPagesToRead_books);
+            tvBookProgress = itemView.findViewById(R.id.tvBookProgress_books);
             itemView.setOnClickListener(this);
         }
 

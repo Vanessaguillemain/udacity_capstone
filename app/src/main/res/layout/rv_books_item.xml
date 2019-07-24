@@ -18,22 +18,74 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tvBookId_books"
-                android:layout_width="wrap_content"
+            android:layout_margin="@dimen/border_margin"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/ivImageBook_books"
+                android:scaleType="centerCrop"
+                android:elevation="@dimen/fab_elevation"
+                android:layout_width="67dp"
+                android:layout_height="101dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/tvBookTitle_books"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/tvBookPageCount_books"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"/>
+                android:layout_marginStart="@dimen/border_margin"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvBookTitle_books"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:width="@dimen/books_label_width"
+                        android:text="@string/b_search_label_end_date"
+                        android:textSize="16sp"/>
+                    <TextView
+                        android:id="@+id/tvBookEndDate_books"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:width="@dimen/books_label_width"
+                        android:text="@string/b_search_label_pages_to_read"
+                        android:textSize="16sp"/>
+                    <TextView
+                        android:id="@+id/tvBookPagesToRead_books"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:width="@dimen/books_label_width"
+                        android:text="@string/b_search_label_progression"
+                        android:textSize="16sp"/>
+                    <TextView
+                        android:id="@+id/tvBookProgress_books"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

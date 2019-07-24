@@ -250,11 +250,12 @@ public class BookEntity implements Parcelable   {
     }
 
     public float getPercentRead() {
-        if(nbPagesToRead>0) {
-            return nbPagesRead / nbPagesToRead * 100;
-        } else {
-            return 0;
+        if (nbPagesRead !=null) {
+            if (nbPagesToRead > 0 && nbPagesRead > 0) {
+                return new Float(nbPagesRead) / new Float(nbPagesToRead) * 100;
+            }
         }
+        return 0;
     }
 
     public String getImageLink() {

@@ -31,7 +31,6 @@ public class TabBooksFragment extends Fragment implements BooksRecyclerViewAdapt
     }
 
     public void setBooksToAdapter(List<BookEntity> books) {
-        //TODO remove after when LiveData ?
         if (booksRecyclerViewAdapter != null) {
             booksRecyclerViewAdapter.setBooks(books);
         } else {

@@ -26,6 +26,9 @@ public interface BookDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateBook(BookEntity bookEntry);
 
+    @Query("UPDATE book SET nbPagesRead=(nbPagesRead + :nb) WHERE id = :id")
+    void updateBookReadingForBookId(int id, int nb);
+
     @Delete
     void deleteBook(BookEntity bookEntry);
 

@@ -42,9 +42,15 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
     @Override
     public void onBindViewHolder(TodayViewHolder holder, int position) {
         PlanningEntity planning = mDataPlanningEntities.get(position);
-        holder.tvBookTitle.setText(planning.getTitle());
+
+        String title = planning.getTitle();
+        if(title.length()>18) {
+            title = title.substring(0, 17) + "...";
+        }
+
+        holder.tvBookTitle.setText(title);
         String imageLink = planning.getImageLink();
-        if(imageLink != null || imageLink != "") {
+        if(imageLink != null && !imageLink.equals("")) {
             Picasso.with(holder.ivImageBook.getContext()).load(imageLink).into((ImageView) holder.ivImageBook);
         } else {
             Picasso.with(holder.ivImageBook.getContext()).load(R.drawable.photobook).into((ImageView) holder.ivImageBook);

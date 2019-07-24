@@ -14,11 +14,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.android.bookstudyplanner.AddBookViewModel;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.UpdatePlanningViewModel;
 import com.example.android.bookstudyplanner.Utils;
+import com.example.android.bookstudyplanner.database.AddBookViewModelFactory;
 import com.example.android.bookstudyplanner.database.AppDatabase;
 import com.example.android.bookstudyplanner.database.AppExecutor;
+import com.example.android.bookstudyplanner.database.BookEntity;
 import com.example.android.bookstudyplanner.database.PlanningEntity;
 import com.example.android.bookstudyplanner.database.UpdatePlanningViewModelFactory;
 
@@ -74,7 +77,7 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
 
         if(view.getId() == R.id.btnDone) {
 
-            int mBookId = planning.getBookId();
+            final int mBookId = planning.getBookId();
             Date mDate = planning.getDate();
 
             UpdatePlanningViewModelFactory factory = new UpdatePlanningViewModelFactory(mDb, mBookId, mDate);
@@ -84,14 +87,24 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
                 @Override
                 public void onChanged(@Nullable PlanningEntity planning) {
                     viewModel.getPlanning().removeObserver(this);
-                    Log.d(TAG, "Receiving database update from LiveData");
+                    Log.d(TAG, "From viewModel Planning");
+                }
+            });
+
+            AddBookViewModelFactory factoryBook = new AddBookViewModelFactory(mDb, mBookId);
+            final AddBookViewModel viewModelBook = ViewModelProviders.of(this, factoryBook).get(AddBookViewModel.class);
+            viewModelBook.getBook().observe(this, new Observer<BookEntity>() {
+                @Override
+                public void onChanged(@Nullable BookEntity book) {
+                viewModelBook.getBook().removeObserver(this);
+                Log.d(TAG, "From viewModel Book");
                 }
             });
 
             TextView count = view.getRootView().findViewById(R.id.tvBookPagesCount_today);
             TextView min = view.getRootView().findViewById(R.id.tvBookMinutesCount_today);
 
-            int pagesCount = Integer.parseInt(count.getText().toString());
+            final int pagesCount = Integer.parseInt(count.getText().toString());
             int minutes = planning.getNbMinutesReading();
             if(min.getText() == "") {
                 minutes = Integer.parseInt(min.getText().toString());
@@ -104,6 +117,7 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
                 public void run() {
                     //update
                     mDb.planningDao().updatePlanning(planning2);
+                    mDb.bookDao().updateBookReadingForBookId(mBookId, pagesCount);
                 }
             });
 
