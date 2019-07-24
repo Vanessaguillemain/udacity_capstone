@@ -1,8 +1,10 @@
 package com.example.android.bookstudyplanner.uis;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -518,6 +520,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                     book.setId(mBookId);
                     mDb.bookDao().updateBook(book);
                 }
+                Intent resultIntent = new Intent();
+                setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }
         });
@@ -537,6 +541,9 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                     PlanningEntity planning = new PlanningEntity(d, mBookId, false, mNbPagesToReadByDay, mNbPagesToReadByDay*mAvgNbSecByPage/60, null);
                     mDb.planningDao().insertPlanning(planning);
                 }
+
+                Intent resultIntent = new Intent();
+                setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }
         });
@@ -690,7 +697,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             setButtonSaveState();
         } else {
             mPlanningValid = false;
-            mAboutNbPages.setText("ZERO days of reading");
+            mAboutNbPages.setText("ZERO days of reading");//TODO
             mButtonSave.setEnabled(false);
         }
     }

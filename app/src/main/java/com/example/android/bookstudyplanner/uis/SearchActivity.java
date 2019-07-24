@@ -48,6 +48,9 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
     // Constant for logging
     private static final String TAG = SearchActivity.class.getSimpleName();
 
+    //For launch intent
+    private static final int DETAIL_BOOK_REQUEST = 1;
+
     //layout elements
     @BindView(R.id.tv_error_message_display) TextView mErrorMessageDisplay;
     @BindView(R.id.tv_error_no_book_found) TextView mErrorNoBookFound;
@@ -270,10 +273,19 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         Intent myIntent = new Intent(this, BookDetailActivity.class);
         myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_FROM_SEARCH);
         myIntent.putExtra(Utils.INTENT_KEY_METADATA, metadata);
-        startActivity(myIntent);
-        finish();
+        startActivityForResult(myIntent, DETAIL_BOOK_REQUEST);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == DETAIL_BOOK_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                finish();
+            }
+        }
+    }
     @Override
     public void onSaveInstanceState(Bundle outState) {
         ArrayList<MyVolume> testing = new ArrayList<MyVolume>();
