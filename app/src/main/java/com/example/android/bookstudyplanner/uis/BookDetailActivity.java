@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -116,7 +118,6 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     //boolean
     private boolean mTitleValid = false;
     private boolean mPagesToReadValid = false;
-    private boolean mFromBeforeTo = false;
     private boolean mDatesToFromValid = false;
     private boolean mPlanningValid = false;
 
@@ -324,6 +325,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         mDateFromSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                removeKeyBoard();
                 Date chosenDate = Utils.getDateFromDatePicker(view);
                 mBeginDate = chosenDate;
                 String formatedDate = Utils.getFormatedDateFromDatePicker(view, BookDetailActivity.this);
@@ -342,14 +344,12 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 } else {
                     if(mEndDate!=null) {
                         if (!Utils.dateOneIsBeforeDateTwo(chosenDate, mEndDate)) {
-                            mFromBeforeTo = false;
                             mLabelSelectFromDate.setError("");
                             mLabelErrorFromDate.setVisibility(View.VISIBLE);
                             mLabelErrorFromDate.setText(getString(R.string.err_date_from_after_to));
                             mDatesToFromValid = false;
                             mAboutNbPages.setText("");
                         } else {
-                            mFromBeforeTo = true;
                             mLabelSelectFromDate.setError(null);
                             mLabelErrorFromDate.setVisibility(View.GONE);
                             mLabelSelectToDate.setError(null);
@@ -370,6 +370,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         mDateToSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                removeKeyBoard();
                 Date chosenDate = Utils.getDateFromDatePicker(view);
                 mEndDate = chosenDate;
                 String formatedDate = Utils.getFormatedDateFromDatePicker(view, BookDetailActivity.this);
@@ -389,14 +390,12 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 } else {
                     if(mBeginDate!=null) {
                         if (!Utils.dateOneIsBeforeDateTwo(mBeginDate, chosenDate)) {
-                            mFromBeforeTo = false;
                             mLabelSelectToDate.setError("");
                             mLabelErrorToDate.setVisibility(View.VISIBLE);
                             mLabelErrorToDate.setText(getString(R.string.err_date_to_before_from));
                             mDatesToFromValid = false;
                             mAboutNbPages.setText("");
                         } else {
-                            mFromBeforeTo = true;
                             mDatesToFromValid = true;
                             mLabelSelectToDate.setError(null);
                             if ((mBookId == DEFAULT_BOOK_ID) && dateIsBeforeToday(mBeginDate)) {
@@ -432,6 +431,11 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    private void removeKeyBoard() {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private void setButtonSaveState() {
