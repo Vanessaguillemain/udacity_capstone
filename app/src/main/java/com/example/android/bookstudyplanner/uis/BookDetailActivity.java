@@ -474,7 +474,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 mPagesToReadValid = false;
                 mButtonSave.setEnabled(false);
             } else {
-                mAboutNbPages.setText(String.valueOf(mNbPagesToReadByDay) + " " +getString (R.string.label_pages)+ " (" + text + ")" +getString (R.string.label_per_day));
+                mAboutNbPages.setText(" " + String.valueOf(mNbPagesToReadByDay) + " " +getString (R.string.label_pages)+ " (" + text + ")" +getString (R.string.label_per_day));
                 mPagesToReadValid = true;
                 setButtonSaveState();
             }
@@ -677,7 +677,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             int total = mAvgNbSecByPage*mNbPagesToRead;
             String time = Utils.getTime(total, getString(R.string.label_hour), getString(R.string.label_minute));
 
-            mValueTimeEstimated.setText(time);
+            mValueTimeEstimated.setText(" " + time);
             mValueTimeEstimated.setVisibility(View.VISIBLE);
             mValueNbPagesToRead.setVisibility(View.VISIBLE);
             mLabelNbPagesToRead.setVisibility(View.VISIBLE);

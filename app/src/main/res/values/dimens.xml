@@ -23,6 +23,7 @@
     <dimen name="main_tv_error_text_size">22sp</dimen>
     <dimen name="main_tv_error_padding">16dp</dimen>
     <dimen name="books_label_width">150dp</dimen>
+    <dimen name="book_detail_label_width">50dp</dimen>
 
     <!-- IMAGES -->
     <dimen name="books_image_width_little">80dp</dimen>

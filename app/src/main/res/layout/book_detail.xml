@@ -40,7 +40,7 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-
+        <!-- PHOTO, TITLE, TOTAL PAGES -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,12 +52,14 @@
                 android:id="@+id/imageBook_detail"
                 android:layout_width="@dimen/books_image_width_little"
                 android:layout_height="@dimen/books_image_height_little"
+                android:background="#000000"
+                android:padding="1dp"
                 android:src="@drawable/book"/>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/books_image_height_little"
                 android:orientation="vertical">
-
+                <!-- TITLE -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -72,18 +74,18 @@
                     <EditText
                         android:id="@+id/tvTitle"
                         android:layout_width="match_parent"
-                        android:lines="2"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_title"
-                        android:inputType="text"
+                        android:minLines="1"
+                        android:maxLines="2"
+                        android:inputType="text|textNoSuggestions|textMultiLine"
                         />
                 </LinearLayout>
-
+                <!-- TOTAL PAGE COUNT -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/border_margin"
-                    android:layout_marginTop="@dimen/border_margin"
                     android:orientation="horizontal">
 
                     <TextView
@@ -107,6 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/border_margin"
             android:layout_marginEnd="@dimen/border_margin"
+            android:layout_marginTop="@dimen/border_margin"
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/labelWantToRead"
@@ -195,7 +198,7 @@
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/labelFromDate"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/book_detail_label_width"
                 android:layout_height="wrap_content"
                 android:text="@string/b_detail_from_date"/>
             <TextView
@@ -205,6 +208,7 @@
                 android:text="@string/b_detail_pick_a_date"/>
             <Button
                 android:id="@+id/btnCalendarFrom"
+                android:layout_marginStart="@dimen/medium_border_margin"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:background="@drawable/ic_calendar"/>
@@ -224,7 +228,7 @@
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/labelToDate"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/book_detail_label_width"
                 android:layout_height="wrap_content"
                 android:text="@string/b_detail_to_date"/>
             <TextView
@@ -233,6 +237,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/b_detail_pick_a_date"/>
             <Button
+                android:layout_marginStart="@dimen/medium_border_margin"
                 android:id="@+id/btnCalendarTo"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -254,7 +259,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/border_margin"
             android:layout_marginStart="@dimen/border_margin"
-            android:text="@string/b_detail_read_freaquency"/>
+            android:text="@string/b_detail_read_frequency"/>
 
         <LinearLayout
             android:layout_width="match_parent"
