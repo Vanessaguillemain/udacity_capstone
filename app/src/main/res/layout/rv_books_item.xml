@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:padding="5dp">
+
+    <!--        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true" -->
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -12,8 +15,13 @@
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardElevation="@dimen/card_elevation"
-        card_view:cardCornerRadius="16dp">
+        app:cardPreventCornerOverlap="true"
+        app:cardMaxElevation="60dp"
+        android:elevation="30dp"
+        app:cardBackgroundColor="@android:color/white"
+        android:foreground="?attr/selectableItemBackground"
+        android:stateListAnimator="@animator/lift_on_touch"
+        app:cardCornerRadius="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,8 +32,8 @@
                 android:id="@+id/ivImageBook_books"
                 android:scaleType="centerCrop"
                 android:elevation="@dimen/fab_elevation"
-                android:layout_width="67dp"
-                android:layout_height="101dp" />
+                android:layout_width="80dp"
+                android:layout_height="120dp" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,6 +44,8 @@
                     android:id="@+id/tvBookTitle_books"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:lines="2"
                     android:textSize="20sp"/>
                 <LinearLayout
                     android:layout_width="match_parent"

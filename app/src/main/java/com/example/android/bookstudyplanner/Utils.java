@@ -36,6 +36,8 @@ public class Utils {
     public static final int ERROR_NB_DAYS_TO_READ_ZERO =-2;
     public static final String ERROR_NB_SECONDS_A_DAY = "ERROR_NB_SECONDS_A_DAY";
     private static int DURATION_OF_DAY_IN_SEC = 60 * 60 * 24;
+    public static final int SCREEN_BOOKS = 1;
+    public static final int SCREEN_TODAY = 2;
 
     public static void tostL(Context c, String msg) {
         Toast.makeText(c, msg, Toast.LENGTH_LONG).show();
@@ -335,4 +337,20 @@ public class Utils {
         }
         return false;
     }
+
+    public static String getTruncatedStringFor(String input, final int screen, Context context) {
+        String result = input;
+        int valMax = 0;
+        if (screen == Utils.SCREEN_BOOKS) {
+             valMax = context.getResources().getInteger(R.integer.books_title_width);
+        }
+        if (screen == Utils.SCREEN_TODAY) {
+            valMax = context.getResources().getInteger(R.integer.today_title_width);
+        }
+        if(input.length() > valMax) {
+            result = input.substring(0, valMax-1) + "...";
+        }
+        return result;
+    }
+
 }

@@ -13,8 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:nestedScrollingEnabled="true"
-        card_view:cardElevation="@dimen/card_elevation"
-        card_view:cardCornerRadius="16dp">
+        android:elevation="@dimen/card_elevation"
+        card_view:cardCornerRadius="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,12 +28,15 @@
                 android:layout_width="145dp"
                 android:layout_height="218dp"
                 android:scaleType="centerCrop"
+                android:layout_marginBottom="@dimen/medium_border_margin"
+                android:layout_marginTop="@dimen/medium_border_margin"
                 android:layout_gravity="center"
                 android:elevation="@dimen/card_elevation" />
 
             <TextView
                 android:id="@+id/tvBookTitle_today"
                 android:layout_gravity="center_horizontal"
+                android:lines="2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

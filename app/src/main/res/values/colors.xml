@@ -18,8 +18,10 @@
     <color name="pink">#FF00FF</color>
     <color name="black">#000000</color>
     <color name="light_grey">#EEEEEE</color>
+    <color name="very_light_grey">#EFEFEF</color>
 
     <color name="orange_A200">#FF6E40</color>
+    <color name="orange_50">#FFF2DF</color>
     <color name="blue_gray_500">#607D8B</color>
     <color name="blue_gray_700">#455A64</color>
 </resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TEXTS -->
+    <integer name="books_title_width">90</integer>
+    <integer name="today_title_width">80</integer>
+</resources>

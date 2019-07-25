@@ -49,10 +49,8 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
         } else {
             Picasso.with(context).load(R.drawable.photobook).into((ImageView) holder.ivImageBooks);
         }
-        String title = book.getTitle();
-        if(title.length()>20) {
-            title = title.substring(0, 19) + "...";
-        }
+        String title = Utils.getTruncatedStringFor(book.getTitle(), Utils.SCREEN_BOOKS, context);
+
         holder.tvBookTitle.setText(title);
         String formatedDate = Utils.getFormatedDateFromDate(book.getEndDate(), context);
         holder.tvBookEndDate.setText(formatedDate);

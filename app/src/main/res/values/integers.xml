@@ -4,4 +4,8 @@
     <integer name="avg_nb_words_by_page">300</integer>
     <integer name="avg_nb_sec_by_page">72</integer>
     <integer name="avg_nb_pages">200</integer>
+
+    <!-- TEXTS -->
+    <integer name="books_title_width">45</integer>
+    <integer name="today_title_width">40</integer>
 </resources>

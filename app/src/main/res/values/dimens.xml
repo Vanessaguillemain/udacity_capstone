@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- ELEVATIONS -->
     <dimen name="fab_elevation">6dp</dimen>
-    <dimen name="card_elevation">4dp</dimen>
-    <dimen name="appbar_elevation">4dp</dimen>
     <dimen name="fab_press_translation_z">12dp</dimen>
+    <dimen name="card_elevation">8dp</dimen>
+    <dimen name="card_resting_elevation">4dp</dimen>
+    <dimen name="appbar_elevation">4dp</dimen>
+    <dimen name="dialog_elevation">24dp</dimen>
+    <dimen name="top_app_bar_elevation">2dp</dimen>
+    <dimen name="top_app_bar_scroll_elevation">4dp</dimen>
+
+    <!-- MARGINS -->
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fab_margin_mini">24dp</dimen>
     <dimen name="border_margin">16dp</dimen>
     <dimen name="medium_border_margin">8dp</dimen>
 
     <dimen name="check_day_size">30dp</dimen>
-
     <dimen name="standard_60">60dp</dimen>
     <dimen name="standard_110">110dp</dimen>
 
     <dimen name="main_tv_error_text_size">22sp</dimen>
     <dimen name="main_tv_error_padding">16dp</dimen>
-    <dimen name="books_label_width">160dp</dimen>
+    <dimen name="books_label_width">150dp</dimen>
+
+
 
 </resources>

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bookstudyplanner.R;
+import com.example.android.bookstudyplanner.Utils;
 import com.example.android.bookstudyplanner.database.PlanningEntity;
 import com.squareup.picasso.Picasso;
 
@@ -43,29 +44,25 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
     public void onBindViewHolder(TodayViewHolder holder, int position) {
         PlanningEntity planning = mDataPlanningEntities.get(position);
 
-        String title = planning.getTitle();
-        if(title.length()>18) {
-            title = title.substring(0, 17) + "...";
-        }
+        Context context = holder.ivImageBook.getContext();
+        String title = Utils.getTruncatedStringFor(planning.getTitle(), Utils.SCREEN_TODAY, context);
 
         holder.tvBookTitle.setText(title);
         String imageLink = planning.getImageLink();
         if(imageLink != null && !imageLink.equals("")) {
-            Picasso.with(holder.ivImageBook.getContext()).load(imageLink).into((ImageView) holder.ivImageBook);
+            Picasso.with(context).load(imageLink).into((ImageView) holder.ivImageBook);
         } else {
-            Picasso.with(holder.ivImageBook.getContext()).load(R.drawable.photobook).into((ImageView) holder.ivImageBook);
+            Picasso.with(context).load(R.drawable.photobook).into((ImageView) holder.ivImageBook);
         }
 
+        holder.tvBookPageCount.setText(String.valueOf(planning.getNbPagesToRead()));
+        holder.tvBookMinuteCount.setText(String.valueOf(planning.getNbMinutesReading()));
         if(planning.isDone()) {
             holder.btnDone.setEnabled(false);
             holder.tvBookPageCount.setEnabled(false);
-            holder.tvBookPageCount.setText(String.valueOf(planning.getNbPagesToRead()));
-            holder.tvBookMinuteCount.setText(String.valueOf(planning.getNbMinutesReading()));
             holder.tvBookMinuteCount.setEnabled(false);
         } else {
             holder.btnDone.setEnabled(true);
-            holder.tvBookMinuteCount.setHint(String.valueOf(planning.getNbMinutesReading()));
-            holder.tvBookPageCount.setText(String.valueOf(planning.getNbPagesToRead()));
         }
     }
 
