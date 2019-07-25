@@ -24,6 +24,11 @@
     <dimen name="main_tv_error_padding">16dp</dimen>
     <dimen name="books_label_width">150dp</dimen>
 
+    <!-- IMAGES -->
+    <dimen name="books_image_width_little">80dp</dimen>
+    <dimen name="books_image_height_little">120dp</dimen>
+    <dimen name="books_image_width_large">145dp</dimen>
+    <dimen name="books_image_height_large">218dp</dimen>
 
 
 </resources>

@@ -230,7 +230,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         mValuePageCount.setText(String.valueOf(item.getPageCount()));
         mTitleValid = true;
         if(item.getNbPagesToRead() != null) {
-            mValueNbPagesToRead.setText(String.valueOf(item.getNbPagesToRead()));
+            mValueNbPagesToRead.setText(" "+ String.valueOf(item.getNbPagesToRead()) + " ");
         }
         if(item.getFromPageNb() == null) {
             mTvFromPage.setText(STRING_NUMBER_PAGE_NULL);
@@ -671,7 +671,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             //mButtonSave.setEnabled(true);
             mPagesToReadValid = true;
             mNbPagesToRead = to-from+1;
-            mValueNbPagesToRead.setText(String.valueOf(mNbPagesToRead));
+            mValueNbPagesToRead.setText(" " + String.valueOf(mNbPagesToRead) + " ");
             Resources res = getResources();
             mAvgNbSecByPage = res.getInteger(R.integer.avg_nb_sec_by_page);
             int total = mAvgNbSecByPage*mNbPagesToRead;

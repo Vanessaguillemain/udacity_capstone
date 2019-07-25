@@ -25,8 +25,8 @@
 
             <ImageView
                 android:id="@+id/ivImageBook_today"
-                android:layout_width="145dp"
-                android:layout_height="218dp"
+                android:layout_width="@dimen/books_image_width_large"
+                android:layout_height="@dimen/books_image_height_large"
                 android:scaleType="centerCrop"
                 android:layout_marginBottom="@dimen/medium_border_margin"
                 android:layout_marginTop="@dimen/medium_border_margin"
