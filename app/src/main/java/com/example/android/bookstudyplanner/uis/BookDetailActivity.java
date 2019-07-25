@@ -21,6 +21,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -138,7 +139,6 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         initViews();
 
         mDb = AppDatabase.getInstance(getApplicationContext());
-
         // recovering the instance state
         if (savedInstanceState != null) {
             mTvTitle.setText(savedInstanceState.getString(BUNDLE_KEY_TEXT_TITLE));
@@ -753,5 +753,11 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         mCbx5.setChecked(tabPlanning[4]==1);
         mCbx6.setChecked(tabPlanning[5]==1);
         mCbx7.setChecked(tabPlanning[6]==1);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 }
