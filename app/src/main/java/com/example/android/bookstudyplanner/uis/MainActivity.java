@@ -2,12 +2,14 @@ package com.example.android.bookstudyplanner.uis;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,6 +21,7 @@ import com.example.android.bookstudyplanner.MainViewModel;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
 import com.example.android.bookstudyplanner.database.AppDatabase;
+import com.example.android.bookstudyplanner.database.AppExecutor;
 import com.example.android.bookstudyplanner.database.BookEntity;
 import com.example.android.bookstudyplanner.database.PlanningEntity;
 
@@ -209,5 +212,19 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.this.startActivity(myIntent);
         closeSubMenusFab();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage(getResources().getString(R.string.b_detail_msg_confirm_exit))
+                .setCancelable(false)
+                .setPositiveButton(getResources().getString(R.string.b_detail_confirm_exit), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.b_detail_confirm_stay), null)
+                .show();
     }
 }

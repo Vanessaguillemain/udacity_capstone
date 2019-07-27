@@ -4,6 +4,11 @@
     <string name="tab_today_title">Today</string>
     <string name="tab_planning_title">Planning</string>
 
+    <!-- MAIN SCREENS  -->
+    <string name="b_detail_msg_confirm_exit">Are you sure you want to exit?</string>
+    <string name="b_detail_confirm_exit">Yes exit</string>
+    <string name="b_detail_confirm_stay">No, stay</string>
+
     <!-- SCREEN BOOK DETAIL -->
     <string name="label_hour">h</string>
     <string name="label_minute">m</string>
