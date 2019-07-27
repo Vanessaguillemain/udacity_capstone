@@ -52,8 +52,6 @@
                 android:id="@+id/imageBook_detail"
                 android:layout_width="@dimen/books_image_width_little"
                 android:layout_height="@dimen/books_image_height_little"
-                android:background="#000000"
-                android:padding="1dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/book"/>
             <LinearLayout
