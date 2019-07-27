@@ -4,7 +4,9 @@
     <color name="colorPrimaryDark">@color/black</color>
     <color name="colorAccent">@color/orange_A200</color>
 
-    <color name="cardview_light_background">@color/orange_A200</color>
+    <!--
+    <color name="cardview_light_background">@color/orange_A200</color>-->
+    <color name="cardview_light_background">@color/white</color>
 
     <!-- for FAB
     <color name="colorSecondary">@color/orange_A200</color>

@@ -249,10 +249,12 @@ public class BookEntity implements Parcelable   {
         this.nbSecondsByPage = nbSecondsByPage;
     }
 
-    public float getPercentRead() {
+    public double getPercentRead() {
         if (nbPagesRead !=null) {
             if (nbPagesToRead > 0 && nbPagesRead > 0) {
-                return new Float(nbPagesRead) / new Float(nbPagesToRead) * 100;
+                Double percent = new Double(nbPagesRead/nbPagesToRead*100);
+                double roundOff = Math.round(percent * 100.0) / 100.0;
+                return roundOff;
             }
         }
         return 0;

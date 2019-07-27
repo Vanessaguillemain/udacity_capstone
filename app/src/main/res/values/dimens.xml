@@ -31,5 +31,10 @@
     <dimen name="books_image_width_large">145dp</dimen>
     <dimen name="books_image_height_large">218dp</dimen>
 
+    <dimen name="books_image_width_search">135dp</dimen>
+    <dimen name="books_image_height_search">202dp</dimen>
+    <dimen name="height_search_tv_title">40dp</dimen>
+    <dimen name="height_search_tv_pages">20dp</dimen>
+
 
 </resources>

@@ -75,7 +75,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         ButterKnife.bind(this);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 2 : 3);
-        searchRecyclerViewAdapter = new SearchRecyclerViewAdapter(this, myVolumeList, 1);
+        searchRecyclerViewAdapter = new SearchRecyclerViewAdapter(this, myVolumeList);
         searchRecyclerViewAdapter.setClickListener(this);
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(searchRecyclerViewAdapter);

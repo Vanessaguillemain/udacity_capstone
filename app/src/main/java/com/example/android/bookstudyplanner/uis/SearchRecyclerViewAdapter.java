@@ -28,14 +28,12 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     // Constant for logging
     private static final String TAG = SearchRecyclerViewAdapter.class.getSimpleName();
 
-    private final int spanCount;
     private List<MyVolume> mVolumes;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
-    public SearchRecyclerViewAdapter(Context context, List<MyVolume> volumes, int spanCount) {
+    public SearchRecyclerViewAdapter(Context context, List<MyVolume> volumes) {
         this.mVolumes = volumes;
-        this.spanCount = spanCount;
         this.mInflater = LayoutInflater.from(context);
     }
 
@@ -52,7 +50,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
     @Override
     public void onBindViewHolder(SearchBookViewHolder holder, int position) {
-        holder.setSpanCount(spanCount);
         holder.setVolumeInLayout(mVolumes.get(position));
     }
 
@@ -84,14 +81,14 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         private int spanCount;
         ImageView ivBookImage;
         TextView tvBookTitle;
-        TextView tvBookSubTitle;
+        //TextView tvBookSubTitle;
         TextView tvBookPageCount;
 
         public SearchBookViewHolder(ViewGroup viewGroup) {
             super(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.rv_search_item, viewGroup, false));
             ivBookImage = (ImageView) itemView.findViewById(R.id.imageBook_search);
             tvBookTitle = (TextView) itemView.findViewById(R.id.tvBookTitle_search);
-            tvBookSubTitle = (TextView) itemView.findViewById(R.id.tvBookSubTitle_search);
+            //tvBookSubTitle = (TextView) itemView.findViewById(R.id.tvBookSubTitle_search);
             tvBookPageCount = (TextView) itemView.findViewById(R.id.tvBookPageCount_search);
             itemView.setOnClickListener(this);
         }
@@ -106,22 +103,14 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
                 Picasso.with(itemView.getContext()).load(R.drawable.photobook).into((ImageView) ivBookImage);
             }
             if (volume.getVolumeInfoTitle() != null) {
-                tvBookTitle.setVisibility(View.VISIBLE);
                 tvBookTitle.setText(volume.getVolumeInfoTitle());
             } else {
-                tvBookTitle.setVisibility(View.GONE);
-            }
-            if (volume.getVolumeInfoSubtitle() != null) {
-                tvBookSubTitle.setVisibility(View.VISIBLE);
-                tvBookSubTitle.setText(volume.getVolumeInfoSubtitle());
-            } else {
-                tvBookSubTitle.setVisibility(View.GONE);
+                tvBookTitle.setText("Title not found");//TODO
             }
             if (volume.getVolumeInfoPageCount() != null && volume.getVolumeInfoPageCount() != MyVolume.NO_PAGE_COUNT) {
-                tvBookPageCount.setVisibility(View.VISIBLE);
                 tvBookPageCount.setText(String.valueOf(volume.getVolumeInfoPageCount())+ " pages");//TODO
             } else {
-                tvBookPageCount.setVisibility(View.GONE);
+                tvBookPageCount.setText(" - pages");//TODO
             }
 
         }
