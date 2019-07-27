@@ -3,6 +3,7 @@ package com.example.android.bookstudyplanner.uis;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -65,7 +66,7 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
 
         // set up the RecyclerView
         RecyclerView recyclerView = rootView.findViewById(R.id.rvToday);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 2 : 3));
         todayRecyclerViewAdapter = new TodayRecyclerViewAdapter(getActivity(), planningEntities);
         todayRecyclerViewAdapter.setClickListener(this);
         recyclerView.setAdapter(todayRecyclerViewAdapter);
