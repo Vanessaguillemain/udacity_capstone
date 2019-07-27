@@ -1,5 +1,6 @@
 package com.example.android.bookstudyplanner.uis;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -73,13 +74,13 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
     }
 
     @Override
-    public void onItemClick(View view, int position) {
+    public void onItemClick(View view, TextView tvPageCount, TextView tvMinutes,  int position) {
         PlanningEntity planning = todayRecyclerViewAdapter.getItem(position);
 
         if(view.getId() == R.id.btnDone) {
 
             final int mBookId = planning.getBookId();
-            Date mDate = planning.getDate();
+            final Date mDate = planning.getDate();
 
             UpdatePlanningViewModelFactory factory = new UpdatePlanningViewModelFactory(mDb, mBookId, mDate);
             final UpdatePlanningViewModel viewModel = ViewModelProviders.of(this, factory).get(UpdatePlanningViewModel.class);
@@ -102,13 +103,10 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
                 }
             });
 
-            TextView count = view.getRootView().findViewById(R.id.tvBookPagesCount_today);
-            TextView min = view.getRootView().findViewById(R.id.tvBookMinutesCount_today);
-
-            final int pagesCount = Integer.parseInt(count.getText().toString());
+            final int pagesCount = Integer.parseInt(tvPageCount.getText().toString());
             int minutes = planning.getNbMinutesReading();
-            if(min.getText() == "") {
-                minutes = Integer.parseInt(min.getText().toString());
+            if(tvMinutes.getText() != null && tvMinutes.getText().length() > 0) {
+                minutes = Integer.parseInt(tvMinutes.getText().toString());
             }
 
             //PlanningEntity
@@ -118,7 +116,9 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
                 public void run() {
                     //update
                     mDb.planningDao().updatePlanning(planning2);
-                    mDb.bookDao().updateBookReadingForBookId(mBookId, pagesCount);
+                    Integer nbPagesToRead = mDb.bookDao().loadNbPagesToReadBookById(mBookId);
+                    Double percentRead = Utils.getPercentRead(pagesCount, nbPagesToRead);
+                    mDb.bookDao().updateBookReadingForBookId(mBookId, pagesCount, percentRead);
                 }
             });
 

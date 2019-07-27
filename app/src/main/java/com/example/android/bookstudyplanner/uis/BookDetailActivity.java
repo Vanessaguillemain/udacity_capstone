@@ -117,6 +117,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private int mNbPagesToReadByDay;
     private int mAvgNbSecByPage;
     private String mImageLink;
+    private BookEntity mBook;
 
     //boolean
     private boolean mTitleValid = false;
@@ -177,8 +178,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
            if (Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF.equals(action)) {
                 //TODO test if null
-                BookEntity book = intent.getParcelableExtra(Utils.INTENT_KEY_BOOK);
-                mBookId = book.getId();
+                mBook = intent.getParcelableExtra(Utils.INTENT_KEY_BOOK);
+                mBookId = mBook.getId();
 
                 AddBookViewModelFactory factory = new AddBookViewModelFactory(mDb, mBookId);
                 final AddBookViewModel viewModel = ViewModelProviders.of(this, factory).get(AddBookViewModel.class);
@@ -517,15 +518,23 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         Integer toPageNb = Integer.parseInt(toPage);
         final Integer nbPagesToRead = toPageNb - fromPageNb +1;
 
+        final Boolean newBook = (mBookId == DEFAULT_BOOK_ID);
         Integer nbPagesRead = 0;
         Integer readTimeInSeconds = null;
         Integer nbSecondsByPage = null;
-        final Boolean newBook = (mBookId == DEFAULT_BOOK_ID);
+        Double percentRead = 0d;
+
+        if(!newBook) {
+            nbPagesRead = mBook.getNbPagesRead();
+            readTimeInSeconds = mBook.getReadTimeInSeconds();
+            nbSecondsByPage = mBook.getNbSecondsByPage();
+            percentRead = Utils.getPercentRead(nbPagesRead, nbPagesToRead);
+        }
 
         mWeekPlanning = Utils.getStringWeekPlanningFromTab(mTabWeekPlanning);
         //Book Entity
         final BookEntity book = new BookEntity(ISBN_ABSENT_VALUE,  title,  pageCount,  fromPageNb,  toPageNb, nbPagesToRead,
-                beginDate, endDate, mWeekPlanning, nbPagesRead, readTimeInSeconds, nbSecondsByPage, mImageLink);
+                beginDate, endDate, mWeekPlanning, nbPagesRead, readTimeInSeconds, nbSecondsByPage, mImageLink, percentRead);
 
         AppExecutor.getInstance().diskIO().execute(new Runnable() {
             @Override

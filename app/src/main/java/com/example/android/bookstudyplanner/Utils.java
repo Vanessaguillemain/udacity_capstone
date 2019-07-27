@@ -353,4 +353,14 @@ public class Utils {
         return result;
     }
 
+    public static double getPercentRead(Integer nbPagesRead, Integer nbPagesToRead) {
+        if (nbPagesRead !=null) {
+            if (nbPagesToRead > 0 && nbPagesRead > 0) {
+                Double percent = (new Double(nbPagesRead)/new Double(nbPagesToRead))*100;
+                double roundOff = Math.round(percent * 100.0) / 100.0;
+                return roundOff;
+            }
+        }
+        return 0;
+    }
 }

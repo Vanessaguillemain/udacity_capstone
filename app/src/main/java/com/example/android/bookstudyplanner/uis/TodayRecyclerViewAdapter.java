@@ -2,6 +2,8 @@ package com.example.android.bookstudyplanner.uis;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,14 +100,47 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
             tvBookTitle = itemView.findViewById(R.id.tvBookTitle_today);
             ivImageBook = itemView.findViewById(R.id.ivImageBook_today);
             tvBookPageCount = itemView.findViewById(R.id.tvBookPagesCount_today);
+
+            tvBookPageCount.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if( s.length() == 0 ) {
+                        tvBookPageCount.setError(mInflater.getContext().getResources().getString(R.string.err_page_count_required));
+                        btnDone.setEnabled(false);
+                    } else {
+                        btnDone.setEnabled(true);
+                    }
+                }
+            });
+
             tvBookMinuteCount = itemView.findViewById(R.id.tvBookMinutesCount_today);
+            tvBookMinuteCount.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if( s.length() == 0 ) {
+                        PlanningEntity p = mDataPlanningEntities.get(getAdapterPosition());
+                        tvBookMinuteCount.setHint(p.getNbMinutesReading().toString());
+                    }
+                }
+            });
+
             btnDone = itemView.findViewById(R.id.btnDone);
             btnDone.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null) mClickListener.onItemClick(view, tvBookPageCount, tvBookMinuteCount, getAdapterPosition() );
         }
     }
 
@@ -121,7 +156,7 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(View view, TextView pageCount, TextView minutes, int position);
     }
 
 }
