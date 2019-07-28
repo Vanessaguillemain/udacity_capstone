@@ -35,6 +35,7 @@ public class Utils {
     public static final int ERROR_NB_PAGES_AVERAGE =-1;
     public static final int ERROR_NB_DAYS_TO_READ_ZERO =-2;
     public static final String ERROR_NB_SECONDS_A_DAY = "ERROR_NB_SECONDS_A_DAY";
+    public static final String SPACE_STRING = " ";
     private static int DURATION_OF_DAY_IN_SEC = 60 * 60 * 24;
     public static final int SCREEN_BOOKS = 1;
     public static final int SCREEN_TODAY = 2;

@@ -34,7 +34,8 @@
                 android:layout_gravity="center_horizontal"
                 android:scaleType="centerCrop"
                 android:transitionName="@string/transition_photo"
-                android:layout_margin="4dp"/>
+                android:layout_margin="4dp"
+                android:contentDescription="@string/desc_book_image" />
             <TextView
                 android:id="@+id/tvBookTitle_search"
                 android:layout_width="wrap_content"

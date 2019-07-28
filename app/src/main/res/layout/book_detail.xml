@@ -7,7 +7,7 @@
 
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/light_grey"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
@@ -54,7 +54,8 @@
                 android:layout_width="@dimen/books_image_width_little"
                 android:layout_height="@dimen/books_image_height_little"
                 android:scaleType="centerCrop"
-                android:transitionName="@string/transition_photo"/>
+                android:transitionName="@string/transition_photo"
+                android:contentDescription="@string/desc_book_image" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -94,6 +95,7 @@
                         style="@style/SubtitleText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:labelFor="@id/valuePageCount"
                         android:text="@string/b_detail_total_pages" />
                     <EditText
                         android:id="@+id/valuePageCount"
@@ -143,6 +145,7 @@
                 android:id="@+id/labelFromPage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:labelFor="@id/tvFromPage"
                 android:text="@string/b_detail_from_page"/>
             <EditText
                 android:id="@+id/tvFromPage"
@@ -154,6 +157,7 @@
                 android:id="@+id/labelToPage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:labelFor="@id/tvToPage"
                 android:text="@string/b_detail_to_page"/>
 
             <EditText
@@ -282,7 +286,7 @@
                 android:id="@+id/cbx2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/radiobtn_bck"
                 android:button="@null"
                 android:checked="true"
@@ -293,7 +297,7 @@
                 android:id="@+id/cbx3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/radiobtn_bck"
                 android:checked="true"
                 android:gravity="center"
@@ -304,7 +308,7 @@
                 android:id="@+id/cbx4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/radiobtn_bck"
                 android:checked="true"
                 android:gravity="center"
@@ -315,7 +319,7 @@
                 android:id="@+id/cbx5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/radiobtn_bck"
                 android:checked="true"
                 android:gravity="center"
@@ -325,7 +329,7 @@
                 android:id="@+id/cbx6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/radiobtn_bck"
                 android:gravity="center"
                 android:button="@null"
@@ -334,7 +338,7 @@
                 android:id="@+id/cbx7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/radiobtn_bck"
                 android:gravity="center"
                 android:button="@null"

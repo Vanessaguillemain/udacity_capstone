@@ -244,7 +244,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         mValuePageCount.setText(String.valueOf(item.getPageCount()));
         mTitleValid = true;
         if(item.getNbPagesToRead() != null) {
-            mValueNbPagesToRead.setText(" "+ String.valueOf(item.getNbPagesToRead()) + " ");
+            String result = Utils.SPACE_STRING + String.valueOf(item.getNbPagesToRead()) + Utils.SPACE_STRING;
+            mValueNbPagesToRead.setText(result);
         }
         if(item.getFromPageNb() == null) {
             mTvFromPage.setText(STRING_NUMBER_PAGE_NULL);
@@ -477,18 +478,19 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             mPagesToReadValid = false;
             mButtonSave.setEnabled(false);
         } else if (mNbPagesToReadByDay == Utils.ERROR_NB_DAYS_TO_READ_ZERO) {
-            mAboutNbPages.setText("ZERO days of reading");
+            mAboutNbPages.setText(getString(R.string.zero_days_reading));
             mPagesToReadValid = false;
             mButtonSave.setEnabled(false);
         } else {
             int seconds = mAvgNbSecByPage*mNbPagesToReadByDay;
             String text = secondsToText(seconds);
-            if(text == Utils.ERROR_NB_SECONDS_A_DAY) {
+            if(text.equals(Utils.ERROR_NB_SECONDS_A_DAY)) {
                 mAboutNbPages.setText(getString(R.string.err_read_time_greater_than_day));
                 mPagesToReadValid = false;
                 mButtonSave.setEnabled(false);
             } else {
-                mAboutNbPages.setText(" " + String.valueOf(mNbPagesToReadByDay) + " " +getString (R.string.label_pages)+ " (" + text + ")" +getString (R.string.label_per_day));
+                String result = Utils.SPACE_STRING + String.valueOf(mNbPagesToReadByDay) + Utils.SPACE_STRING + getString (R.string.label_pages)+ " (" + text + ")" +getString (R.string.label_per_day);
+                mAboutNbPages.setText(result);
                 mPagesToReadValid = true;
                 setButtonSaveState();
             }
@@ -693,13 +695,13 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             //mButtonSave.setEnabled(true);
             mPagesToReadValid = true;
             mNbPagesToRead = to-from+1;
-            mValueNbPagesToRead.setText(" " + String.valueOf(mNbPagesToRead) + " ");
+            String result = Utils.SPACE_STRING + String.valueOf(mNbPagesToRead) + Utils.SPACE_STRING;
+            mValueNbPagesToRead.setText(result);
             Resources res = getResources();
             mAvgNbSecByPage = res.getInteger(R.integer.avg_nb_sec_by_page);
             int total = mAvgNbSecByPage*mNbPagesToRead;
-            String time = Utils.getTime(total, getString(R.string.label_hour), getString(R.string.label_minute));
-
-            mValueTimeEstimated.setText(" " + time);
+            String time = Utils.SPACE_STRING + Utils.getTime(total, getString(R.string.label_hour), getString(R.string.label_minute));
+            mValueTimeEstimated.setText(time);
             mValueTimeEstimated.setVisibility(View.VISIBLE);
             mValueNbPagesToRead.setVisibility(View.VISIBLE);
             mLabelNbPagesToRead.setVisibility(View.VISIBLE);
@@ -748,7 +750,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             setButtonSaveState();
         } else {
             mPlanningValid = false;
-            mAboutNbPages.setText("ZERO days of reading");//TODO
+            mAboutNbPages.setText(R.string.zero_days_reading);
             mButtonSave.setEnabled(false);
         }
     }

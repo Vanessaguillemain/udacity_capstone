@@ -9,13 +9,14 @@
     <string name="b_detail_confirm_exit">Yes exit</string>
     <string name="b_detail_confirm_stay">No, stay</string>
     <string name="transition_photo">transition_photo</string>
+    <string name="desc_book_image">Book\'s image</string>
+    <string name="label_pages">pages</string>
 
     <!-- SCREEN BOOK DETAIL -->
     <string name="label_hour">h</string>
     <string name="label_minute">m</string>
     <string name="title_create">Create</string>
     <string name="title_modify">Modify</string>
-    <string name="label_pages">pages</string>
     <string name="label_per_day">/day</string>
     <string name="err_title_required">Title is required !</string>
     <string name="err_date_before_today">Date is before Today!</string>
@@ -81,6 +82,12 @@
 
     <!-- SCREEN TODAY  -->
     <string name="err_page_count_required">Count is required !</string>
+    <string name="today_label_pages">pages</string>
+    <string name="title_your_program_today">Your program today :</string>
+    <string name="today_label_done">DONE</string>
+    <string name="zero_days_reading">ZERO days of reading</string>
+    <string name="err_search_title_not_found">Title not found</string>
+    <string name="label_search_no_pages">- pages</string>
 
 
 </resources>
