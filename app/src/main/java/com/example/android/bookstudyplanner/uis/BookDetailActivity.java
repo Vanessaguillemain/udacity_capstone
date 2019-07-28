@@ -219,7 +219,13 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                        mValuePageCount.setText(String.valueOf(pageCount));
                    }
                    mImageLink = metaData.getString(GoogleBookMetaData.IMAGE);
-                   Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
+                   if(mImageLink != null && !mImageLink.equals("")) {
+                       Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
+                   } else {
+                       Picasso.with(this).load(R.drawable.photobook).into((ImageView) mImageBook);
+                   }
+               } else {
+                   Picasso.with(this).load(R.drawable.photobook).into((ImageView) mImageBook);
                }
 
            }
