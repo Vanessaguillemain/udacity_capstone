@@ -4,16 +4,16 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.transition.TransitionInflater;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -177,6 +177,19 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             String action = intent.getStringExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION);
 
            if (Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF.equals(action)) {
+
+               //BEGIN Test Transition
+/*
+               Bundle extras = intent.getExtras();
+               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                   getWindow().setSharedElementEnterTransition(TransitionInflater.from(this).inflateTransition(R.transition.shared_photo2));
+                   String imageTransitionName = extras.getString("SMALL_IMAGE_TRANSITION_NAME");
+                   mImageBook.setTransitionName(imageTransitionName);
+               }
+*/
+
+               // END test Transition
+
                 //TODO test if null
                 mBook = intent.getParcelableExtra(Utils.INTENT_KEY_BOOK);
                 mBookId = mBook.getId();

@@ -25,12 +25,17 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/border_margin"
             android:orientation="horizontal">
+
             <ImageView
                 android:id="@+id/ivImageBook_books"
                 android:scaleType="centerCrop"
                 android:elevation="@dimen/fab_elevation"
                 android:layout_width="@dimen/books_image_width_little"
-                android:layout_height="@dimen/books_image_height_little" />
+                android:layout_height="@dimen/books_image_height_little"
+                android:transitionName="@string/transition_photo" />
+
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

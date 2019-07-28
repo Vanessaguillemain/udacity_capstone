@@ -10,6 +10,8 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -305,7 +307,13 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         Intent myIntent = new Intent(this, BookDetailActivity.class);
         myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_FROM_SEARCH);
         myIntent.putExtra(Utils.INTENT_KEY_METADATA, metadata);
-        startActivityForResult(myIntent, DETAIL_BOOK_REQUEST);
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(SearchActivity.this, view, "transition_photo");
+
+        //startActivityForResult(myIntent, DETAIL_BOOK_REQUEST, options.toBundle());
+        ActivityCompat.startActivityForResult(SearchActivity.this, myIntent, DETAIL_BOOK_REQUEST, options.toBundle());
+
     }
 
     @Override

@@ -2,13 +2,13 @@ package com.example.android.bookstudyplanner.uis;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
@@ -60,6 +60,15 @@ public class TabBooksFragment extends Fragment implements BooksRecyclerViewAdapt
         myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF);
         myIntent.putExtra(Utils.INTENT_KEY_BOOK, item);
 
-        getActivity().startActivity(myIntent);
+        String nameTrans = view.findViewById(R.id.ivImageBook_books).getTransitionName();
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, nameTrans);
+        getActivity().startActivity(myIntent, options.toBundle());
+
+/*
+        String nameTrans = "small_img" + position;
+        myIntent.putExtra("SMALL_IMAGE_TRANSITION_NAME", nameTrans);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, nameTrans);
+        getActivity().startActivity(myIntent, options.toBundle());
+*/
     }
 }
