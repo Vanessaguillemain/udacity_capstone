@@ -13,6 +13,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.transition.Slide;
 import android.transition.TransitionInflater;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -178,19 +179,12 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
            if (Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF.equals(action)) {
 
-               //BEGIN Test Transition
-/*
-               Bundle extras = intent.getExtras();
+               //Transition
                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                   getWindow().setSharedElementEnterTransition(TransitionInflater.from(this).inflateTransition(R.transition.shared_photo2));
-                   String imageTransitionName = extras.getString("SMALL_IMAGE_TRANSITION_NAME");
-                   mImageBook.setTransitionName(imageTransitionName);
+                   Slide slide = (Slide)TransitionInflater.from(this).inflateTransition(R.transition.slide_bottom);
+                   getWindow().setEnterTransition(slide);
                }
-*/
 
-               // END test Transition
-
-                //TODO test if null
                 mBook = intent.getParcelableExtra(Utils.INTENT_KEY_BOOK);
                 mBookId = mBook.getId();
 
