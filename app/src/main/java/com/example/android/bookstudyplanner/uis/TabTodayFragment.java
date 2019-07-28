@@ -118,8 +118,10 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
                     //update
                     mDb.planningDao().updatePlanning(planning2);
                     Integer nbPagesToRead = mDb.bookDao().loadNbPagesToReadBookById(mBookId);
-                    Double percentRead = Utils.getPercentRead(pagesCount, nbPagesToRead);
-                    mDb.bookDao().updateBookReadingForBookId(mBookId, pagesCount, percentRead);
+                    Integer nbPagesReadBefore = mDb.bookDao().loadNbPagesReadBookById(mBookId);
+                    Integer totalPagesRead = pagesCount + nbPagesReadBefore;
+                    Double percentRead = Utils.getPercentRead(totalPagesRead, nbPagesToRead);
+                    mDb.bookDao().updateBookReadingForBookId(mBookId, totalPagesRead, percentRead);
                 }
             });
 

@@ -26,7 +26,7 @@ public interface BookDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateBook(BookEntity bookEntry);
 
-    @Query("UPDATE book SET nbPagesRead=(nbPagesRead + :nbPagesRead), percentRead=:percentRead WHERE id = :id")
+    @Query("UPDATE book SET nbPagesRead=:nbPagesRead, percentRead=:percentRead WHERE id = :id")
     void updateBookReadingForBookId(int id, int nbPagesRead, double percentRead);
 
     @Delete
@@ -40,6 +40,12 @@ public interface BookDao {
 
     @Query("SELECT nbPagesToRead FROM book WHERE id = :id")
     Integer loadNbPagesToReadBookById(int id);
+
+    @Query("SELECT nbPagesRead FROM book WHERE id = :id")
+    Integer loadNbPagesReadBookById(int id);
+
+    @Query("SELECT percentRead FROM book WHERE id = :id")
+    Double loadPercentReadBookById(int id);
 
     @Query("SELECT * FROM book WHERE isbn = :isbn")
     BookEntity loadBookByIsbn(int isbn);
