@@ -21,6 +21,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +62,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
     @BindView(R.id.tv_error_isbn_invalid) TextView mErrorISBNInvalid;
     @BindView(R.id.search_view) SearchView mSearchView;
     @BindView(R.id.books_grid) RecyclerView mRecyclerView;
+    @BindView(R.id.progress_bar) ProgressBar mProgressBar;
 
     private boolean mInternetAvailable = false;
 
@@ -183,12 +185,14 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
 
     @Override
     public void onSearching() {
+        mProgressBar.setVisibility(View.VISIBLE);
         myVolumeList.clear();
         mRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
     @Override
     public void onResult(List<Volume> volumes) {
+        mProgressBar.setVisibility(View.GONE);
         if(volumes.size() == 0) {
             mErrorNoBookFound.setVisibility(View.VISIBLE);
         } else {

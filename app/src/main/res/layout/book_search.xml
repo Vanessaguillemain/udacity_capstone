@@ -75,6 +75,11 @@
             android:text="@string/error_isbn_invalid"
             android:visibility="gone" />
 
+        <ProgressBar android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="center"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/books_grid"
