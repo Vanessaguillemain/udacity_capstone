@@ -63,12 +63,6 @@ public class TabBooksFragment extends Fragment implements BooksRecyclerViewAdapt
         String nameTrans = view.findViewById(R.id.ivImageBook_books).getTransitionName();
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, nameTrans);
         getActivity().startActivity(myIntent, options.toBundle());
-
-/*
-        String nameTrans = "small_img" + position;
-        myIntent.putExtra("SMALL_IMAGE_TRANSITION_NAME", nameTrans);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, nameTrans);
-        getActivity().startActivity(myIntent, options.toBundle());
-*/
+        
     }
 }
