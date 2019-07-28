@@ -309,9 +309,8 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         myIntent.putExtra(Utils.INTENT_KEY_METADATA, metadata);
 
         ActivityOptionsCompat options = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(SearchActivity.this, view, "transition_photo");
+                makeSceneTransitionAnimation(SearchActivity.this, view, getString(R.string.transition_photo));
 
-        //startActivityForResult(myIntent, DETAIL_BOOK_REQUEST, options.toBundle());
         ActivityCompat.startActivityForResult(SearchActivity.this, myIntent, DETAIL_BOOK_REQUEST, options.toBundle());
 
     }
