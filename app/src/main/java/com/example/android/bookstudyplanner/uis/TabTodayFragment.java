@@ -64,12 +64,21 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
 
         mDb = AppDatabase.getInstance(getActivity().getApplicationContext());
 
+        // Test if list empty
+        TextView tvError = rootView.findViewById(R.id.tv_error_no_plannings);
+
         // set up the RecyclerView
         RecyclerView recyclerView = rootView.findViewById(R.id.rvToday);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 2 : 3));
-        todayRecyclerViewAdapter = new TodayRecyclerViewAdapter(getActivity(), planningEntities);
+        todayRecyclerViewAdapter = new TodayRecyclerViewAdapter(getActivity(), planningEntities, tvError);
         todayRecyclerViewAdapter.setClickListener(this);
         recyclerView.setAdapter(todayRecyclerViewAdapter);
+
+        if(planningEntities.isEmpty()) {
+            tvError.setVisibility(View.VISIBLE);
+        } else {
+            tvError.setVisibility(View.GONE);
+        }
 
         return rootView;
     }

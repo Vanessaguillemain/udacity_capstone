@@ -22,6 +22,18 @@
             android:id="@+id/textView" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_error_no_plannings"
+        android:textSize="@dimen/main_tv_error_text_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="@dimen/main_tv_error_padding"
+        android:text="@string/error_no_entries"
+        android:layout_below="@+id/layout_title"
+        android:visibility="gone" />
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvToday"
         android:layout_width="match_parent"

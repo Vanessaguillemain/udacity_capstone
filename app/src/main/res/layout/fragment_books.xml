@@ -3,6 +3,16 @@
     android:layout_height="match_parent"
     android:background="@color/very_light_grey">
 
+    <TextView
+        android:id="@+id/tv_error_no_books"
+        android:textSize="@dimen/main_tv_error_text_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="@dimen/main_tv_error_padding"
+        android:text="@string/error_no_entries"
+        android:visibility="gone" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvBooks"
         android:layout_width="match_parent"

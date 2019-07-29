@@ -27,11 +27,13 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
     private List<PlanningEntity> mDataPlanningEntities;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+    private TextView mTvError;
 
     // data is passed into the constructor
-    TodayRecyclerViewAdapter(Context context, List<PlanningEntity> dataBookEntities) {
+    TodayRecyclerViewAdapter(Context context, List<PlanningEntity> dataBookEntities, TextView tvError) {
         this.mInflater = LayoutInflater.from(context);
         this.mDataPlanningEntities = dataBookEntities;
+        this.mTvError = tvError;
     }
 
     // inflates the row layout from xml when needed
@@ -83,6 +85,11 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
      */
     public void setPlannings(List<PlanningEntity> plannings) {
         mDataPlanningEntities = plannings;
+        if (plannings.isEmpty()) {
+            mTvError.setVisibility(View.VISIBLE);
+        } else {
+            mTvError.setVisibility(View.GONE);
+        }
         notifyDataSetChanged();
     }
 

@@ -11,6 +11,7 @@
     <string name="transition_photo">transition_photo</string>
     <string name="desc_book_image">Book\'s image</string>
     <string name="label_pages">pages</string>
+    <string name="error_no_entries">Click on + to create a new entry.</string>
 
     <!-- SCREEN BOOK DETAIL -->
     <string name="label_hour">h</string>

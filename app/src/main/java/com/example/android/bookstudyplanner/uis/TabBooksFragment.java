@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
@@ -41,13 +42,20 @@ public class TabBooksFragment extends Fragment implements BooksRecyclerViewAdapt
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_books, container, false);
-
         // set up the RecyclerView
         RecyclerView recyclerView = rootView.findViewById(R.id.rvBooks);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(getActivity(), bookEntities);
         booksRecyclerViewAdapter.setClickListener(this);
         recyclerView.setAdapter(booksRecyclerViewAdapter);
+
+        // Test if list empty
+        TextView tvError = rootView.findViewById(R.id.tv_error_no_books);
+        if(bookEntities.isEmpty()) {
+            tvError.setVisibility(View.VISIBLE);
+        } else {
+            tvError.setVisibility(View.GONE);
+        }
 
         return rootView;
     }
