@@ -707,6 +707,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             setNbPagesAverage();
             setButtonSaveState();
         } else {
+            mValueTimeEstimated.setVisibility(View.INVISIBLE);
             mValueNbPagesToRead.setVisibility(View.INVISIBLE);
             mLabelNbPagesToRead.setVisibility(View.INVISIBLE);
             mPagesToReadValid = false;
