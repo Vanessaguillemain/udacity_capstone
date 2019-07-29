@@ -21,6 +21,7 @@ import com.example.android.bookstudyplanner.AddBookViewModel;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.UpdatePlanningViewModel;
 import com.example.android.bookstudyplanner.Utils;
+import com.example.android.bookstudyplanner.bookservice.WidgetService;
 import com.example.android.bookstudyplanner.database.AddBookViewModelFactory;
 import com.example.android.bookstudyplanner.database.AppDatabase;
 import com.example.android.bookstudyplanner.database.AppExecutor;
@@ -131,6 +132,10 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
                     Integer totalPagesRead = pagesCount + nbPagesReadBefore;
                     Double percentRead = Utils.getPercentRead(totalPagesRead, nbPagesToRead);
                     mDb.bookDao().updateBookReadingForBookId(mBookId, totalPagesRead, percentRead);
+
+                    //WidgetService.startActionUpdateTodayWidgets(getContext());
+                    WidgetService.handleActionUpdateTodayWidgets(getContext());
+
                 }
             });
 

@@ -34,6 +34,7 @@ import android.widget.TextView;
 import com.example.android.bookstudyplanner.AddBookViewModel;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
+import com.example.android.bookstudyplanner.bookservice.WidgetService;
 import com.example.android.bookstudyplanner.database.AddBookViewModelFactory;
 import com.example.android.bookstudyplanner.database.AppDatabase;
 import com.example.android.bookstudyplanner.database.AppExecutor;
@@ -584,6 +585,9 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 PlanningEntity planning = new PlanningEntity(d, mBookId, false, mNbPagesToReadByDay, mNbPagesToReadByDay*mAvgNbSecByPage/60);
                 mDb.planningDao().insertPlanning(planning);
             }
+
+            //WidgetService.startActionUpdateTodayWidgets(getApplicationContext());
+            WidgetService.handleActionUpdateTodayWidgets(getApplicationContext());
 
             Intent resultIntent = new Intent();
             setResult(Activity.RESULT_OK, resultIntent);

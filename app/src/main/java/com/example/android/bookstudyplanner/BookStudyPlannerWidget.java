@@ -5,20 +5,53 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.widget.RemoteViews;
 
+import com.example.android.bookstudyplanner.bookservice.WidgetService;
 import com.example.android.bookstudyplanner.uis.MainActivity;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class BookStudyPlannerWidget extends AppWidgetProvider {
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, String imgRes,
                                 int appWidgetId) {
 
         // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.book_study_planner_widget);
+        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.book_study_planner_widget);
+
+        // Update image
+        Picasso.with(context)
+                .load(imgRes)
+                .placeholder(R.drawable.photobook)
+                .into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        views.setImageViewBitmap(R.id.widget_book_image,bitmap);
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+                        //do something when loading failed
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        //do something while loading
+                    }
+                    });
 
         // Create an Intent to launch MainActivity when clicked
         Intent intent = new Intent(context, MainActivity.class);
@@ -35,9 +68,13 @@ public class BookStudyPlannerWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
+        WidgetService.handleActionUpdateTodayWidgets(context);
+    }
+
+    public static void updateTodayWidgets(Context context, AppWidgetManager appWidgetManager,
+                                          String imgRes, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            updateAppWidget(context, appWidgetManager, imgRes, appWidgetId);
         }
     }
 
