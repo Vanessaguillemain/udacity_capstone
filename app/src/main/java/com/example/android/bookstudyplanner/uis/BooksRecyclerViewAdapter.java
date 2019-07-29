@@ -55,7 +55,7 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
         String formatedDate = Utils.getFormatedDateFromDate(book.getEndDate(), context);
         holder.tvBookEndDate.setText(formatedDate);
         holder.tvPagesToRead.setText(String.valueOf(book.getNbPagesToRead()));
-        String progress = String.valueOf(book.getPercentRead()) + Utils.SPACE_STRING + context.getResources().getString(R.string.b_search_label_percent);
+        String progress = String.valueOf(book.getPercentRead()) + context.getResources().getString(R.string.b_search_label_percent);
         holder.tvBookProgress.setText(progress);
     }
 

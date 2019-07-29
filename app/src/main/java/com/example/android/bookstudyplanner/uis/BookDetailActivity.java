@@ -244,8 +244,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         mValuePageCount.setText(String.valueOf(item.getPageCount()));
         mTitleValid = true;
         if(item.getNbPagesToRead() != null) {
-            String result = Utils.SPACE_STRING + String.valueOf(item.getNbPagesToRead()) + Utils.SPACE_STRING;
-            mValueNbPagesToRead.setText(result);
+            mValueNbPagesToRead.setText(String.valueOf(item.getNbPagesToRead()));
         }
         if(item.getFromPageNb() == null) {
             mTvFromPage.setText(STRING_NUMBER_PAGE_NULL);
@@ -489,7 +488,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 mPagesToReadValid = false;
                 mButtonSave.setEnabled(false);
             } else {
-                String result = Utils.SPACE_STRING + String.valueOf(mNbPagesToReadByDay) + Utils.SPACE_STRING + getString (R.string.label_pages)+ " (" + text + ")" +getString (R.string.label_per_day);
+                String result = String.format(getString(R.string.b_detail_nb_pages_to_read_by_day), mNbPagesToReadByDay, text);
                 mAboutNbPages.setText(result);
                 mPagesToReadValid = true;
                 setButtonSaveState();
@@ -515,7 +514,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
         Date beginDate = Utils.getDateFromFormatedDate(mLabelSelectFromDate.getText().toString(), BookDetailActivity.this);
         Date endDate = Utils.getDateFromFormatedDate(mLabelSelectToDate.getText().toString(), BookDetailActivity.this);
-        //TODO test the 2 dates are not null 19/07/19
+
         boolean intervaleOk = Utils.dateOneIsBeforeDateTwo(beginDate, endDate);
         if(!intervaleOk) {
             mLabelErrorToDate.setVisibility(View.VISIBLE);
@@ -695,12 +694,11 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             //mButtonSave.setEnabled(true);
             mPagesToReadValid = true;
             mNbPagesToRead = to-from+1;
-            String result = Utils.SPACE_STRING + String.valueOf(mNbPagesToRead) + Utils.SPACE_STRING;
-            mValueNbPagesToRead.setText(result);
+            mValueNbPagesToRead.setText(String.valueOf(mNbPagesToRead));
             Resources res = getResources();
             mAvgNbSecByPage = res.getInteger(R.integer.avg_nb_sec_by_page);
             int total = mAvgNbSecByPage*mNbPagesToRead;
-            String time = Utils.SPACE_STRING + Utils.getTime(total, getString(R.string.label_hour), getString(R.string.label_minute));
+            String time = Utils.getTime(total, getString(R.string.label_hour), getString(R.string.label_minute));//TODO
             mValueTimeEstimated.setText(time);
             mValueTimeEstimated.setVisibility(View.VISIBLE);
             mValueNbPagesToRead.setVisibility(View.VISIBLE);

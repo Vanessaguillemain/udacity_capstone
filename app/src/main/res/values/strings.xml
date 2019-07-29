@@ -10,7 +10,7 @@
     <string name="b_detail_confirm_stay">No, stay</string>
     <string name="transition_photo">transition_photo</string>
     <string name="desc_book_image">Book\'s image</string>
-    <string name="label_pages">pages</string>
+    <string name="label_pages">&#160;pages</string>
     <string name="error_no_entries">Click on + to create a new entry.</string>
 
     <!-- SCREEN BOOK DETAIL -->
@@ -30,15 +30,16 @@
     <string name="err_pages_to_read_positive">Pages to read has to be greater than 0 !</string>
     <string name="err_read_time_greater_than_day">Your reading time exceeds 24h/day !</string>
 
-    <string name="lorem_ipsum_20">Ut enim bene Cato in perfecto et spectato viro.</string>
+    <string name="b_detail_nb_pages_to_read_by_day">&#160;%1$d pages (%2$s)/day</string>
+    <string name="lorem_ipsum_20">Ut enim bene Cato in perfecto et spectato viro.</string> <!-- TODO -->
     <string name="b_detail_title">Title :</string>
     <string name="hint_title">Title</string>
     <string name="b_detail_total_pages">Total pages :</string>
-    <string name="b_detail_i_want_to_read">I want to read :</string>
-    <string name="b_detail_pages">Pages</string>
+    <string name="b_detail_i_want_to_read">I want to read :&#160;</string>
+    <string name="b_detail_pages">&#160;pages</string>
     <string name="b_detail_from_page">From page :</string>
     <string name="b_detail_to_page">To page :</string>
-    <string name="b_detail_estimated_time">Estimated time :</string>
+    <string name="b_detail_estimated_time">Estimated time :&#160;</string>
     <string name="b_detail_plan_reading">I want to plan reading :</string>
     <string name="b_detail_from_date">From :</string>
     <string name="b_detail_pick_a_date">Pick a date</string>
@@ -78,8 +79,8 @@
     <!-- SCREEN BOOKS  -->
     <string name="b_search_label_end_date">End date : </string>
     <string name="b_search_label_pages_to_read">Pages to read : </string>
-    <string name="b_search_label_progression">Progression : </string>
-    <string name="b_search_label_percent"> % </string>
+    <string name="b_search_label_progression">Progression :</string>
+    <string name="b_search_label_percent">&#160;%</string>
 
     <!-- SCREEN TODAY  -->
     <string name="err_page_count_required">Count is required !</string>
