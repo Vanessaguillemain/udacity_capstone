@@ -29,6 +29,9 @@ public class Utils {
     public static final String INTENT_VAL_BOOK_DETAIL_ACTION_MODIF = "INTENT_VAL_BOOK_DETAIL_ACTION_MODIF";
     public static final String INTENT_KEY_BOOK = "INTENT_KEY_BOOK";
     public static final String INTENT_KEY_METADATA = "INTENT_KEY_METADATA";
+    public static final String INTENT_KEY_WIDGET_PAGE = "INTENT_KEY_WIDGET_PAGE";
+    public static final int INTENT_VAL_WIDGET_PAGE_1 = 1;
+
     public static final String BUNDLE_KEY_VOLUME_LIST = "BUNDLE_KEY_VOLUME_LIST";
     public static final String BUNDLE_KEY_ERROR_ISBN = "BUNDLE_KEY_ERROR_ISBN";
     public static final String BUNDLE_KEY_ERROR_NO_BOOK_FOUND = "BUNDLE_KEY_ERROR_NO_BOOK_FOUND";

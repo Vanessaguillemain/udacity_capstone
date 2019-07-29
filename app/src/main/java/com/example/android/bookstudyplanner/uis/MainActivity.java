@@ -65,11 +65,20 @@ public class MainActivity extends AppCompatActivity {
     private TabBooksFragment tabBooksFragment;
     private TabTodayFragment tabTodayFragment;
 
-
+    private int tabToOpen = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
+        //Get page to open from widget pending intent
+        Intent intent = getIntent();
+        if(intent !=null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                int page = extras.getInt(Utils.INTENT_KEY_WIDGET_PAGE);
+                if (page >= 0) tabToOpen = page;
+            }
+        }
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
@@ -84,12 +93,15 @@ public class MainActivity extends AppCompatActivity {
         tabTodayFragment = new TabTodayFragment();
         tabTodayFragment.setPlanningEntities(planningTodayEntities);
 
+
         adapter.addFragment(tabBooksFragment, getString(R.string.tab_books_title));
         adapter.addFragment(tabTodayFragment, getString(R.string.tab_today_title));
-        adapter.addFragment(new TabPlanningFragment(), getString(R.string.tab_planning_title));
+        //adapter.addFragment(new TabPlanningFragment(), getString(R.string.tab_planning_title));
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+
+        viewPager.setCurrentItem(tabToOpen);
 
         fabExpanded = false;
         // recovering the instance state
@@ -131,6 +143,19 @@ public class MainActivity extends AppCompatActivity {
     private void hideFABMenu(boolean toHide) {
         if (toHide) closeSubMenusFab();
         else openSubMenusFab();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if(intent !=null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                int page = extras.getInt(Utils.INTENT_KEY_WIDGET_PAGE);
+                if (page >= 0) tabToOpen = page;
+                viewPager.setCurrentItem(tabToOpen);
+            }
+        }
     }
 
     /**

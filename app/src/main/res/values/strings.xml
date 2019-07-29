@@ -90,6 +90,8 @@
     <string name="zero_days_reading">ZERO days of reading</string>
     <string name="err_search_title_not_found">Title not found</string>
     <string name="label_search_no_pages">- pages</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 
 </resources>

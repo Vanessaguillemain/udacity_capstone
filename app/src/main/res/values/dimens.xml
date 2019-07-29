@@ -36,5 +36,11 @@
     <dimen name="height_search_tv_title">40dp</dimen>
     <dimen name="height_search_tv_pages">20dp</dimen>
 
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
+
 
 </resources>
