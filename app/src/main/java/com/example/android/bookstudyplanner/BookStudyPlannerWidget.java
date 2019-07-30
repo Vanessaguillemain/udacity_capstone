@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.RemoteViews;
@@ -35,7 +36,9 @@ public class BookStudyPlannerWidget extends AppWidgetProvider {
         //Test String image
         if(imgRes == null || Utils.RESULT_NO_PLANNING_TODAY.equals(imgRes)) {
             views.setImageViewResource(R.id.widget_book_image,R.drawable.palmier);
+            views.setTextViewText(R.id.widget_title, context.getText(R.string.nothing_today));
         } else {
+            views.setTextViewText(R.id.widget_title, context.getText(R.string.your_next_reading));
             Handler uiHandler = new Handler(Looper.getMainLooper());
             uiHandler.post(new Runnable(){
                 @Override

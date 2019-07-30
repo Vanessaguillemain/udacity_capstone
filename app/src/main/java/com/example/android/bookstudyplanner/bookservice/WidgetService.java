@@ -58,7 +58,7 @@ public class WidgetService extends IntentService {
             public void run() {
                 String imgPlanningToday = Utils.RESULT_NO_PLANNING_TODAY;
                 //load Data
-                List<PlanningEntity> listPlannings = mDb.planningDao().loadAllWidgetPlanningsForDate(Utils.getToday());
+                List<PlanningEntity> listPlannings = mDb.planningDao().loadAllWidgetPlanningsForDate(Utils.getToday(), false);
                 if(listPlannings != null && !listPlannings.isEmpty()) {
                     PlanningEntity planning = listPlannings.get(0);
                     imgPlanningToday = planning.getImageLink();
