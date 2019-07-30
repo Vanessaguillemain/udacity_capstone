@@ -36,11 +36,30 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_menu_search"
+        app:backgroundTint="@color/colorAccent"
+        app:fabSize="mini" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutFabScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/fab_margin_mini"
+        android:layout_marginEnd="@dimen/fab_margin_mini"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabSearch"
+            android:id="@+id/fabScan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_menu_search"
+            android:src="@drawable/ic_menu_scan"
             app:backgroundTint="@color/colorAccent"
             app:fabSize="mini" />
 

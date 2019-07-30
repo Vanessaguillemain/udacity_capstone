@@ -48,10 +48,14 @@ public class MainActivity extends AppCompatActivity {
      FloatingActionButton fabEdit;
     @BindView(R.id.fabSearch)
      FloatingActionButton fabSearch;
+    @BindView(R.id.fabScan)
+    FloatingActionButton fabScan;
     @BindView(R.id.layoutFabEdit)
      LinearLayout layoutFabEdit;
     @BindView(R.id.layoutFabSearch)
      LinearLayout layoutFabSearch;
+    @BindView(R.id.layoutFabScan)
+    LinearLayout layoutFabScan;
 
     private boolean fabExpanded = false;
     private static final String BUNDLE_KEY_FAB_EXPANDED = "BUNDLE_KEY_FAB_EXPANDED";
@@ -141,6 +145,13 @@ public class MainActivity extends AppCompatActivity {
                 openSearchBook();
             }
         });
+
+        fabScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openScanBook();
+            }
+        });
     }
 
     private void hideFABMenu(boolean toHide) {
@@ -215,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
     private void closeSubMenusFab(){
         layoutFabEdit.animate().translationY(0);
         layoutFabSearch.animate().translationY(0);
+        layoutFabScan.animate().translationY(0);
         //Change close icon to add icon
         fabAdd.setImageResource(R.drawable.ic_menu_add);
         fabExpanded = false;
@@ -224,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
     private void openSubMenusFab(){
         layoutFabEdit.animate().translationY(-getResources().getDimension(R.dimen.standard_60));
         layoutFabSearch.animate().translationY(-getResources().getDimension(R.dimen.standard_110));
+        layoutFabScan.animate().translationY(-getResources().getDimension(R.dimen.standard_160));
         //Change add icon to close icon
         fabAdd.setImageResource(R.drawable.ic_menu_close);
         fabExpanded = true;
@@ -239,8 +252,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void openSearchBook(){
 
-        //Toast.makeText(this,"open search", Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
+        MainActivity.this.startActivity(myIntent);
+        closeSubMenusFab();
+
+    }
+
+    private void openScanBook(){
+
+        Intent myIntent = new Intent(MainActivity.this, ScanActivity.class);
         MainActivity.this.startActivity(myIntent);
         closeSubMenusFab();
 
