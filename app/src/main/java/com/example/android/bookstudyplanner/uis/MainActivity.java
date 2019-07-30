@@ -15,13 +15,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.android.bookstudyplanner.MainViewModel;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
 import com.example.android.bookstudyplanner.database.AppDatabase;
-import com.example.android.bookstudyplanner.database.AppExecutor;
 import com.example.android.bookstudyplanner.database.BookEntity;
 import com.example.android.bookstudyplanner.database.PlanningEntity;
 
@@ -66,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     private TabTodayFragment tabTodayFragment;
 
     private int tabToOpen = 0;
+    private int bookIdFromWidget = Utils.INTENT_VAL_BOOK_ID_EMPTY;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             if (extras != null) {
                 int page = extras.getInt(Utils.INTENT_KEY_WIDGET_PAGE);
                 if (page >= 0) tabToOpen = page;
+                bookIdFromWidget = extras.getInt(Utils.INTENT_KEY_WIDGET_BOOK_ID);
             }
         }
         setContentView(R.layout.activity_main);
@@ -102,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         viewPager.setCurrentItem(tabToOpen);
+        //scroll to position in tab according to bookId from widget
+        tabTodayFragment.selectBookPositionWithIdFromWidget(bookIdFromWidget);
 
         fabExpanded = false;
         // recovering the instance state
@@ -154,6 +157,10 @@ public class MainActivity extends AppCompatActivity {
                 int page = extras.getInt(Utils.INTENT_KEY_WIDGET_PAGE);
                 if (page >= 0) tabToOpen = page;
                 viewPager.setCurrentItem(tabToOpen);
+
+                bookIdFromWidget = extras.getInt(Utils.INTENT_KEY_WIDGET_BOOK_ID);
+                //select bookId from widget
+                tabTodayFragment.selectBookPositionWithIdFromWidget(bookIdFromWidget);
             }
         }
     }

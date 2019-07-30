@@ -31,6 +31,8 @@ public class Utils {
     public static final String INTENT_KEY_METADATA = "INTENT_KEY_METADATA";
     public static final String INTENT_KEY_WIDGET_PAGE = "INTENT_KEY_WIDGET_PAGE";
     public static final int INTENT_VAL_WIDGET_PAGE_1 = 1;
+    public static final String INTENT_KEY_WIDGET_BOOK_ID = "INTENT_KEY_WIDGET_BOOK_ID";
+    public static final int INTENT_VAL_BOOK_ID_EMPTY = -1;
 
     public static final String BUNDLE_KEY_VOLUME_LIST = "BUNDLE_KEY_VOLUME_LIST";
     public static final String BUNDLE_KEY_ERROR_ISBN = "BUNDLE_KEY_ERROR_ISBN";

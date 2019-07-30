@@ -27,7 +27,7 @@ import java.net.URL;
  */
 public class BookStudyPlannerWidget extends AppWidgetProvider {
 
-    static void updateAppWidget(final Context context, AppWidgetManager appWidgetManager, final String imgRes,
+    static void updateAppWidget(final Context context, AppWidgetManager appWidgetManager, final String imgRes, int bookId,
                                 int appWidgetId) {
 
         // Construct the RemoteViews object
@@ -67,6 +67,7 @@ public class BookStudyPlannerWidget extends AppWidgetProvider {
         // Create an Intent to launch MainActivity when clicked
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(Utils.INTENT_KEY_WIDGET_PAGE, Utils.INTENT_VAL_WIDGET_PAGE_1);
+        intent.putExtra(Utils.INTENT_KEY_WIDGET_BOOK_ID, bookId);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -83,9 +84,9 @@ public class BookStudyPlannerWidget extends AppWidgetProvider {
     }
 
     public static void updateTodayWidgets(Context context, AppWidgetManager appWidgetManager,
-                                          String imgRes, int[] appWidgetIds) {
+                                          String imgRes, int bookId, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, imgRes, appWidgetId);
+            updateAppWidget(context, appWidgetManager, imgRes, bookId, appWidgetId);
         }
     }
 

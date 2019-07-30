@@ -57,13 +57,15 @@ public class WidgetService extends IntentService {
             @Override
             public void run() {
                 String imgPlanningToday = Utils.RESULT_NO_PLANNING_TODAY;
+                int bookId = -1;
                 //load Data
                 List<PlanningEntity> listPlannings = mDb.planningDao().loadAllWidgetPlanningsForDate(Utils.getToday(), false);
                 if(listPlannings != null && !listPlannings.isEmpty()) {
                     PlanningEntity planning = listPlannings.get(0);
                     imgPlanningToday = planning.getImageLink();
+                    bookId = planning.getBookId();
                 }
-                BookStudyPlannerWidget.updateTodayWidgets(context, appWidgetManager, imgPlanningToday, appWidgetIds);
+                BookStudyPlannerWidget.updateTodayWidgets(context, appWidgetManager, imgPlanningToday, bookId, appWidgetIds);
             }
         });
     }

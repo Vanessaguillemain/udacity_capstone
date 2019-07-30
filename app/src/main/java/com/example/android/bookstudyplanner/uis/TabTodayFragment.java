@@ -1,6 +1,5 @@
 package com.example.android.bookstudyplanner.uis;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
@@ -41,6 +40,8 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
 
     // Constant for logging
     private static final String TAG = TabTodayFragment.class.getSimpleName();
+    //private int bookIdFromWidget = Utils.INTENT_VAL_BOOK_ID_EMPTY;
+    private RecyclerView myRecyclerView;
 
     TodayRecyclerViewAdapter todayRecyclerViewAdapter;
     ArrayList<PlanningEntity> planningEntities = new ArrayList<>();
@@ -74,6 +75,7 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
         todayRecyclerViewAdapter = new TodayRecyclerViewAdapter(getActivity(), planningEntities, tvError);
         todayRecyclerViewAdapter.setClickListener(this);
         recyclerView.setAdapter(todayRecyclerViewAdapter);
+        myRecyclerView = recyclerView;
 
         if(planningEntities.isEmpty()) {
             tvError.setVisibility(View.VISIBLE);
@@ -145,6 +147,21 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
         }
 
     }
+
+    public void selectBookPositionWithIdFromWidget(int bookIdFromWidget) {
+        if(todayRecyclerViewAdapter != null && bookIdFromWidget != Utils.INTENT_VAL_BOOK_ID_EMPTY) {
+            int position = 0;
+            for(PlanningEntity planningEntity : planningEntities) {
+                if(bookIdFromWidget == planningEntity.getBookId()) {
+                    myRecyclerView.getLayoutManager().scrollToPosition(position);
+                    return;
+                } else {
+                    position++;
+                }
+            }
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
