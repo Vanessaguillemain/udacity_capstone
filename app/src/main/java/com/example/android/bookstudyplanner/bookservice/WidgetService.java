@@ -6,11 +6,15 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.support.annotation.Nullable;
 
 import com.example.android.bookstudyplanner.BookStudyPlannerWidget;
+import com.example.android.bookstudyplanner.Utils;
+import com.example.android.bookstudyplanner.database.AppDatabase;
+import com.example.android.bookstudyplanner.database.AppExecutor;
+import com.example.android.bookstudyplanner.database.PlanningEntity;
+
+import java.util.List;
 
 /**
  * Created by vanessa on 29/07/2019.
@@ -18,7 +22,10 @@ import com.example.android.bookstudyplanner.BookStudyPlannerWidget;
 
 public class WidgetService extends IntentService {
 
-    //public static final String ACTION_UPDATE_TODAY_WIDGETS = "ACTION_UPDATE_TODAY_WIDGETS";
+    // Constant for logging
+    private static final String TAG = WidgetService.class.getSimpleName();
+    //for DB access
+    private static AppDatabase mDb;
 
 
     /**
@@ -35,36 +42,29 @@ public class WidgetService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
-            /*
-            if (ACTION_UPDATE_TODAY_WIDGETS.equals(action)) {
-                //handleActionUpdateTodayWidgets();
-            }*/
+
         }
     }
 
-    /**
-     * Starts this service to perform UpdateTodayWidgets action with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    /*
-    public static void startActionUpdateTodayWidgets(Context context) {
-        Intent intent = new Intent(context, WidgetService.class);
-        intent.setAction(ACTION_UPDATE_TODAY_WIDGETS);
-        context.startService(intent);
-    }*/
 
-    public static void handleActionUpdateTodayWidgets(Context context) {
-        //Query to get the book
-        String imgString = "http://books.google.com/books/content?id=2MmoqvmP0WkC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api";
+    public static void handleActionUpdateTodayWidgets(final Context context) {
+        //Query to get the plannings of the day
+        mDb = AppDatabase.getInstance(context);
+        final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        final int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, BookStudyPlannerWidget.class));
 
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, BookStudyPlannerWidget.class));
-
-        Uri imgRes = Uri.parse(imgString);
-
-        //Now update all widgets
-        BookStudyPlannerWidget.updateTodayWidgets(context, appWidgetManager, imgString, appWidgetIds);
+        AppExecutor.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                String imgPlanningToday = Utils.RESULT_NO_PLANNING_TODAY;
+                //load Data
+                List<PlanningEntity> listPlannings = mDb.planningDao().loadAllWidgetPlanningsForDate(Utils.getToday());
+                if(listPlannings != null && !listPlannings.isEmpty()) {
+                    PlanningEntity planning = listPlannings.get(0);
+                    imgPlanningToday = planning.getImageLink();
+                }
+                BookStudyPlannerWidget.updateTodayWidgets(context, appWidgetManager, imgPlanningToday, appWidgetIds);
+            }
+        });
     }
 }

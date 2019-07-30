@@ -6,9 +6,9 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.RemoteViews;
 
 import com.example.android.bookstudyplanner.bookservice.WidgetService;
@@ -26,33 +26,41 @@ import java.net.URL;
  */
 public class BookStudyPlannerWidget extends AppWidgetProvider {
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, String imgRes,
+    static void updateAppWidget(final Context context, AppWidgetManager appWidgetManager, final String imgRes,
                                 int appWidgetId) {
 
         // Construct the RemoteViews object
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.book_study_planner_widget);
 
-        // Update image
-        Picasso.with(context)
-                .load(imgRes)
-                .placeholder(R.drawable.photobook)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        views.setImageViewBitmap(R.id.widget_book_image,bitmap);
-                    }
+        //Test String image
+        if(imgRes == null || Utils.RESULT_NO_PLANNING_TODAY.equals(imgRes)) {
+            views.setImageViewResource(R.id.widget_book_image,R.drawable.palmier);
+        } else {
+            Handler uiHandler = new Handler(Looper.getMainLooper());
+            uiHandler.post(new Runnable(){
+                @Override
+                public void run() {
+                    Picasso.with(context)
+                            .load(imgRes)
+                            .into(new Target() {
+                                @Override
+                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                    views.setImageViewBitmap(R.id.widget_book_image, bitmap);
+                                }
 
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-                        //do something when loading failed
-                    }
+                                @Override
+                                public void onBitmapFailed(Drawable errorDrawable) {
+                                    //do something when loading failed
+                                }
 
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        //do something while loading
-                    }
-                    });
-
+                                @Override
+                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                    //do something while loading
+                                }
+                            });
+                }
+            });
+        }
         // Create an Intent to launch MainActivity when clicked
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(Utils.INTENT_KEY_WIDGET_PAGE, Utils.INTENT_VAL_WIDGET_PAGE_1);
