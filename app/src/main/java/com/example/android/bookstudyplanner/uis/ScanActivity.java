@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.android.bookstudyplanner.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
@@ -43,13 +44,17 @@ public class ScanActivity extends AppCompatActivity {
 
 
         //Set up Barcode
-        detector =
-                new BarcodeDetector.Builder(this)
-                        .setBarcodeFormats(Barcode.ISBN | Barcode.QR_CODE)
+        detector = new BarcodeDetector.Builder(this)
+                        .setBarcodeFormats(Barcode.ISBN)
                         .build();
 
+        /*BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay);
+        barcodeDetector.setProcessor(
+                new MultiProcessor.Builder<>(barcodeFactory).build());*/
+
         //setup camera source
-        cameraSource = new CameraSource.Builder(this, detector).setRequestedPreviewSize(640, 480).build();
+        cameraSource = new CameraSource.Builder(this, detector)
+                .setRequestedPreviewSize(640, 480).setAutoFocusEnabled(true).build();
 
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override

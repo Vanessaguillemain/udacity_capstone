@@ -260,7 +260,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void openScanBook(){
 
-        Intent myIntent = new Intent(MainActivity.this, ScanActivity.class);
+        //Intent myIntent = new Intent(MainActivity.this, ScanActivity.class);
+        Intent myIntent = new Intent(MainActivity.this, QRCodeScanActivity.class);
         MainActivity.this.startActivity(myIntent);
         closeSubMenusFab();
 

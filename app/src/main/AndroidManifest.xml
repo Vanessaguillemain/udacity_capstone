@@ -43,6 +43,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".uis.MainActivity" />
         </activity>
+        <activity
+            android:name=".uis.QRCodeScanActivity"
+            android:parentActivityName=".uis.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".uis.MainActivity" />
+        </activity>
+        <activity
+            android:name=".uis.ScanResultActivity"
+            android:parentActivityName=".uis.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".uis.MainActivity" />
+        </activity>
 
         <receiver android:name=".BookStudyPlannerWidget">
             <intent-filter>
@@ -53,6 +67,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/book_study_planner_widget_info" />
         </receiver>
+<!--
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />-->
     </application>
 
 </manifest>
