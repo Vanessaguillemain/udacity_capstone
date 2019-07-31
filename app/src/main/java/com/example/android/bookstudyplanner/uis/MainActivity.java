@@ -60,8 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean fabExpanded = false;
     private static final String BUNDLE_KEY_FAB_EXPANDED = "BUNDLE_KEY_FAB_EXPANDED";
     private static final String BUNDLE_KEY_TAB_POSITION = "BUNDLE_KEY_TAB_POSITION";
-    // Member variable for the Database
-    private AppDatabase mDb;
+
     private ArrayList<BookEntity> bookEntities = new ArrayList<>();
     private ArrayList<PlanningEntity> planningTodayEntities = new ArrayList<>();
     private TabBooksFragment tabBooksFragment;
@@ -89,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         adapter = new TabAdapter(getSupportFragmentManager());
 
-        mDb = AppDatabase.getInstance(getApplicationContext());
         setUpViewModel();
 
         tabBooksFragment = new TabBooksFragment();
@@ -101,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.addFragment(tabBooksFragment, getString(R.string.tab_books_title));
         adapter.addFragment(tabTodayFragment, getString(R.string.tab_today_title));
-        //adapter.addFragment(new TabPlanningFragment(), getString(R.string.tab_planning_title));
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -115,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             fabExpanded = savedInstanceState.getBoolean(BUNDLE_KEY_FAB_EXPANDED);
             int tabPos = savedInstanceState.getInt(BUNDLE_KEY_TAB_POSITION);
-            tabLayout.getTabAt(tabPos).select();
+            if(tabLayout.getTabAt(tabPos) != null)
+                tabLayout.getTabAt(tabPos).select();
         }
 
         setSupportActionBar(toolbar);
@@ -220,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        //textView.setText(savedInstanceState.getString(TEXT_VIEW_KEY));
     }
 
     private void closeSubMenusFab(){
@@ -251,20 +248,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openSearchBook(){
-
         Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
         MainActivity.this.startActivity(myIntent);
         closeSubMenusFab();
-
     }
 
     private void openScanBook(){
-
-        //Intent myIntent = new Intent(MainActivity.this, ScanActivity.class);
         Intent myIntent = new Intent(MainActivity.this, QRCodeScanActivity.class);
         MainActivity.this.startActivity(myIntent);
         closeSubMenusFab();
-
     }
 
     @Override

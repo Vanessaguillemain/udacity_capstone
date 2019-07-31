@@ -152,14 +152,14 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             mImageLink = savedInstanceState.getString(BUNDLE_KEY_IMAGE_LINK);
 
             //Save locally the dates to avoid them to be wipe off by data base values
-            if(sBegin != defaultDate) {
+            if(sBegin != null && !sBegin.equals(defaultDate)) {
                 mBeginDate = Utils.getDateFromFormatedDate(sBegin, BookDetailActivity.this);
                 yearFrom = Utils.getYearFromDate(mBeginDate);
                 monthFrom = Utils.getMonthFromDate(mBeginDate);
                 dayOfMonthFrom = Utils.getDayFromDate(mBeginDate);
             }
 
-            if(sEnd != defaultDate) {
+            if(sEnd != null && !sEnd.equals(defaultDate)) {
                 mEndDate = Utils.getDateFromFormatedDate(sEnd, BookDetailActivity.this);
                 yearTo = Utils.getYearFromDate(mEndDate);
                 monthTo = Utils.getMonthFromDate(mEndDate);
@@ -461,7 +461,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
     private void removeKeyBoard() {
         InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        if(inputManager != null && getCurrentFocus() != null)
+            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private void setButtonSaveState() {
@@ -604,7 +605,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         DatePickerDialog datePickerDialog = new DatePickerDialog(BookDetailActivity.this, android.R.style.Theme_Holo_Dialog,
                 mDateFromSetListener, y, m, d);
 
-        datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        if(datePickerDialog.getWindow() != null)
+            datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         datePickerDialog.show();
     }
 
@@ -616,7 +618,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         DatePickerDialog datePickerDialog = new DatePickerDialog(BookDetailActivity.this, android.R.style.Theme_Holo_Dialog,
                 mDateToSetListener, y, m, d);
 
-        datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        if(datePickerDialog.getWindow() != null)
+            datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         datePickerDialog.show();
     }
 

@@ -86,7 +86,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
                                 String[]{Manifest.permission.CAMERA}, 1024);
                     }
                 } catch (IOException e) {
-                    Log.e("Camera start error-->> ", e.getMessage().toString());
+                    Log.e("Camera start error-->> ", e.getMessage());
                 }
             }
 
@@ -119,7 +119,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
                     toneNotification.startTone(ToneGenerator.TONE_PROP_BEEP, 150);
 
                     //Text result
-                    scanResult = barcodes.valueAt(0).displayValue.toString();
+                    scanResult = barcodes.valueAt(0).displayValue;
 
                     searchBookAndSendToDetail(scanResult);
 
@@ -133,7 +133,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
      * Checks if there is an ISBN and validates it eventually. Then
      * creates a new SearchTask for the search. If the search succeeds,
      * launches an intent to DetailBookActivity
-     * @param barcode
+     * @param barcode the code scanned
      */
     public void searchBookAndSendToDetail(String barcode) {
         boolean valid = true;

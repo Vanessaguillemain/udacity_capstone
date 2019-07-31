@@ -85,7 +85,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         mRecyclerView.setAdapter(searchRecyclerViewAdapter);
 
         if(savedInstanceState != null) {
-            ArrayList<MyVolume> myVolumeArrayList = new ArrayList<MyVolume>();
+            ArrayList<MyVolume> myVolumeArrayList;
             myVolumeArrayList = savedInstanceState.getParcelableArrayList(Utils.BUNDLE_KEY_VOLUME_LIST);
             boolean msgNoBook = savedInstanceState.getBoolean(Utils.BUNDLE_KEY_ERROR_NO_BOOK_FOUND);
             boolean msgIsbnInvalid = savedInstanceState.getBoolean(Utils.BUNDLE_KEY_ERROR_ISBN);
@@ -124,7 +124,8 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
                 }
 
                 InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                if(inputManager != null && getCurrentFocus() != null)
+                    inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 mSearchView.clearFocus();
 
                 return true;
@@ -156,7 +157,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
     /**
      * Checks if there is an ISBN and validates it eventually. Then
      * creates a new SearchTask for the search.
-     * @param query
+     * @param query the query entered by user (title, author, isbn...)
      */
     public void searchBooks(String query) {
         if (query.equalsIgnoreCase(latestQuery)) {
@@ -334,7 +335,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
     }
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        ArrayList<MyVolume> testing = new ArrayList<MyVolume>();
+        ArrayList<MyVolume> testing = new ArrayList<>();
         testing.addAll(myVolumeList);
         outState.putParcelableArrayList(Utils.BUNDLE_KEY_VOLUME_LIST, testing);
         if(mErrorISBNInvalid.getVisibility() == View.VISIBLE) {

@@ -31,7 +31,6 @@
     <string name="err_read_time_greater_than_day">Your reading time exceeds 24h/day !</string>
 
     <string name="b_detail_nb_pages_to_read_by_day">&#160;%1$d pages (%2$s)/day</string>
-    <string name="lorem_ipsum_20">Ut enim bene Cato in perfecto et spectato viro.</string> <!-- TODO -->
     <string name="b_detail_title">Title :</string>
     <string name="hint_title">Title</string>
     <string name="b_detail_total_pages">Total pages :</string>

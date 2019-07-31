@@ -187,7 +187,7 @@ public class Utils {
     public static List<Date> getPlanning(Date fromDate, Date toDate, int[] weekPlanning, int nbDaysAWeek) {
         //todo : le planning retourné était de taille nulle, voir pourquoi
         if(fromDate != null && toDate != null) {
-            List<Date> planning = new ArrayList<Date>();
+            List<Date> planning = new ArrayList<>();
             if (nbDaysAWeek == 0) {
                 return planning;
             }
