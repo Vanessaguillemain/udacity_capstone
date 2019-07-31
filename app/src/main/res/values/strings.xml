@@ -96,10 +96,14 @@
     <!-- WIDGET  -->
     <string name="your_next_reading">Your next reading :</string>
     <string name="nothing_today">Nothing today !</string>
+    <string name="widget_desc_book_image">Image of book to read today</string>
 
     <!-- SCREEN BOOK SCAN -->
     <string name="title_scan">Scan</string>
     <string name="please_focus_on_isbn_code">Please focus on ISBN code</string>
+    <string name="err_not_isbn_valid">Not a valid ISBN</string>
+    <string name="err_no_book_found">No book found</string>
+    <string name="ask_retry">Retry</string>
 
 
 </resources>

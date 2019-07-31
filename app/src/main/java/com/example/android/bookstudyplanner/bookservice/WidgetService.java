@@ -40,10 +40,6 @@ public class WidgetService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        if (intent != null) {
-            final String action = intent.getAction();
-
-        }
     }
 
 

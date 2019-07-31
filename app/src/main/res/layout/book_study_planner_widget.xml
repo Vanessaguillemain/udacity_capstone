@@ -15,6 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_closed_book_icon"/>
+        android:src="@drawable/ic_closed_book_icon"
+        android:contentDescription="@string/widget_desc_book_image" />
 
 </LinearLayout>

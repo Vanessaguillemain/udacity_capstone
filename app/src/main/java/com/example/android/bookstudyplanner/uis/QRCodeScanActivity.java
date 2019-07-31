@@ -66,7 +66,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
     public void initComponents() {
         // Initialize objects
         barcodeDetector = new BarcodeDetector.Builder(this)
-                .setBarcodeFormats(Barcode.ISBN)
+                .setBarcodeFormats(Barcode.EAN_13|Barcode.ISBN)
                 .build();
         cameraSource = new CameraSource.Builder(getApplicationContext(), barcodeDetector)
                 .setRequestedPreviewSize(1024, 768)
@@ -159,18 +159,18 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
     }
 
     private void alertISBNInvalid() {
-        alertDialog("ISBN Invalid");
+        alertDialog(getResources().getString(R.string.err_not_isbn_valid));
     }
 
     private void alertNoBookFound() {
-        alertDialog("No book found");
+        alertDialog(getResources().getString(R.string.err_no_book_found));
     }
 
     private void alertDialog(String message) {
         new AlertDialog.Builder(this)
                 .setMessage(message)
                 .setCancelable(false)
-                .setPositiveButton("retry", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.ask_retry), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //have the scan reloaded. Didn't find best solution
                         Intent intent= new Intent (getBaseContext(),QRCodeScanActivity.class);
@@ -195,7 +195,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
     @Override
     public void onResult(List<Volume> volumes) {
         if(volumes.size() == 0) {
-            alertNoBookFound();;
+            alertNoBookFound();
         } else {
             MyVolume myVolume = new MyVolume(volumes.get(0));
             sendBookToDetail(myVolume);
