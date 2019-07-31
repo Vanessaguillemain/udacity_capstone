@@ -103,6 +103,10 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
             }
         });
 
+        launchBarcodeDetector();
+    }
+
+    private void launchBarcodeDetector() {
         // Add Processor to Barcode detector
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
@@ -125,10 +129,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
                     scanResult = barcodes.valueAt(0).displayValue.toString();
 
                     searchBookAndSendToDetail(scanResult);
-                    /*
-                    Intent intent = new Intent(QRCodeScanActivity.this, ScanResultActivity.class);
-                    intent.putExtra("ScanResult", scanResult);
-                    startActivity(intent);*/
+
                 }
             }
         });
@@ -141,7 +142,9 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
      * @param barcode
      */
     public void searchBookAndSendToDetail(String barcode) {
-       boolean valid = true;
+        mErrorNoBookFound.setVisibility(View.GONE);
+        mErrorISBNInvalid.setVisibility(View.GONE);
+        boolean valid = true;
         //if it's an ISBN
         if (Utils.isInteger(barcode)) {
             if (barcode.length() == 13) {
@@ -152,7 +155,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
             }
         }
         if(valid) {
-            mErrorISBNInvalid.setVisibility(View.GONE);
+            //mErrorISBNInvalid.setVisibility(View.GONE);
             if (searchTask != null) {
                 searchTask.cancel(true);
             }
@@ -161,6 +164,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
             searchTask.execute(barcode);
         } else {
             mErrorISBNInvalid.setVisibility(View.VISIBLE);
+            launchBarcodeDetector();
         }
     }
 
@@ -178,8 +182,9 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
     public void onResult(List<Volume> volumes) {
         if(volumes.size() == 0) {
             mErrorNoBookFound.setVisibility(View.VISIBLE);
+            launchBarcodeDetector();
         } else {
-            mErrorNoBookFound.setVisibility(View.GONE);
+            //mErrorNoBookFound.setVisibility(View.GONE);
             MyVolume myVolume = new MyVolume(volumes.get(0));
             sendBookToDetail(myVolume);
         }
