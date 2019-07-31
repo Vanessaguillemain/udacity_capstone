@@ -4,18 +4,31 @@
     android:orientation="vertical"
     android:padding="@dimen/widget_margin">
 
-    <TextView
-        android:id="@+id/widget_title"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/your_next_reading"/>
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_sun"
+            android:contentDescription="@string/widget_desc_sun_image"/>
+        <TextView
+            android:id="@+id/widget_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/your_next_reading"/>
+
+    </FrameLayout>
     <ImageView
         android:id="@+id/widget_book_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_closed_book_icon"
+        android:src="@drawable/palmier"
         android:contentDescription="@string/widget_desc_book_image" />
 
 </LinearLayout>

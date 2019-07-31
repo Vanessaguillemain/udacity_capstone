@@ -97,6 +97,7 @@
     <string name="your_next_reading">Your next reading :</string>
     <string name="nothing_today">Nothing today !</string>
     <string name="widget_desc_book_image">Image of book to read today</string>
+    <string name="widget_desc_sun_image">Image of sun</string>
 
     <!-- SCREEN BOOK SCAN -->
     <string name="title_scan">Scan</string>
