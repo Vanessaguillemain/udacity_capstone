@@ -40,10 +40,6 @@ import butterknife.ButterKnife;
 
 public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.SearchListener {
 
-    //Layout Elements
-    //@BindView(R.id.tv_error_isbn_invalid) TextView mErrorISBNInvalid;
-    //@BindView(R.id.tv_error_no_book_found) TextView mErrorNoBookFound;
-
     //Elements for scan
     @BindView(R.id.surfaceQRScanner) SurfaceView surfaceQRScanner;
     BarcodeDetector barcodeDetector;
@@ -70,7 +66,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
     public void initComponents() {
         // Initialize objects
         barcodeDetector = new BarcodeDetector.Builder(this)
-                .setBarcodeFormats(Barcode.ALL_FORMATS)
+                .setBarcodeFormats(Barcode.ISBN)
                 .build();
         cameraSource = new CameraSource.Builder(getApplicationContext(), barcodeDetector)
                 .setRequestedPreviewSize(1024, 768)
@@ -176,7 +172,10 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
                 .setCancelable(false)
                 .setPositiveButton("retry", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        initComponents();
+                        //have the scan reloaded. Didn't find best solution
+                        Intent intent= new Intent (getBaseContext(),QRCodeScanActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 })
                 .show();
@@ -204,7 +203,6 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
     }
 
     private void sendBookToDetail(MyVolume volume) {
-        //barcodeDetector.release();
         Bundle metadata = new Bundle();
 
         metadata.putString(GoogleBookMetaData.TITLE, volume.getVolumeInfoTitle());
