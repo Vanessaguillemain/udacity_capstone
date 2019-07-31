@@ -96,6 +96,9 @@
     <!-- WIDGET  -->
     <string name="your_next_reading">Your next reading :</string>
     <string name="nothing_today">Nothing today !</string>
+
+    <!-- SCREEN BOOK SCAN -->
+    <string name="title_scan">Scan</string>
     <string name="please_focus_on_isbn_code">Please focus on ISBN code</string>
 
 

@@ -1,26 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/light_grey">
 
-
-
-    <SurfaceView
-        android:id="@+id/surfaceQRScanner"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_centerInParent="true"/>
-
-    <TextView
-        android:id="@+id/txtContent"
-        android:text="@string/please_focus_on_isbn_code"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/surfaceQRScanner"
-        android:gravity="center"/>
+        android:theme="@style/MyToolbarTheme">
 
-</RelativeLayout>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:gravity="center_vertical"
+            app:layout_collapseMode="pin"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/MyToolbarTheme"
+            app:title="@string/title_scan"
+            app:elevation="40dp"/>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <RelativeLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_error_isbn_invalid"
+            android:textSize="@dimen/main_tv_error_text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/main_tv_error_padding"
+            android:text="@string/error_isbn_invalid"
+            android:layout_above="@+id/surfaceQRScanner"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_error_no_book_found"
+            android:textSize="@dimen/main_tv_error_text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/main_tv_error_padding"
+            android:text="@string/error_no_book_found"
+            android:layout_above="@+id/surfaceQRScanner"
+            android:visibility="gone" />
+
+        <SurfaceView
+            android:id="@+id/surfaceQRScanner"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/txtContent"
+            android:text="@string/please_focus_on_isbn_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textColor="@color/colorAccent"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/surfaceQRScanner"
+            android:gravity="center"/>
+
+    </RelativeLayout>
+</LinearLayout>

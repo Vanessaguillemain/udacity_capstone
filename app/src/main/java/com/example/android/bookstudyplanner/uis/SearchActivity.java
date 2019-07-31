@@ -153,6 +153,11 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         }
     }
 
+    /**
+     * Checks if there is an ISBN and validates it eventually. Then
+     * creates a new SearchTask for the search.
+     * @param query
+     */
     public void searchBooks(String query) {
         if (query.equalsIgnoreCase(latestQuery)) {
             return;
@@ -197,12 +202,10 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
             mErrorNoBookFound.setVisibility(View.VISIBLE);
         } else {
             mErrorNoBookFound.setVisibility(View.GONE);
-            //volumeList = volumes;
             for(Volume volume:volumes) {
                 MyVolume myVolume = new MyVolume(volume);
                 myVolumeList.add(myVolume);
             }
-            //searchRecyclerViewAdapter.setVolumes(volumes);
             searchRecyclerViewAdapter.setVolumes(myVolumeList);
         }
     }
