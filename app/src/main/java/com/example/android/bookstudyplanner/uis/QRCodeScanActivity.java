@@ -1,11 +1,13 @@
 package com.example.android.bookstudyplanner.uis;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,9 +41,8 @@ import butterknife.ButterKnife;
 public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.SearchListener {
 
     //Layout Elements
-    @BindView(R.id.tv_error_isbn_invalid)
-    TextView mErrorISBNInvalid;
-    @BindView(R.id.tv_error_no_book_found) TextView mErrorNoBookFound;
+    //@BindView(R.id.tv_error_isbn_invalid) TextView mErrorISBNInvalid;
+    //@BindView(R.id.tv_error_no_book_found) TextView mErrorNoBookFound;
 
     //Elements for scan
     @BindView(R.id.surfaceQRScanner) SurfaceView surfaceQRScanner;
@@ -115,7 +116,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
                 if (barcodes.size() > 0) {
 
                     //release detector
-                    //barcodeDetector.release();
+                    barcodeDetector.release();
 
                     //Beep sound
                     ToneGenerator toneNotification = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
@@ -139,8 +140,6 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
      * @param barcode
      */
     public void searchBookAndSendToDetail(String barcode) {
-        mErrorNoBookFound.setVisibility(View.GONE);
-        mErrorISBNInvalid.setVisibility(View.GONE);
         boolean valid = true;
         //if it's an ISBN
         if (Utils.isInteger(barcode)) {
@@ -159,9 +158,30 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
             searchTask.setSearchListener(this);
             searchTask.execute(barcode);
         } else {
-            mErrorISBNInvalid.setVisibility(View.VISIBLE);
+            alertISBNInvalid();
         }
     }
+
+    private void alertISBNInvalid() {
+        alertDialog("ISBN Invalid");
+    }
+
+    private void alertNoBookFound() {
+        alertDialog("No book found");
+    }
+
+    private void alertDialog(String message) {
+        new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("retry", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        initComponents();
+                    }
+                })
+                .show();
+    }
+
 
     @Override
     public void onResume() {
@@ -176,17 +196,15 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
     @Override
     public void onResult(List<Volume> volumes) {
         if(volumes.size() == 0) {
-            mErrorNoBookFound.setVisibility(View.VISIBLE);
-            //launchBarcodeDetector();
+            alertNoBookFound();;
         } else {
-            //mErrorNoBookFound.setVisibility(View.GONE);
             MyVolume myVolume = new MyVolume(volumes.get(0));
             sendBookToDetail(myVolume);
         }
     }
 
     private void sendBookToDetail(MyVolume volume) {
-        barcodeDetector.release();
+        //barcodeDetector.release();
         Bundle metadata = new Bundle();
 
         metadata.putString(GoogleBookMetaData.TITLE, volume.getVolumeInfoTitle());
