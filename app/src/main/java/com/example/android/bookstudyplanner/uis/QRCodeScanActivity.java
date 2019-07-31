@@ -103,10 +103,6 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
             }
         });
 
-        launchBarcodeDetector();
-    }
-
-    private void launchBarcodeDetector() {
         // Add Processor to Barcode detector
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
@@ -119,7 +115,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
                 if (barcodes.size() > 0) {
 
                     //release detector
-                    barcodeDetector.release();
+                    //barcodeDetector.release();
 
                     //Beep sound
                     ToneGenerator toneNotification = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
@@ -133,6 +129,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
                 }
             }
         });
+
     }
 
     /**
@@ -155,7 +152,6 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
             }
         }
         if(valid) {
-            //mErrorISBNInvalid.setVisibility(View.GONE);
             if (searchTask != null) {
                 searchTask.cancel(true);
             }
@@ -164,7 +160,6 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
             searchTask.execute(barcode);
         } else {
             mErrorISBNInvalid.setVisibility(View.VISIBLE);
-            launchBarcodeDetector();
         }
     }
 
@@ -182,7 +177,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
     public void onResult(List<Volume> volumes) {
         if(volumes.size() == 0) {
             mErrorNoBookFound.setVisibility(View.VISIBLE);
-            launchBarcodeDetector();
+            //launchBarcodeDetector();
         } else {
             //mErrorNoBookFound.setVisibility(View.GONE);
             MyVolume myVolume = new MyVolume(volumes.get(0));
@@ -191,6 +186,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
     }
 
     private void sendBookToDetail(MyVolume volume) {
+        barcodeDetector.release();
         Bundle metadata = new Bundle();
 
         metadata.putString(GoogleBookMetaData.TITLE, volume.getVolumeInfoTitle());
