@@ -105,6 +105,7 @@
     <string name="err_no_book_found">No book found</string>
     <string name="err_no_web_connection">No Web connection</string>
     <string name="ask_retry">Retry</string>
+    <string name="ask_exit_retry">Exit and retry</string>
 
 
 </resources>

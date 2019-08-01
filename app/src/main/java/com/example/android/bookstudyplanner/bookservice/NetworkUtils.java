@@ -85,6 +85,11 @@ public class NetworkUtils {
         return url;
     }
 
+    /**
+     * This methods checks if there is a connection
+     * @param context the context that will be used to check CONNECTIVITY_SERVICE
+     * @return true if connected, false if not
+     */
     public static boolean isOnline(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if(cm != null) {

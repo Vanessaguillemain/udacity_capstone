@@ -58,7 +58,13 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode_scan);
         ButterKnife.bind(this);
-        initComponents();
+
+        boolean internetAvailable = NetworkUtils.isOnline(QRCodeScanActivity.this);
+        if (internetAvailable) {
+            initComponents();
+        } else {
+            alertErrorMessageInternet();
+        }
     }
 
     /**
@@ -137,7 +143,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
      * @param barcode the code scanned
      */
     public void searchBookAndSendToDetail(String barcode) {
-        boolean valid = true;
+        boolean valid = false;
         //if it's an ISBN
         if (Utils.isInteger(barcode)) {
             if (barcode.length() == 13) {
@@ -151,21 +157,24 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
             if (searchTask != null) {
                 searchTask.cancel(true);
             }
-            Boolean internetAvailable = NetworkUtils.isOnline(QRCodeScanActivity.this);
-            if (internetAvailable) {
-                searchTask = new SearchTask();
-                searchTask.setSearchListener(this);
-                searchTask.execute(barcode);
-            } else {
-                alertErrorMessageInternet();
-            }
+            searchTask = new SearchTask();
+            searchTask.setSearchListener(this);
+            searchTask.execute(barcode);
         } else {
             alertISBNInvalid();
         }
     }
 
     private void alertErrorMessageInternet() {
-        alertDialog(getResources().getString(R.string.err_no_web_connection));
+        new AlertDialog.Builder(this)
+                .setMessage(getResources().getString(R.string.err_no_web_connection))
+                .setCancelable(false)
+                .setPositiveButton(getResources().getString(R.string.ask_exit_retry), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                })
+                .show();
     }
 
     private void alertISBNInvalid() {

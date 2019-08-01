@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
+import com.example.android.bookstudyplanner.bookservice.NetworkUtils;
 import com.example.android.bookstudyplanner.bookservice.SearchTask;
 import com.example.android.bookstudyplanner.database.GoogleBookMetaData;
 import com.example.android.bookstudyplanner.entities.MyVolume;
@@ -113,7 +114,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
             }
             @Override
             public boolean onQueryTextSubmit(String query) {
-                mInternetAvailable = isOnline(SearchActivity.this);
+                mInternetAvailable = NetworkUtils.isOnline(SearchActivity.this);
                 if (mInternetAvailable) {
                     hideErrorMessageInternet();
                     searchBooks(query);
@@ -146,7 +147,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
     }
 
     private void manageInternetConnection() {
-        mInternetAvailable = isOnline(this);
+        mInternetAvailable = NetworkUtils.isOnline(this);
         if (mInternetAvailable) {
             hideErrorMessageInternet();
         } else {
@@ -286,21 +287,6 @@ public class SearchActivity extends AppCompatActivity implements SearchTask.Sear
         Uri uri = Uri.fromParts("package", getPackageName(), null);
         intent.setData(uri);
         startActivityForResult(intent, 101);
-    }
-
-    /**
-     * This methods checks if there is a connection
-     * @param context the context that will be used to check CONNECTIVITY_SERVICE
-     * @return true if connected, false if not
-     */
-    private boolean isOnline(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(cm != null) {
-            NetworkInfo netInfo = cm.getActiveNetworkInfo();
-            //should check null because in airplane mode it will be null
-            return (netInfo != null && netInfo.isConnected());
-        }
-        return false;
     }
 
     @Override
