@@ -565,6 +565,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 book.setId(mBookId);
                 mDb.bookDao().updateBook(book);
             }
+            WidgetService.handleActionUpdateTodayWidgets(BookDetailActivity.this);
             Intent resultIntent = new Intent();
             setResult(Activity.RESULT_OK, resultIntent);
             finish();
@@ -587,7 +588,6 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 mDb.planningDao().insertPlanning(planning);
             }
 
-            //WidgetService.startActionUpdateTodayWidgets(getApplicationContext());
             WidgetService.handleActionUpdateTodayWidgets(getApplicationContext());
 
             Intent resultIntent = new Intent();
@@ -634,6 +634,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                         public void run() {
                         mDb.bookDao().deleteBookById(mBookId);
                         mDb.planningDao().deletePlanningByBookId(mBookId);
+                        WidgetService.handleActionUpdateTodayWidgets(getApplicationContext());
                         finish();
                         }
                     });

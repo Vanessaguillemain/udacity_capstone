@@ -55,6 +55,7 @@
                 android:resource="@xml/book_study_planner_widget_info" />
         </receiver>
 
+        <service android:name=".bookservice.WidgetService" />
     </application>
 
 </manifest>

@@ -27,14 +27,12 @@ public class WidgetService extends IntentService {
     //for DB access
     private static AppDatabase mDb;
 
-
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name Used to name the worker thread, important only for debugging.
-     */
     public WidgetService(String name) {
         super(name);
+    }
+
+    public WidgetService() {
+        super("WidgetService");
     }
 
 

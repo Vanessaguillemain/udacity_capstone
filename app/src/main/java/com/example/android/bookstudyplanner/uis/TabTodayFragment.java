@@ -40,7 +40,6 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
 
     // Constant for logging
     private static final String TAG = TabTodayFragment.class.getSimpleName();
-    //private int bookIdFromWidget = Utils.INTENT_VAL_BOOK_ID_EMPTY;
     private RecyclerView myRecyclerView;
 
     TodayRecyclerViewAdapter todayRecyclerViewAdapter;
@@ -135,7 +134,6 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
                     Double percentRead = Utils.getPercentRead(totalPagesRead, nbPagesToRead);
                     mDb.bookDao().updateBookReadingForBookId(mBookId, totalPagesRead, percentRead);
 
-                    //WidgetService.startActionUpdateTodayWidgets(getContext());
                     WidgetService.handleActionUpdateTodayWidgets(getContext());
 
                 }

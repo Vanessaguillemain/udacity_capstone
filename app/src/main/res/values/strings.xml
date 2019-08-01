@@ -93,7 +93,7 @@
     <string name="add_widget">Add widget</string>
 
     <!-- WIDGET  -->
-    <string name="your_next_reading">Your next reading :</string>
+    <string name="your_next_reading">Your next book</string>
     <string name="nothing_today">Nothing today !</string>
     <string name="widget_desc_book_image">Image of book to read today</string>
     <string name="widget_desc_sun_image">Image of sun</string>
