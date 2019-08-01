@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
+import com.example.android.bookstudyplanner.bookservice.NetworkUtils;
 import com.example.android.bookstudyplanner.bookservice.SearchTask;
 import com.example.android.bookstudyplanner.database.GoogleBookMetaData;
 import com.example.android.bookstudyplanner.entities.MyVolume;
@@ -150,12 +151,21 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
             if (searchTask != null) {
                 searchTask.cancel(true);
             }
-            searchTask = new SearchTask();
-            searchTask.setSearchListener(this);
-            searchTask.execute(barcode);
+            Boolean internetAvailable = NetworkUtils.isOnline(QRCodeScanActivity.this);
+            if (internetAvailable) {
+                searchTask = new SearchTask();
+                searchTask.setSearchListener(this);
+                searchTask.execute(barcode);
+            } else {
+                alertErrorMessageInternet();
+            }
         } else {
             alertISBNInvalid();
         }
+    }
+
+    private void alertErrorMessageInternet() {
+        alertDialog(getResources().getString(R.string.err_no_web_connection));
     }
 
     private void alertISBNInvalid() {
