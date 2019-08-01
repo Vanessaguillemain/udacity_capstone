@@ -667,24 +667,28 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             if (from > pageCount) {
                 mTvFromPage.setError(getString(R.string.err_from_page_too_big));
                 mButtonSave.setEnabled(false);
+                mAboutNbPages.setText("");
                 mPagesToReadValid = false;
                 return;
             }
             if (from == 0) {
                 mTvFromPage.setError(getString(R.string.err_from_page_greater_than_zero));
                 mButtonSave.setEnabled(false);
+                mAboutNbPages.setText("");
                 mPagesToReadValid = false;
                 return;
             }
             if (to > pageCount) {
                 mTvToPage.setError(getString(R.string.err_to_page_too_big));
                 mButtonSave.setEnabled(false);
+                mAboutNbPages.setText("");
                 mPagesToReadValid = false;
                 return;
             }
             if (to == 0) {
                 mTvToPage.setError(getString(R.string.err_to_page_greater_than_zero));
                 mButtonSave.setEnabled(false);
+                mAboutNbPages.setText("");
                 mPagesToReadValid = false;
                 return;
             }
@@ -692,6 +696,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 mTvFromPage.setError(getString(R.string.err_pages_to_read_positive));
                 mTvToPage.setError(getString(R.string.err_pages_to_read_positive));
                 mButtonSave.setEnabled(false);
+                mAboutNbPages.setText("");
                 mPagesToReadValid = false;
                 return;
             } else {
@@ -718,6 +723,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             mValueNbPagesToRead.setVisibility(View.INVISIBLE);
             mLabelNbPagesToRead.setVisibility(View.INVISIBLE);
             mPagesToReadValid = false;
+            mAboutNbPages.setText("");
+            mButtonSave.setEnabled(false);
         }
 
     }
