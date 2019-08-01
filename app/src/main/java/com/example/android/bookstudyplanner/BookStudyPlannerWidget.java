@@ -3,13 +3,17 @@ package com.example.android.bookstudyplanner;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.widget.ImageView;
 import android.widget.RemoteViews;
 
 import com.example.android.bookstudyplanner.bookservice.WidgetService;
@@ -27,42 +31,34 @@ import java.net.URL;
  */
 public class BookStudyPlannerWidget extends AppWidgetProvider {
 
-    static void updateAppWidget(final Context context, AppWidgetManager appWidgetManager, final String imgRes, int bookId,
-                                int appWidgetId) {
+    static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager, final String imgRes, int bookId,
+                                final int appWidgetId) {
+
+        final int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, BookStudyPlannerWidget.class));
 
         // Construct the RemoteViews object
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.book_study_planner_widget);
 
-        //Test String image
-        if(imgRes == null || Utils.RESULT_NO_PLANNING_TODAY.equals(imgRes)) {
+        //test book
+        if(bookId == Utils.INTENT_VAL_BOOK_ID_EMPTY) {
             views.setImageViewResource(R.id.widget_book_image,R.drawable.palmier);
             views.setTextViewText(R.id.widget_title, context.getText(R.string.nothing_today));
         } else {
             views.setTextViewText(R.id.widget_title, context.getText(R.string.your_next_reading));
-            Handler uiHandler = new Handler(Looper.getMainLooper());
-            uiHandler.post(new Runnable(){
-                @Override
-                public void run() {
-                    Picasso.with(context)
-                            .load(imgRes)
-                            .into(new Target() {
-                                @Override
-                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                    views.setImageViewBitmap(R.id.widget_book_image, bitmap);
-                                }
-
-                                @Override
-                                public void onBitmapFailed(Drawable errorDrawable) {
-                                    //do something when loading failed
-                                }
-
-                                @Override
-                                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                                    //do something while loading
-                                }
-                            });
-                }
-            });
+            //Test String image
+            if (imgRes == null) {
+                views.setImageViewResource(R.id.widget_book_image, R.drawable.photobook);
+            } else {
+                Handler uiHandler = new Handler(Looper.getMainLooper());
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Picasso.with(context)
+                                .load(imgRes)
+                                .into(views, R.id.widget_book_image, appWidgetIds);
+                    }
+                });
+            }
         }
         // Create an Intent to launch MainActivity when clicked
         Intent intent = new Intent(context, MainActivity.class);

@@ -134,8 +134,8 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
                     Double percentRead = Utils.getPercentRead(totalPagesRead, nbPagesToRead);
                     mDb.bookDao().updateBookReadingForBookId(mBookId, totalPagesRead, percentRead);
 
-                    WidgetService.handleActionUpdateTodayWidgets(getContext());
-
+                    //WidgetService.handleActionUpdateTodayWidgets(getContext());
+                    WidgetService.startActionUpdateWidgets(getContext());
                 }
             });
 

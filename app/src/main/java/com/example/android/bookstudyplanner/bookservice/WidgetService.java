@@ -26,6 +26,7 @@ public class WidgetService extends IntentService {
     private static final String TAG = WidgetService.class.getSimpleName();
     //for DB access
     private static AppDatabase mDb;
+    public static final String ACTION_UPDATE_WIDGETS = "ACTION_UPDATE_WIDGETS";
 
     public WidgetService(String name) {
         super(name);
@@ -38,8 +39,19 @@ public class WidgetService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        if (intent != null) {
+            final String action = intent.getAction();
+            if (ACTION_UPDATE_WIDGETS.equals(action)) {
+                handleActionUpdateTodayWidgets(this);
+            }
+        }
     }
 
+    public static void startActionUpdateWidgets(Context context) {
+        Intent intent = new Intent(context, WidgetService.class);
+        intent.setAction(ACTION_UPDATE_WIDGETS);
+        context.startService(intent);
+    }
 
     public static void handleActionUpdateTodayWidgets(final Context context) {
         //Query to get the plannings of the day
@@ -51,7 +63,7 @@ public class WidgetService extends IntentService {
             @Override
             public void run() {
                 String imgPlanningToday = Utils.RESULT_NO_PLANNING_TODAY;
-                int bookId = -1;
+                int bookId = Utils.INTENT_VAL_BOOK_ID_EMPTY;
                 //load Data
                 List<PlanningEntity> listPlannings = mDb.planningDao().loadAllWidgetPlanningsForDate(Utils.getToday(), false);
                 if(listPlannings != null && !listPlannings.isEmpty()) {
