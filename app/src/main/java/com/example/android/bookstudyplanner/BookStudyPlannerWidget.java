@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
 
@@ -25,11 +26,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class BookStudyPlannerWidget extends AppWidgetProvider {
+
+    private static final String TAG ="BookStudyPlannerWidget";
 
     static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager, final String imgRes, int bookId,
                                 final int appWidgetId) {
@@ -44,7 +48,9 @@ public class BookStudyPlannerWidget extends AppWidgetProvider {
             views.setImageViewResource(R.id.widget_book_image,R.drawable.palmier);
             views.setTextViewText(R.id.widget_title, context.getText(R.string.nothing_today));
         } else {
-            views.setTextViewText(R.id.widget_title, context.getText(R.string.your_next_reading));
+            Calendar cal = Calendar.getInstance();
+            //TODO : for tests. Remove
+            views.setTextViewText(R.id.widget_title, context.getText(R.string.your_next_reading)+"-"+cal.getTime());
             //Test String image
             if (imgRes == null) {
                 views.setImageViewResource(R.id.widget_book_image, R.drawable.photobook);
@@ -76,6 +82,9 @@ public class BookStudyPlannerWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Calendar cal = Calendar.getInstance();
+        Log.d(TAG, "onUpdate: " + cal.getTime());
+
         WidgetService.handleActionUpdateTodayWidgets(context);
     }
 
