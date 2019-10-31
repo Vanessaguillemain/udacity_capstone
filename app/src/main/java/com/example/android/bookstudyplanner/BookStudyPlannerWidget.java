@@ -13,7 +13,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.transition.Visibility;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
 
@@ -35,7 +37,7 @@ public class BookStudyPlannerWidget extends AppWidgetProvider {
 
     private static final String TAG ="BookStudyPlannerWidget";
 
-    static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager, final String imgRes, int bookId,
+    static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager, final String imgRes, int bookId, int nbPagesToRead,
                                 final int appWidgetId) {
 
         final int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, BookStudyPlannerWidget.class));
@@ -45,12 +47,15 @@ public class BookStudyPlannerWidget extends AppWidgetProvider {
 
         //test book
         if(bookId == Utils.INTENT_VAL_BOOK_ID_EMPTY) {
-            views.setImageViewResource(R.id.widget_book_image,R.drawable.palmier);
+            views.setImageViewResource(R.id.widget_book_image,R.drawable.ic_launcher_foreground);
             views.setTextViewText(R.id.widget_title, context.getText(R.string.nothing_today));
+            views.setViewVisibility(R.id.widget_title_done, View.VISIBLE);
+            views.setViewVisibility(R.id.widget_title, View.INVISIBLE);
         } else {
-            Calendar cal = Calendar.getInstance();
-            //TODO : for tests. Remove
-            views.setTextViewText(R.id.widget_title, context.getText(R.string.your_next_reading)+"-"+cal.getTime());
+            views.setViewVisibility(R.id.widget_title_done, View.INVISIBLE);
+            views.setViewVisibility(R.id.widget_title, View.VISIBLE);
+            String result = context.getResources().getQuantityString(R.plurals.page_count, nbPagesToRead, nbPagesToRead);
+            views.setTextViewText(R.id.widget_title, result);
             //Test String image
             if (imgRes == null) {
                 views.setImageViewResource(R.id.widget_book_image, R.drawable.photobook);
@@ -89,9 +94,9 @@ public class BookStudyPlannerWidget extends AppWidgetProvider {
     }
 
     public static void updateTodayWidgets(Context context, AppWidgetManager appWidgetManager,
-                                          String imgRes, int bookId, int[] appWidgetIds) {
+                                          String imgRes, int bookId, int nbPagesToRead, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, imgRes, bookId, appWidgetId);
+            updateAppWidget(context, appWidgetManager, imgRes, bookId, nbPagesToRead, appWidgetId);
         }
     }
 

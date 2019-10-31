@@ -184,6 +184,21 @@ public class Utils {
         return d;
     }
 
+    /**
+     * Calculate the date of current day, without year, with current hours.minutes
+     * To be able to compare with date picked.
+     * @return the date of current day, without current hours.minutes...
+     */
+    public static String getTodayHourMinute() {
+        Calendar cal = Calendar.getInstance();
+        int month = cal.get(Calendar.MONTH)+1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+        String date = day+"/"+month+" "+hour+":"+minute;
+        return date;
+    }
+
     public static List<Date> getPlanning(Date fromDate, Date toDate, int[] weekPlanning, int nbDaysAWeek) {
         //todo : le planning retourné était de taille nulle, voir pourquoi
         if(fromDate != null && toDate != null) {
