@@ -28,6 +28,12 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="20dp" />
 
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_end_cbx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/guideline_end_cbx_width" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline_bottom"
@@ -237,6 +243,15 @@
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/layout_read_to" />
 
+    <TextView
+        android:id="@+id/labelPlanningNbDays"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@+id/labelPlanning"
+        app:layout_constraintTop_toBottomOf="@+id/layout_read_to"
+        tools:text="25 days" />
+
     <LinearLayout
         android:id="@+id/layout_from_date"
         android:layout_width="0dp"
@@ -318,14 +333,7 @@
             android:text="@string/b_detail_read_frequency"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_frequency_checks"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
-        app:layout_constraintStart_toStartOf="@+id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title">
+
 
         <CheckBox
             android:id="@+id/cbx1"
@@ -335,7 +343,11 @@
             android:button="@null"
             android:checked="true"
             android:gravity="center"
-            android:text="@string/b_detail_monday" />
+            android:text="@string/b_detail_monday"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@+id/cbx2"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title"/>
 
         <CheckBox
             android:id="@+id/cbx2"
@@ -346,6 +358,10 @@
             android:button="@null"
             android:checked="true"
             android:gravity="center"
+            app:layout_constraintStart_toEndOf="@+id/cbx1"
+            app:layout_constraintEnd_toStartOf="@+id/cbx3"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title"
             android:text="@string/b_detail_tuesday" />
 
         <CheckBox
@@ -357,6 +373,10 @@
             android:button="@null"
             android:checked="true"
             android:gravity="center"
+            app:layout_constraintStart_toEndOf="@+id/cbx2"
+            app:layout_constraintEnd_toStartOf="@+id/cbx4"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title"
             android:text="@string/b_detail_wednesday" />
 
         <CheckBox
@@ -368,6 +388,10 @@
             android:button="@null"
             android:checked="true"
             android:gravity="center"
+            app:layout_constraintStart_toEndOf="@+id/cbx3"
+            app:layout_constraintEnd_toStartOf="@+id/cbx5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title"
             android:text="@string/b_detail_thursday" />
 
         <CheckBox
@@ -379,6 +403,10 @@
             android:button="@null"
             android:checked="true"
             android:gravity="center"
+            app:layout_constraintStart_toEndOf="@+id/cbx4"
+            app:layout_constraintEnd_toStartOf="@+id/cbx6"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title"
             android:text="@string/b_detail_friday" />
 
         <CheckBox
@@ -389,6 +417,10 @@
             android:background="@drawable/radiobtn_bck"
             android:button="@null"
             android:gravity="center"
+            app:layout_constraintStart_toEndOf="@+id/cbx5"
+            app:layout_constraintEnd_toStartOf="@+id/cbx7"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title"
             android:text="@string/b_detail_saturday" />
 
         <CheckBox
@@ -399,7 +431,57 @@
             android:background="@drawable/radiobtn_bck"
             android:button="@null"
             android:gravity="center"
+            app:layout_constraintStart_toEndOf="@+id/cbx6"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_end_cbx"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title"
             android:text="@string/b_detail_sunday" />
-    </LinearLayout>
 
+    <TextView
+        android:id="@+id/labelEstimation"
+        style="@style/SubtitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@+id/cbx7"
+        android:text="@string/b_detail_estimation"/>
+
+    <TextView
+        android:id="@+id/labelAbout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@+id/labelEstimation"
+        app:layout_constraintTop_toBottomOf="@+id/cbx7"
+        android:text="@string/b_detail_about"/>
+    <TextView
+        android:id="@+id/aboutNbPages"
+        android:layout_width="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/labelAbout"
+        app:layout_constraintTop_toBottomOf="@+id/cbx7"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:elevation="4dp"
+        app:layout_constraintTop_toBottomOf="@+id/aboutNbPages"
+        app:layout_constraintStart_toEndOf="@+id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@+id/buttonDelete"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        android:theme="@style/DetailButton"
+        android:text="@string/b_detail_submit"/>
+
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:elevation="4dp"
+        android:text="@string/b_detail_delete"
+        app:layout_constraintTop_toBottomOf="@+id/aboutNbPages"
+        app:layout_constraintStart_toEndOf="@+id/buttonSave"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        android:theme="@style/DetailButton"/>
 </android.support.constraint.ConstraintLayout>

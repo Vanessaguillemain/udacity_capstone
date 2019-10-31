@@ -61,6 +61,10 @@
     <string name="b_detail_msg_confirm_delete">Are you sure you want to delete?</string>
     <string name="b_detail_confirm_delete_yes">Yes delete</string>
     <string name="b_detail_confirm_delete_no">No</string>
+    <plurals name="days_count">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
 
     <!-- SCREEN BOOK SEARCH -->
     <string name="title_search">Search</string>
