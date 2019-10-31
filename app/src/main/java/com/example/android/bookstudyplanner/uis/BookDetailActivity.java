@@ -138,7 +138,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.book_detail);
+        setContentView(R.layout.book_detail1);
 
         initViews();
 
