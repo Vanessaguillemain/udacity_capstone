@@ -70,6 +70,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private final String BUNDLE_KEY_IMAGE_LINK = "BUNDLE_KEY_IMAGE_LINK";
 
     private final String STRING_NUMBER_PAGE_NULL = "0";
+    private final String STRING_NUMBER_PAGE_ONE = "1";
     private final String STRING_DEFAULT_WEEK_PLANNING = "1111100";
 
     @BindView(R.id.imageBook_detail) ImageView mImageBook;
@@ -214,11 +215,21 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                    String title = metaData.getString(GoogleBookMetaData.TITLE);
                    int pageCount = metaData.getInt(GoogleBookMetaData.PAGE_COUNT);
                    mTvTitle.setText(title);
+                   mTvFromPage.setText(STRING_NUMBER_PAGE_ONE);
                    if(pageCount == MyVolume.NO_PAGE_COUNT) {
                        mValuePageCount.setText("");
                    } else {
                        mValuePageCount.setText(String.valueOf(pageCount));
+                       mTvToPage.setText(String.valueOf(pageCount));
                    }
+
+                   mBeginDate = Utils.getToday();
+                   String sBegin = Utils.getFormatedDateFromDate(mBeginDate, BookDetailActivity.this);
+                   mLabelSelectFromDate.setText(sBegin);
+                   yearFrom = Utils.getYearFromDate(mBeginDate);
+                   monthFrom = Utils.getMonthFromDate(mBeginDate);
+                   dayOfMonthFrom = Utils.getDayFromDate(mBeginDate);
+
                    mImageLink = metaData.getString(GoogleBookMetaData.IMAGE);
                    if(mImageLink != null && !mImageLink.equals("")) {
                        Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
@@ -242,18 +253,19 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         }
 
         mTvTitle.setText(item.getTitle());
-        mValuePageCount.setText(String.valueOf(item.getPageCount()));
+        String sPageCount = String.valueOf(item.getPageCount());
+        mValuePageCount.setText(sPageCount);
         mTitleValid = true;
         if(item.getNbPagesToRead() != null) {
             mValueNbPagesToRead.setText(String.valueOf(item.getNbPagesToRead()));
         }
         if(item.getFromPageNb() == null) {
-            mTvFromPage.setText(STRING_NUMBER_PAGE_NULL);
+            mTvFromPage.setText(STRING_NUMBER_PAGE_ONE);
         } else {
             mTvFromPage.setText(String.valueOf(item.getFromPageNb()));
         }
         if(item.getToPageNb() == null) {
-            mTvToPage.setText(STRING_NUMBER_PAGE_NULL);
+            mTvToPage.setText(sPageCount);
         } else {
             mTvToPage.setText(String.valueOf(item.getToPageNb()));
         }
@@ -261,13 +273,16 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         //If mBeginDate is not null, it has been initialized in savednstanceSTate
         if(mBeginDate == null) {
             mBeginDate = item.getBeginDate();
+            String sBegin;
             if (mBeginDate != null) {
-                String sBegin = Utils.getFormatedDateFromDate(mBeginDate, BookDetailActivity.this);
-                mLabelSelectFromDate.setText(sBegin);
-                yearFrom = Utils.getYearFromDate(mBeginDate);
-                monthFrom = Utils.getMonthFromDate(mBeginDate);
-                dayOfMonthFrom = Utils.getDayFromDate(mBeginDate);
+                sBegin = Utils.getFormatedDateFromDate(mBeginDate, BookDetailActivity.this);
+            } else {
+                sBegin = Utils.getFormatedDateFromDate(Utils.getToday(), BookDetailActivity.this);
             }
+            mLabelSelectFromDate.setText(sBegin);
+            yearFrom = Utils.getYearFromDate(mBeginDate);
+            monthFrom = Utils.getMonthFromDate(mBeginDate);
+            dayOfMonthFrom = Utils.getDayFromDate(mBeginDate);
         }
         //If mEndDate is not null, it has been initialized in savedInstanceState
         if(mEndDate == null) {
