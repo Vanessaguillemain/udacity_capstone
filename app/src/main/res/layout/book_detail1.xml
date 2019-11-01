@@ -275,6 +275,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/b_detail_plan_reading"
+                android:layout_marginTop="@dimen/medium_border_margin"
                 app:layout_constraintStart_toStartOf="@+id/guideline_start"
                 app:layout_constraintTop_toBottomOf="@+id/layout_read_to" />
 
@@ -284,7 +285,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 app:layout_constraintStart_toEndOf="@+id/labelPlanning"
-                app:layout_constraintTop_toBottomOf="@+id/layout_read_to"
+                app:layout_constraintTop_toTopOf="@+id/labelPlanning"
                 tools:text="25 days" />
 
 
@@ -339,6 +340,7 @@
                     style="@style/SubtitleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/medium_border_margin"
                     app:layout_constraintStart_toStartOf="@+id/guideline_start"
                     app:layout_constraintTop_toBottomOf="@+id/labelToDate"
                     android:text="@string/b_detail_read_frequency"/>
@@ -450,6 +452,7 @@
                 style="@style/SubtitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium_border_margin"
                 app:layout_constraintStart_toEndOf="@+id/guideline_start"
                 app:layout_constraintTop_toBottomOf="@+id/cbx7"
                 android:text="@string/b_detail_estimation"/>
@@ -458,7 +461,7 @@
                 android:id="@+id/aboutNbPages"
                 android:layout_width="wrap_content"
                 app:layout_constraintStart_toEndOf="@+id/labelEstimation"
-                app:layout_constraintTop_toBottomOf="@+id/cbx7"
+                app:layout_constraintTop_toTopOf="@+id/labelEstimation"
                 android:layout_height="wrap_content"/>
 
             <Button
@@ -466,6 +469,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:elevation="4dp"
+                android:layout_marginTop="@dimen/medium_border_margin"
                 app:layout_constraintTop_toBottomOf="@+id/aboutNbPages"
                 app:layout_constraintStart_toEndOf="@+id/guideline_start"
                 app:layout_constraintEnd_toStartOf="@+id/buttonDelete"
@@ -479,7 +483,7 @@
                 android:layout_width="0dp"
                 android:elevation="4dp"
                 android:text="@string/b_detail_delete"
-                app:layout_constraintTop_toBottomOf="@+id/aboutNbPages"
+                app:layout_constraintTop_toTopOf="@+id/buttonSave"
                 app:layout_constraintStart_toEndOf="@+id/buttonSave"
                 app:layout_constraintEnd_toEndOf="@+id/guideline_end"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
