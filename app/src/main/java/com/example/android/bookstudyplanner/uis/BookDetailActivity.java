@@ -30,6 +30,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.bookstudyplanner.AddBookViewModel;
 import com.example.android.bookstudyplanner.R;
@@ -83,8 +84,6 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     @BindView(R.id.valueTimeEstimated) TextView mValueTimeEstimated;
     @BindView(R.id.buttonSave) Button mButtonSave;
     @BindView(R.id.buttonDelete) Button mButtonDelete;
-    @BindView(R.id.labelErrorFromDate) TextView mLabelErrorFromDate;
-    @BindView(R.id.labelErrorToDate) TextView mLabelErrorToDate;
     @BindView(R.id.labelSelectFromDate) TextView mLabelSelectFromDate;
     @BindView(R.id.labelSelectToDate) TextView mLabelSelectToDate;
     @BindView(R.id.btnCalendarFrom) Button mButtonCalendarFrom;
@@ -98,6 +97,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     @BindView(R.id.cbx6) CheckBox mCbx6;
     @BindView(R.id.cbx7) CheckBox mCbx7;
     @BindView(R.id.aboutNbPages) TextView mAboutNbPages;
+    @BindView(R.id.labelPlanningNbDays) TextView mTvNbTotalDays;
+    @BindView(R.id.valueSpeed) TextView mValueSpeed;
 
     private int year;
     private int month;
@@ -118,6 +119,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private int mTabWeekPlanning[] ;
     private int mNbPagesToRead;
     private int mNbPagesToReadByDay;
+    private int mNbTotalDays;
     private int mAvgNbSecByPage;
     private String mImageLink;
     private BookEntity mBook;
@@ -377,8 +379,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
                 if(dateIsBeforeToday(chosenDate)) {
                     mLabelSelectFromDate.setError("");
-                    mLabelErrorFromDate.setVisibility(View.VISIBLE);
-                    mLabelErrorFromDate.setText(getString(R.string.err_date_before_today));
+                    Toast.makeText(getApplicationContext(), getString(R.string.err_date_before_today), Toast.LENGTH_LONG).show();
                     mDatesToFromValid = false;
                     mButtonSave.setEnabled(false);
                     mAboutNbPages.setText("");
@@ -386,21 +387,17 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                     if(mEndDate!=null) {
                         if (!Utils.dateOneIsBeforeDateTwo(chosenDate, mEndDate)) {
                             mLabelSelectFromDate.setError("");
-                            mLabelErrorFromDate.setVisibility(View.VISIBLE);
-                            mLabelErrorFromDate.setText(getString(R.string.err_date_from_after_to));
+                            Toast.makeText(getApplicationContext(), getString(R.string.err_date_from_after_to), Toast.LENGTH_LONG).show();
                             mDatesToFromValid = false;
                             mAboutNbPages.setText("");
                         } else {
                             mLabelSelectFromDate.setError(null);
-                            mLabelErrorFromDate.setVisibility(View.GONE);
                             mLabelSelectToDate.setError(null);
-                            mLabelErrorToDate.setVisibility(View.GONE);
                             mDatesToFromValid = true;
                             setNbPagesAverage();
                         }
                     } else {
                         mLabelSelectFromDate.setError(null);
-                        mLabelErrorFromDate.setVisibility(View.GONE);
                         mDatesToFromValid = false;
                     }
                 }
@@ -422,36 +419,33 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
                 if(dateIsBeforeToday(chosenDate)) {
                     mLabelSelectToDate.setError("");
-                    mLabelErrorToDate.setVisibility(View.VISIBLE);
-                    mLabelErrorToDate.setText(getString(R.string.err_date_before_today));
+                    Toast.makeText(getApplicationContext(), getString(R.string.err_date_before_today), Toast.LENGTH_LONG).show();
                     mDatesToFromValid = false;
                     mButtonSave.setEnabled(false);
                     mAboutNbPages.setText("");
-                    //return;
                 } else {
                     if(mBeginDate!=null) {
                         if (!Utils.dateOneIsBeforeDateTwo(mBeginDate, chosenDate)) {
                             mLabelSelectToDate.setError("");
-                            mLabelErrorToDate.setVisibility(View.VISIBLE);
-                            mLabelErrorToDate.setText(getString(R.string.err_date_to_before_from));
+                            Toast.makeText(getApplicationContext(), getString(R.string.err_date_to_before_from), Toast.LENGTH_LONG).show();
+
                             mDatesToFromValid = false;
                             mAboutNbPages.setText("");
                         } else {
                             mDatesToFromValid = true;
                             mLabelSelectToDate.setError(null);
-                            if ((mBookId == DEFAULT_BOOK_ID) && dateIsBeforeToday(mBeginDate)) {
+                            //if new book with date before today
+                            //OR date from is invalid
+                            if (((mBookId == DEFAULT_BOOK_ID) && dateIsBeforeToday(mBeginDate)) || mLabelSelectFromDate.getError() != null) {
                                 mDatesToFromValid = false;
                                 mAboutNbPages.setText("");
                             } else {
-                                mLabelErrorFromDate.setVisibility(View.GONE);
                                 mLabelSelectFromDate.setError(null);
                             }
-                            mLabelErrorToDate.setVisibility(View.GONE);
                             setNbPagesAverage();
                         }
                     } else {
                         mLabelSelectToDate.setError(null);
-                        mLabelErrorToDate.setVisibility(View.GONE);
                         mDatesToFromValid = false;
                     }
                 }
@@ -472,6 +466,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        Resources res = getResources();
+        mAvgNbSecByPage = res.getInteger(R.integer.avg_nb_sec_by_page);
     }
 
     private void removeKeyBoard() {
@@ -488,7 +484,16 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         }
     }
     private void setNbPagesAverage() {
+        mNbTotalDays = Utils.calculateNbDaysToRead(mBeginDate, mEndDate, mTabWeekPlanning, mTotalDaysByWeek);
         mNbPagesToReadByDay = Utils.calculateNbPagesAverage(mNbPagesToRead, mBeginDate, mEndDate, mTabWeekPlanning, mTotalDaysByWeek);
+
+        if(mNbTotalDays != Utils.ERROR_NB_DAYS_TO_READ) {
+            String result = this.getResources().getQuantityString(R.plurals.days_count, mNbTotalDays, mNbTotalDays);
+            mTvNbTotalDays.setText(result);
+        } else {
+            mTvNbTotalDays.setText("");
+        }
+
         if (mNbPagesToReadByDay == Utils.ERROR_NB_PAGES_AVERAGE) {
             mAboutNbPages.setText("");
             mPagesToReadValid = false;
@@ -505,7 +510,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 mPagesToReadValid = false;
                 mButtonSave.setEnabled(false);
             } else {
-                String result = String.format(getString(R.string.b_detail_nb_pages_to_read_by_day), mNbPagesToReadByDay, text);
+                String result = this.getResources().getQuantityString(R.plurals.b_detail_nb_pages_to_read_by_day, mNbPagesToReadByDay, mNbPagesToReadByDay, text);
                 mAboutNbPages.setText(result);
                 mPagesToReadValid = true;
                 setButtonSaveState();
@@ -534,8 +539,9 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
         boolean intervaleOk = Utils.dateOneIsBeforeDateTwo(beginDate, endDate);
         if(!intervaleOk) {
-            mLabelErrorToDate.setVisibility(View.VISIBLE);
-            mLabelErrorToDate.setText(getString(R.string.err_date_to_before_from));
+            //mLabelErrorToDate.setVisibility(View.VISIBLE);
+            //mLabelErrorToDate.setText(getString(R.string.err_date_to_before_from));
+            Toast.makeText(this,getString(R.string.err_date_to_before_from), Toast.LENGTH_LONG).show();
             mLabelSelectToDate.setError("");
             mButtonSave.setEnabled(false);
             return;
@@ -723,8 +729,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             mPagesToReadValid = true;
             mNbPagesToRead = to-from+1;
             mValueNbPagesToRead.setText(String.valueOf(mNbPagesToRead));
-            Resources res = getResources();
-            mAvgNbSecByPage = res.getInteger(R.integer.avg_nb_sec_by_page);
+
             int total = mAvgNbSecByPage*mNbPagesToRead;
             String time = Utils.getTime(total, getString(R.string.label_hour), getString(R.string.label_minute));//TODO
             mValueTimeEstimated.setText(time);

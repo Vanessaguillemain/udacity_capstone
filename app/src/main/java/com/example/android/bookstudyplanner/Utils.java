@@ -38,6 +38,7 @@ public class Utils {
     public static final String BUNDLE_KEY_ERROR_ISBN = "BUNDLE_KEY_ERROR_ISBN";
     public static final String BUNDLE_KEY_ERROR_NO_BOOK_FOUND = "BUNDLE_KEY_ERROR_NO_BOOK_FOUND";
     public static final int ERROR_NB_PAGES_AVERAGE =-1;
+    public static final int ERROR_NB_DAYS_TO_READ =-1;
     public static final int ERROR_NB_DAYS_TO_READ_ZERO =-2;
     public static final String ERROR_NB_SECONDS_A_DAY = "ERROR_NB_SECONDS_A_DAY";
     public static final String RESULT_NO_PLANNING_TODAY = "RESULT_NO_PLANNING_TODAY";
@@ -144,7 +145,21 @@ public class Utils {
     }
 
     public static int calculateNbPagesAverage(int pagesToRead, Date fromDate, Date toDate, int[] weekPlanning, int nbDaysAWeek) {
-        if(pagesToRead >0 && fromDate != null && toDate != null && nbDaysAWeek > 0) {
+        if(pagesToRead >0) {
+            int nbTotalDaysToRead = calculateNbDaysToRead(fromDate, toDate, weekPlanning, nbDaysAWeek);
+            if(ERROR_NB_DAYS_TO_READ != nbTotalDaysToRead) {
+                if (nbTotalDaysToRead > 0) {
+                    return (int) Math.ceil((float) pagesToRead / nbTotalDaysToRead);
+                } else {
+                    return ERROR_NB_DAYS_TO_READ_ZERO;
+                }
+            }
+        }
+        return ERROR_NB_PAGES_AVERAGE;
+    }
+
+    public static int calculateNbDaysToRead(Date fromDate, Date toDate, int[] weekPlanning, int nbDaysAWeek) {
+        if(fromDate != null && toDate != null && nbDaysAWeek > 0) {
             int nbTotalDays = daysBetweenDatesIncluded(fromDate, toDate);
             int nbWeeks = (int)nbTotalDays/7;
 
@@ -157,14 +172,9 @@ public class Utils {
                 if(weekPlanning[index] == 1) nbDaysLeftToRead++;
             }
             int nbTotalDaysToRead = nbDaysToReadDuringWeeks + nbDaysLeftToRead;
-
-            if(nbTotalDaysToRead > 0) {
-                return (int) Math.ceil((float) pagesToRead / nbTotalDaysToRead);
-            } else {
-                return ERROR_NB_DAYS_TO_READ_ZERO;
-            }
+            return nbTotalDaysToRead;
         }
-        return ERROR_NB_PAGES_AVERAGE;
+        return ERROR_NB_DAYS_TO_READ;
     }
 
     /**

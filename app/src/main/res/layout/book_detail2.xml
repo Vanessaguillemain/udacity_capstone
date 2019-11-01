@@ -447,17 +447,9 @@
         android:text="@string/b_detail_estimation"/>
 
     <TextView
-        android:id="@+id/labelAbout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        app:layout_constraintStart_toEndOf="@+id/labelEstimation"
-        app:layout_constraintTop_toBottomOf="@+id/cbx7"
-        android:text="@string/b_detail_about"/>
-    <TextView
         android:id="@+id/aboutNbPages"
         android:layout_width="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/labelAbout"
+        app:layout_constraintStart_toEndOf="@+id/labelEstimation"
         app:layout_constraintTop_toBottomOf="@+id/cbx7"
         android:layout_height="wrap_content"/>
 

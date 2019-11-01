@@ -30,12 +30,15 @@
     <string name="err_pages_to_read_positive">Pages to read has to be greater than 0 !</string>
     <string name="err_read_time_greater_than_day">Your reading time exceeds 24h/day !</string>
 
-    <string name="b_detail_nb_pages_to_read_by_day">&#160;%1$d pages (%2$s)/day</string>
-
+    <plurals name="b_detail_nb_pages_to_read_by_day">
+        <item quantity="one">&#160;%d page (%s)/day</item>
+        <item quantity="other">&#160;%d pages (%s)/day</item>
+    </plurals>
 
     <string name="b_detail_title">Title :</string>
     <string name="hint_title">Title</string>
     <string name="b_detail_total_pages">Total pages :</string>
+    <string name="b_detail_avg_speed">Speed (sec/p.)</string>
     <string name="b_detail_i_want_to_read">Read :&#160;</string>
     <string name="b_detail_pages">&#160;pages</string>
     <string name="b_detail_from_page">From page :</string>
@@ -56,7 +59,6 @@
     <string name="b_detail_saturday">Sa</string>
     <string name="b_detail_sunday">Su</string>
     <string name="b_detail_estimation">Estimation :</string>
-    <string name="b_detail_about">About </string>
     <string name="b_detail_submit">Submit</string>
     <string name="b_detail_delete">Delete</string>
     <string name="today_label_minutes">minutes</string>

@@ -164,14 +164,15 @@
                     android:layout_marginStart="0dp"
                     android:labelFor="@id/valuePageCount"
                     android:gravity="center_vertical"
-                    android:text="Avg speed (sec/page) :" />
+                    android:text="@string/b_detail_avg_speed" />
 
                 <EditText
                     android:id="@+id/valueSpeed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    tools:text="120" />
+                    android:enabled="false"
+                    android:text="@integer/avg_nb_sec_by_page" />
             </LinearLayout>
 
             <LinearLayout
@@ -301,27 +302,14 @@
                     app:layout_constraintStart_toEndOf="@+id/labelFromDate"
                     app:layout_constraintTop_toBottomOf="@+id/labelPlanning"
                     android:text="@string/b_detail_pick_a_date"/>
-                <Button
-                    android:id="@+id/btnCalendarFrom"
-                    android:layout_marginStart="@dimen/medium_border_margin"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    app:layout_constraintEnd_toEndOf="@+id/guideline_center"
-                    app:layout_constraintTop_toBottomOf="@+id/labelPlanning"
-                    android:background="@drawable/ic_calendar"/>
 
-
-                <TextView
-                    android:id="@+id/labelErrorFromDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="@color/red"
-                    android:text="@string/b_detail_from_after_to"
-                    app:layout_constraintStart_toStartOf="@+id/guideline_center"
-                    app:layout_constraintTop_toBottomOf="@+id/labelPlanning"
-                    android:visibility="invisible"/>
-
+            <Button
+                android:id="@+id/btnCalendarFrom"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/ic_calendar"
+                app:layout_constraintStart_toEndOf="@+id/guideline_center"
+                app:layout_constraintTop_toBottomOf="@+id/labelPlanning" />
 
                 <TextView
                     android:id="@+id/labelToDate"
@@ -337,26 +325,14 @@
                     app:layout_constraintStart_toStartOf="@+id/labelSelectFromDate"
                     app:layout_constraintTop_toBottomOf="@+id/labelSelectFromDate"
                     android:text="@string/b_detail_pick_a_date"/>
+
                 <Button
-                    android:layout_marginStart="@dimen/medium_border_margin"
                     android:id="@+id/btnCalendarTo"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    app:layout_constraintEnd_toEndOf="@+id/guideline_center"
-                    app:layout_constraintTop_toBottomOf="@+id/btnCalendarFrom"
-                    android:background="@drawable/ic_calendar"/>
-
-
-                <TextView
-                    android:id="@+id/labelErrorToDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/red"
-                    android:textSize="12sp"
-                    android:text="@string/b_detail_to_before_from"
-                    app:layout_constraintStart_toStartOf="@+id/guideline_center"
-                    app:layout_constraintBottom_toBottomOf="@+id/labelToDate"
-                    android:visibility="invisible"/>
+                    android:background="@drawable/ic_calendar"
+                    app:layout_constraintStart_toEndOf="@+id/guideline_center"
+                    app:layout_constraintTop_toBottomOf="@+id/btnCalendarFrom" />
 
                 <TextView
                     android:id="@+id/labelFrequency"
@@ -479,17 +455,9 @@
                 android:text="@string/b_detail_estimation"/>
 
             <TextView
-                android:id="@+id/labelAbout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                app:layout_constraintStart_toEndOf="@+id/labelEstimation"
-                app:layout_constraintTop_toBottomOf="@+id/cbx7"
-                android:text="@string/b_detail_about"/>
-            <TextView
                 android:id="@+id/aboutNbPages"
                 android:layout_width="wrap_content"
-                app:layout_constraintStart_toEndOf="@+id/labelAbout"
+                app:layout_constraintStart_toEndOf="@+id/labelEstimation"
                 app:layout_constraintTop_toBottomOf="@+id/cbx7"
                 android:layout_height="wrap_content"/>
 
