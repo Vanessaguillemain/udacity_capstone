@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/light_grey">
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,6 +37,10 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:background="@color/white"
             android:layout_width="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:elevation="@dimen/card_elevation"
             android:layout_height="match_parent">
 
             <android.support.constraint.Guideline
@@ -111,7 +115,6 @@
                 android:inputType="text|textNoSuggestions"
                 android:maxLines="1"
                 android:minLines="1"
-                android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_end"
                 app:layout_constraintStart_toEndOf="@+id/imageBook_detail"
                 app:layout_constraintTop_toBottomOf="@+id/labelTitle"
@@ -141,7 +144,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:textSize="14sp"
                     tools:text="987" />
             </LinearLayout>
 
@@ -169,7 +171,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:textSize="14sp"
                     tools:text="120" />
             </LinearLayout>
 
@@ -191,14 +192,12 @@
                     android:id="@+id/valueNbPagesToRead"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/SubtitleText"
                     android:visibility="invisible"/>
                 <TextView
                     android:id="@+id/labelNbPagesToRead"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="invisible"
-                    style="@style/SubtitleText"
                     android:text="@string/b_detail_pages"/>
             </LinearLayout>
 
@@ -287,88 +286,86 @@
                 app:layout_constraintTop_toBottomOf="@+id/layout_read_to"
                 tools:text="25 days" />
 
-            <LinearLayout
-                android:id="@+id/layout_from_date"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="@+id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@+id/labelPlanning">
+
                 <TextView
                     android:id="@+id/labelFromDate"
                     android:layout_width="@dimen/book_detail_label_width"
                     android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@+id/labelPlanning"
                     android:text="@string/b_detail_from_date"/>
                 <TextView
                     android:id="@+id/labelSelectFromDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/labelFromDate"
+                    app:layout_constraintTop_toBottomOf="@+id/labelPlanning"
                     android:text="@string/b_detail_pick_a_date"/>
                 <Button
                     android:id="@+id/btnCalendarFrom"
                     android:layout_marginStart="@dimen/medium_border_margin"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_center"
+                    app:layout_constraintTop_toBottomOf="@+id/labelPlanning"
                     android:background="@drawable/ic_calendar"/>
+
+
                 <TextView
                     android:id="@+id/labelErrorFromDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="12sp"
                     android:textColor="@color/red"
                     android:text="@string/b_detail_from_after_to"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_center"
+                    app:layout_constraintTop_toBottomOf="@+id/labelPlanning"
                     android:visibility="invisible"/>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/layout_to_date"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="@+id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@+id/layout_from_date">
 
                 <TextView
                     android:id="@+id/labelToDate"
                     android:layout_width="@dimen/book_detail_label_width"
                     android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@+id/labelFromDate"
                     android:text="@string/b_detail_to_date"/>
                 <TextView
                     android:id="@+id/labelSelectToDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/labelSelectFromDate"
+                    app:layout_constraintTop_toBottomOf="@+id/labelSelectFromDate"
                     android:text="@string/b_detail_pick_a_date"/>
                 <Button
                     android:layout_marginStart="@dimen/medium_border_margin"
                     android:id="@+id/btnCalendarTo"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_center"
+                    app:layout_constraintTop_toBottomOf="@+id/btnCalendarFrom"
                     android:background="@drawable/ic_calendar"/>
+
+
                 <TextView
                     android:id="@+id/labelErrorToDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/red"
+                    android:textSize="12sp"
                     android:text="@string/b_detail_to_before_from"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_center"
+                    app:layout_constraintBottom_toBottomOf="@+id/labelToDate"
                     android:visibility="invisible"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_frequency_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="@+id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@+id/layout_to_date">
 
                 <TextView
                     android:id="@+id/labelFrequency"
                     style="@style/SubtitleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@+id/labelToDate"
                     android:text="@string/b_detail_read_frequency"/>
-            </LinearLayout>
-
-
 
             <CheckBox
                 android:id="@+id/cbx1"
@@ -382,7 +379,7 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline_start"
                 app:layout_constraintEnd_toStartOf="@+id/cbx2"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title"/>
+                app:layout_constraintTop_toBottomOf="@+id/labelFrequency"/>
 
             <CheckBox
                 android:id="@+id/cbx2"
@@ -396,7 +393,7 @@
                 app:layout_constraintStart_toEndOf="@+id/cbx1"
                 app:layout_constraintEnd_toStartOf="@+id/cbx3"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title"
+                app:layout_constraintTop_toBottomOf="@+id/labelFrequency"
                 android:text="@string/b_detail_tuesday" />
 
             <CheckBox
@@ -411,7 +408,7 @@
                 app:layout_constraintStart_toEndOf="@+id/cbx2"
                 app:layout_constraintEnd_toStartOf="@+id/cbx4"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title"
+                app:layout_constraintTop_toBottomOf="@+id/labelFrequency"
                 android:text="@string/b_detail_wednesday" />
 
             <CheckBox
@@ -426,7 +423,7 @@
                 app:layout_constraintStart_toEndOf="@+id/cbx3"
                 app:layout_constraintEnd_toStartOf="@+id/cbx5"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title"
+                app:layout_constraintTop_toBottomOf="@+id/labelFrequency"
                 android:text="@string/b_detail_thursday" />
 
             <CheckBox
@@ -441,7 +438,7 @@
                 app:layout_constraintStart_toEndOf="@+id/cbx4"
                 app:layout_constraintEnd_toStartOf="@+id/cbx6"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title"
+                app:layout_constraintTop_toBottomOf="@+id/labelFrequency"
                 android:text="@string/b_detail_friday" />
 
             <CheckBox
@@ -455,7 +452,7 @@
                 app:layout_constraintStart_toEndOf="@+id/cbx5"
                 app:layout_constraintEnd_toStartOf="@+id/cbx7"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title"
+                app:layout_constraintTop_toBottomOf="@+id/labelFrequency"
                 android:text="@string/b_detail_saturday" />
 
             <CheckBox
@@ -469,7 +466,7 @@
                 app:layout_constraintStart_toEndOf="@+id/cbx6"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_end_cbx"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintTop_toBottomOf="@+id/layout_frequency_title"
+                app:layout_constraintTop_toBottomOf="@+id/labelFrequency"
                 android:text="@string/b_detail_sunday" />
 
             <TextView
@@ -516,7 +513,7 @@
                 android:text="@string/b_detail_delete"
                 app:layout_constraintTop_toBottomOf="@+id/aboutNbPages"
                 app:layout_constraintStart_toEndOf="@+id/buttonSave"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+                app:layout_constraintEnd_toEndOf="@+id/guideline_end"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 android:theme="@style/DetailButton"/>
 

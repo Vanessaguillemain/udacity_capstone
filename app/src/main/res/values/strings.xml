@@ -31,15 +31,17 @@
     <string name="err_read_time_greater_than_day">Your reading time exceeds 24h/day !</string>
 
     <string name="b_detail_nb_pages_to_read_by_day">&#160;%1$d pages (%2$s)/day</string>
+
+
     <string name="b_detail_title">Title :</string>
     <string name="hint_title">Title</string>
     <string name="b_detail_total_pages">Total pages :</string>
-    <string name="b_detail_i_want_to_read">I want to read :&#160;</string>
+    <string name="b_detail_i_want_to_read">Read :&#160;</string>
     <string name="b_detail_pages">&#160;pages</string>
     <string name="b_detail_from_page">From page :</string>
     <string name="b_detail_to_page">To page :</string>
-    <string name="b_detail_estimated_time">Estimated time :&#160;</string>
-    <string name="b_detail_plan_reading">I want to plan reading :</string>
+    <string name="b_detail_estimated_time">During :&#160;</string>
+    <string name="b_detail_plan_reading">I plan reading :</string>
     <string name="b_detail_from_date">From :</string>
     <string name="b_detail_pick_a_date">Pick a date</string>
     <string name="b_detail_from_after_to">From is after To</string>
@@ -54,7 +56,7 @@
     <string name="b_detail_saturday">Sa</string>
     <string name="b_detail_sunday">Su</string>
     <string name="b_detail_estimation">Estimation :</string>
-    <string name="b_detail_about">About :</string>
+    <string name="b_detail_about">About </string>
     <string name="b_detail_submit">Submit</string>
     <string name="b_detail_delete">Delete</string>
     <string name="today_label_minutes">minutes</string>
