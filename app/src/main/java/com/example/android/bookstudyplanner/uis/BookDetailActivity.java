@@ -599,7 +599,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             public void run() {
             if(!newBook) {
                 //Delete all previous planning before inserting new plannings
-                Date firstDate = planning.get(0);
+                Date firstDate = mBeginDate;
                 mDb.planningDao().deletePlanningByBookIdAfterIncludeDate(mBookId, firstDate);
             }
             //inserting new planning
