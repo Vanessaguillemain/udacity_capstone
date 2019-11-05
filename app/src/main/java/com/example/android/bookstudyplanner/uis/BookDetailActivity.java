@@ -654,8 +654,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                         public void run() {
                         mDb.bookDao().deleteBookById(mBookId);
                         mDb.planningDao().deletePlanningByBookId(mBookId);
-                        //WidgetService.handleActionUpdateTodayWidgets(getApplicationContext());
-                            WidgetService.startActionUpdateWidgets(BookDetailActivity.this);
+                        WidgetService.startActionUpdateWidgets(BookDetailActivity.this);
                         finish();
                         }
                     });

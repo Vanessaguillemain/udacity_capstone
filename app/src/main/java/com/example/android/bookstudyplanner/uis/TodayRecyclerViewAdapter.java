@@ -143,6 +143,7 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
 
             btnDone = itemView.findViewById(R.id.btnDone);
             btnDone.setOnClickListener(this);
+            ivImageBook.setOnClickListener(this);//click opens Detail screen
         }
 
         @Override

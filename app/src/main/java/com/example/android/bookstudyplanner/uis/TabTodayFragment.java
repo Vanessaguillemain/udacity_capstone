@@ -2,6 +2,7 @@ package com.example.android.bookstudyplanner.uis;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -87,7 +88,7 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
 
     @Override
     public void onItemClick(View view, TextView tvPageCount, TextView tvMinutes,  int position) {
-        PlanningEntity planning = todayRecyclerViewAdapter.getItem(position);
+        final PlanningEntity planning = todayRecyclerViewAdapter.getItem(position);
 
         if(view.getId() == R.id.btnDone) {
 
@@ -134,7 +135,6 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
                     Double percentRead = Utils.getPercentRead(totalPagesRead, nbPagesToRead);
                     mDb.bookDao().updateBookReadingForBookId(mBookId, totalPagesRead, percentRead);
 
-                    //WidgetService.handleActionUpdateTodayWidgets(getContext());
                     WidgetService.startActionUpdateWidgets(getContext());
                 }
             });
@@ -142,6 +142,18 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
             Button b = view.getRootView().findViewById(R.id.btnDone);
             b.setEnabled(false);
 
+        } else {
+            AppExecutor.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    BookEntity book = mDb.bookDao().loadBookEntityById(planning.getBookId());
+                    Intent myIntent = new Intent(getActivity(), BookDetailActivity.class);
+                    myIntent.putExtra(Utils.INTENT_KEY_BOOK_DETAIL_ACTION, Utils.INTENT_VAL_BOOK_DETAIL_ACTION_MODIF);
+                    myIntent.putExtra(Utils.INTENT_KEY_BOOK, book);
+                    //TODO : try an animation
+                    getActivity().startActivity(myIntent);
+                }
+            });
         }
 
     }

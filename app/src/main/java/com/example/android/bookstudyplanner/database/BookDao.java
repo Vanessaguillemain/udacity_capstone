@@ -38,6 +38,9 @@ public interface BookDao {
     @Query("SELECT * FROM book WHERE id = :id")
     LiveData<BookEntity> loadBookById(int id);
 
+    @Query("SELECT * FROM book WHERE id = :id")
+    BookEntity loadBookEntityById(int id);
+
     @Query("SELECT nbPagesToRead FROM book WHERE id = :id")
     Integer loadNbPagesToReadBookById(int id);
 
