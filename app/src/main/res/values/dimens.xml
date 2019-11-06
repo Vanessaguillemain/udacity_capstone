@@ -29,6 +29,8 @@
     <!-- IMAGES -->
     <dimen name="books_image_width_little">92dp</dimen>
     <dimen name="books_image_height_little">138dp</dimen>
+    <dimen name="books_image_width_medium">118dp</dimen>
+    <dimen name="books_image_height_medium">177dp</dimen>
     <dimen name="books_image_width_large">145dp</dimen>
     <dimen name="books_image_height_large">218dp</dimen>
 
@@ -36,6 +38,9 @@
     <dimen name="books_image_height_search">202dp</dimen>
     <dimen name="height_search_tv_title">40dp</dimen>
     <dimen name="height_search_tv_pages">20dp</dimen>
+
+    <!-- TEXT SIZE -->
+    <dimen name="card_text_size">12sp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information

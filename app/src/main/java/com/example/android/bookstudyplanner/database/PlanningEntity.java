@@ -20,25 +20,33 @@ public class PlanningEntity {
     @NonNull
     private Integer nbPagesToRead;
     private Integer nbMinutesReading;
+    @NonNull
+    private int firstPage;
+    @NonNull
+    private int lastPage;
 
     private String title;
     private String imageLink;
 
     @Ignore
-    public PlanningEntity(Date date, int bookId, boolean done, Integer nbPagesToRead, Integer nbMinutesReading) {
+    public PlanningEntity(Date date, int bookId, boolean done, Integer nbPagesToRead, int firstPage, int lastPage, Integer nbMinutesReading) {
         this.date = date;
         this.bookId = bookId;
         this.done = done;
         this.nbPagesToRead = nbPagesToRead;
+        this.firstPage = firstPage;
+        this.lastPage = lastPage;
         this.nbMinutesReading = nbMinutesReading;
     }
 
 
-    public PlanningEntity(Date date, int bookId, boolean done, Integer nbPagesToRead, Integer nbMinutesReading, String title, String imageLink) {
+    public PlanningEntity(Date date, int bookId, boolean done, Integer nbPagesToRead, int firstPage, int lastPage, Integer nbMinutesReading, String title, String imageLink) {
         this.date = date;
         this.bookId = bookId;
         this.done = done;
         this.nbPagesToRead = nbPagesToRead;
+        this.firstPage = firstPage;
+        this.lastPage = lastPage;
         this.nbMinutesReading = nbMinutesReading;
         this.title = title;
         this.imageLink = imageLink;
@@ -98,5 +106,23 @@ public class PlanningEntity {
 
     public void setImageLink(String imageLink) {
         this.imageLink = imageLink;
+    }
+
+    @NonNull
+    public int getFirstPage() {
+        return firstPage;
+    }
+
+    public void setFirstPage(@NonNull int firstPage) {
+        this.firstPage = firstPage;
+    }
+
+    @NonNull
+    public int getLastPage() {
+        return lastPage;
+    }
+
+    public void setLastPage(@NonNull int lastPage) {
+        this.lastPage = lastPage;
     }
 }

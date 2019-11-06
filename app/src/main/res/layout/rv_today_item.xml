@@ -25,8 +25,8 @@
 
             <ImageView
                 android:id="@+id/ivImageBook_today"
-                android:layout_width="@dimen/books_image_width_large"
-                android:layout_height="@dimen/books_image_height_large"
+                android:layout_width="@dimen/books_image_width_little"
+                android:layout_height="@dimen/books_image_height_little"
                 android:scaleType="centerCrop"
                 android:layout_marginBottom="@dimen/medium_border_margin"
                 android:layout_marginTop="@dimen/medium_border_margin"
@@ -37,9 +37,54 @@
             <TextView
                 android:id="@+id/tvBookTitle_today"
                 android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:lines="2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/today_label_from_page"
+                        android:labelFor="@id/tvBookFromPage_today"
+                        android:textSize="@dimen/card_text_size" />
+                    <EditText
+                        android:id="@+id/tvBookFromPage_today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/card_text_size"
+                        android:inputType="number" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/today_label_to_page"
+                        android:labelFor="@id/tvBookToPage_today"
+                        android:textSize="@dimen/card_text_size"/>
+                    <EditText
+                        android:id="@+id/tvBookToPage_today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/card_text_size"
+                        android:inputType="number"/>
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,6 +100,8 @@
                         android:id="@+id/tvBookPagesCount_today"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:textSize="@dimen/card_text_size"
                         android:inputType="number" />
 
                     <TextView
@@ -62,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/today_label_pages"
                         android:labelFor="@id/tvBookPagesCount_today"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/card_text_size" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -73,13 +120,14 @@
                         android:id="@+id/tvBookMinutesCount_today"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/card_text_size"
                         android:inputType="number"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/today_label_minutes"
                         android:labelFor="@id/tvBookMinutesCount_today"
-                        android:textSize="12sp"/>
+                        android:textSize="@dimen/card_text_size"/>
                 </LinearLayout>
             </LinearLayout>
             <Button

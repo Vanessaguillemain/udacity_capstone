@@ -87,7 +87,7 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
     }
 
     @Override
-    public void onItemClick(View view, TextView tvPageCount, TextView tvMinutes,  int position) {
+    public void onItemClick(View view,TextView tvPageCount,TextView tvPageFrom, TextView tvPageTo, TextView tvMinutes,  int position) {
         final PlanningEntity planning = todayRecyclerViewAdapter.getItem(position);
 
         if(view.getId() == R.id.btnDone) {
@@ -121,20 +121,60 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
             if(tvMinutes.getText() != null && tvMinutes.getText().length() > 0) {
                 minutes = Integer.parseInt(tvMinutes.getText().toString());
             }
+            final int pageFrom = Integer.parseInt(tvPageFrom.getText().toString());
+            final int pageTo = Integer.parseInt(tvPageTo.getText().toString());
 
             //PlanningEntity
-            final PlanningEntity planning2 = new PlanningEntity(mDate, mBookId, true, pagesCount, minutes);
+            final PlanningEntity planningToday = new PlanningEntity(mDate, mBookId, true, pagesCount, pageFrom, pageTo, minutes);
             AppExecutor.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                    //update
-                    mDb.planningDao().updatePlanning(planning2);
+                    //update book
                     Integer nbPagesToRead = mDb.bookDao().loadNbPagesToReadBookById(mBookId);
                     Integer nbPagesReadBefore = mDb.bookDao().loadNbPagesReadBookById(mBookId);
                     Integer totalPagesRead = pagesCount + nbPagesReadBefore;
                     Double percentRead = Utils.getPercentRead(totalPagesRead, nbPagesToRead);
-                    mDb.bookDao().updateBookReadingForBookId(mBookId, totalPagesRead, percentRead);
+                    mDb.bookDao().updateBookReadingForBookId(mBookId, totalPagesRead, percentRead, pageTo);
 
+                    //delete all plannings from D day
+                    mDb.planningDao().deletePlanningByBookIdAfterIncludeDate(mBookId, mDate);
+
+                    //insert planning for today
+                    mDb.planningDao().insertPlanning(planningToday);
+
+                    //get data for new plannings after today
+                    int nbPagesLastToReadAfterToday = nbPagesToRead - totalPagesRead;
+                    String mSTabWeekPlanning = mDb.bookDao().loadWeekPlanningById(mBookId);
+                    int[] mITabWeekPlanning = Utils.getTabWeekPlanningFromString(mSTabWeekPlanning);
+                    int mTotalDaysByWeek = Utils.calculateNbDaysAWeek(mITabWeekPlanning);
+
+                    //mBeginDate = tomorrow for next plannings
+                    Date mBeginDate = Utils.dateAfter(Utils.getToday());
+                    Date mEndDate = mDb.bookDao().loadEndDateById(mBookId);
+                    int lastBookPage = mDb.bookDao().loadToPageNbById(mBookId);
+
+                    int mAvgNbSecByPage = getResources().getInteger(R.integer.avg_nb_sec_by_page);
+                    List<Date> planningDates = Utils.getPlanning(mBeginDate, mEndDate, mITabWeekPlanning);
+                    int mNbPagesToReadByDay = Utils.calculateNbPagesAverage(nbPagesLastToReadAfterToday, mBeginDate, mEndDate, mITabWeekPlanning, mTotalDaysByWeek);
+
+                    //insert all other plannings after today
+                    int firstPage = pageTo +1;
+                    int lastPage = firstPage + mNbPagesToReadByDay - 1;
+                    //inserting new planning, start with the second date, date today is already inserted
+                    int nbMinutesReading = mNbPagesToReadByDay*mAvgNbSecByPage/60;
+                    for (Date d : planningDates){
+                        PlanningEntity planning = new PlanningEntity(d, mBookId, false, mNbPagesToReadByDay, firstPage, lastPage, nbMinutesReading);
+                        mDb.planningDao().insertPlanning(planning);
+                        firstPage = lastPage + 1;
+                        lastPage = firstPage + mNbPagesToReadByDay - 1;
+                        if(lastPage > lastBookPage) {
+                            lastPage = lastBookPage;
+                            mNbPagesToReadByDay = lastPage - firstPage + 1;
+                            nbMinutesReading = mNbPagesToReadByDay*mAvgNbSecByPage/60;
+                        }
+                    }
+
+                    //Update widget
                     WidgetService.startActionUpdateWidgets(getContext());
                 }
             });
@@ -143,6 +183,7 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
             b.setEnabled(false);
 
         } else {
+            //open detail screen
             AppExecutor.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
@@ -164,6 +205,8 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
             for(PlanningEntity planningEntity : planningEntities) {
                 if(bookIdFromWidget == planningEntity.getBookId()) {
                     myRecyclerView.getLayoutManager().scrollToPosition(position);
+                    //TODO reload data in card planning today ?
+                    // ...
                     return;
                 } else {
                     position++;

@@ -539,8 +539,6 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
         boolean intervaleOk = Utils.dateOneIsBeforeDateTwo(beginDate, endDate);
         if(!intervaleOk) {
-            //mLabelErrorToDate.setVisibility(View.VISIBLE);
-            //mLabelErrorToDate.setText(getString(R.string.err_date_to_before_from));
             Toast.makeText(this,getString(R.string.err_date_to_before_from), Toast.LENGTH_LONG).show();
             mLabelSelectToDate.setError("");
             mButtonSave.setEnabled(false);
@@ -551,8 +549,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         String fromPage = mTvFromPage.getText().toString();
         Integer pageCount = Integer.parseInt(mValuePageCount.getText().toString());
 
-        Integer fromPageNb = Integer.parseInt(fromPage);
-        Integer toPageNb = Integer.parseInt(toPage);
+        final Integer fromPageNb = Integer.parseInt(fromPage);
+        final Integer toPageNb = Integer.parseInt(toPage);
         final Integer nbPagesToRead = toPageNb - fromPageNb +1;
 
         final Boolean newBook = (mBookId == DEFAULT_BOOK_ID);
@@ -560,18 +558,21 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         Integer readTimeInSeconds = null;
         Integer nbSecondsByPage = null;
         Double percentRead = 0d;
+        int lastPageRead = 0;
 
         if(!newBook) {
             nbPagesRead = mBook.getNbPagesRead();
             readTimeInSeconds = mBook.getReadTimeInSeconds();
             nbSecondsByPage = mBook.getNbSecondsByPage();
             percentRead = Utils.getPercentRead(nbPagesRead, nbPagesToRead);
+            lastPageRead = mBook.getLastPageRead();
+            //TODO
         }
 
         mWeekPlanning = Utils.getStringWeekPlanningFromTab(mTabWeekPlanning);
         //Book Entity
         final BookEntity book = new BookEntity(ISBN_ABSENT_VALUE,  title,  pageCount,  fromPageNb,  toPageNb, nbPagesToRead,
-                beginDate, endDate, mWeekPlanning, nbPagesRead, readTimeInSeconds, nbSecondsByPage, mImageLink, percentRead);
+                beginDate, endDate, mWeekPlanning, nbPagesRead, lastPageRead, readTimeInSeconds, nbSecondsByPage, mImageLink, percentRead);
 
         AppExecutor.getInstance().diskIO().execute(new Runnable() {
             @Override
@@ -593,24 +594,35 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         });
 
         //Planning calculation and insertion
-        final List<Date> planning = Utils.getPlanning(mBeginDate, mEndDate, mTabWeekPlanning, mTotalDaysByWeek);
+        final List<Date> planningDates = Utils.getPlanning(mBeginDate, mEndDate, mTabWeekPlanning, mTotalDaysByWeek);
         AppExecutor.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-            if(!newBook) {
-                //Delete all previous planning before inserting new plannings
-                Date firstDate = mBeginDate;
-                mDb.planningDao().deletePlanningByBookIdAfterIncludeDate(mBookId, firstDate);
-            }
-            //inserting new planning
-            for(Date d : planning) {
-                PlanningEntity planning = new PlanningEntity(d, mBookId, false, mNbPagesToReadByDay, mNbPagesToReadByDay*mAvgNbSecByPage/60);
-                mDb.planningDao().insertPlanning(planning);
-            }
+                if(!newBook) {
+                    //Delete all previous planning before inserting new plannings
+                    Date firstDate = mBeginDate;
+                    mDb.planningDao().deletePlanningByBookIdAfterIncludeDate(mBookId, firstDate);
+                }
+                int lastBookPage = mDb.bookDao().loadToPageNbById(mBookId);
+                int firstPage = fromPageNb;
+                int lastPage = fromPageNb + mNbPagesToReadByDay - 1;
+                int nbMinutesReading = mNbPagesToReadByDay*mAvgNbSecByPage/60;
+                //inserting new planning
+                for(Date d : planningDates) {
+                    PlanningEntity planning = new PlanningEntity(d, mBookId, false, mNbPagesToReadByDay, firstPage, lastPage, nbMinutesReading);
+                    mDb.planningDao().insertPlanning(planning);
+                    firstPage = lastPage + 1;
+                    lastPage = firstPage + mNbPagesToReadByDay - 1;
+                    if(lastPage > lastBookPage) {
+                        lastPage = lastBookPage;
+                        mNbPagesToReadByDay = lastPage - firstPage + 1;
+                        nbMinutesReading = mNbPagesToReadByDay*mAvgNbSecByPage/60;
+                    }
+                }
 
-            Intent resultIntent = new Intent();
-            setResult(Activity.RESULT_OK, resultIntent);
-            finish();
+                Intent resultIntent = new Intent();
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
             }
         });
 
@@ -730,7 +742,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             mValueNbPagesToRead.setText(String.valueOf(mNbPagesToRead));
 
             int total = mAvgNbSecByPage*mNbPagesToRead;
-            String time = Utils.getTime(total, getString(R.string.label_hour), getString(R.string.label_minute));//TODO
+            String time = Utils.getTime(total, getString(R.string.label_hour), getString(R.string.label_minute));
             mValueTimeEstimated.setText(time);
             mValueTimeEstimated.setVisibility(View.VISIBLE);
             mValueNbPagesToRead.setVisibility(View.VISIBLE);

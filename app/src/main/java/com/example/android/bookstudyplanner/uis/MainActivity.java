@@ -20,6 +20,7 @@ import com.example.android.bookstudyplanner.MainViewModel;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
 import com.example.android.bookstudyplanner.database.AppDatabase;
+import com.example.android.bookstudyplanner.database.AppExecutor;
 import com.example.android.bookstudyplanner.database.BookEntity;
 import com.example.android.bookstudyplanner.database.PlanningEntity;
 
@@ -69,6 +70,27 @@ public class MainActivity extends AppCompatActivity {
     private int tabToOpen = 0;
     private int bookIdFromWidget = Utils.INTENT_VAL_BOOK_ID_EMPTY;
 
+    //TODO remove after all tests
+    private void temporaryMethodDeleteAllPlannings(){
+        final AppDatabase mDb = AppDatabase.getInstance(getApplicationContext());
+        AppExecutor.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.planningDao().deleteAllPlannings();
+            }
+        });
+    }
+
+    //TODO remove after all tests
+    private void temporaryMethodEraseReadings(){
+        final AppDatabase mDb = AppDatabase.getInstance(getApplicationContext());
+        AppExecutor.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.bookDao().updateAllBooksEraseReadings();
+            }
+        });
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

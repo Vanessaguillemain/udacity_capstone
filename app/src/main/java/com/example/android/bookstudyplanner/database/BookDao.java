@@ -8,6 +8,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,8 +27,8 @@ public interface BookDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateBook(BookEntity bookEntry);
 
-    @Query("UPDATE book SET nbPagesRead=:nbPagesRead, percentRead=:percentRead WHERE id = :id")
-    void updateBookReadingForBookId(int id, int nbPagesRead, double percentRead);
+    @Query("UPDATE book SET nbPagesRead=:nbPagesRead, percentRead=:percentRead, lastPageRead=:lastPageRead  WHERE id = :id")
+    void updateBookReadingForBookId(int id, int nbPagesRead, double percentRead, int lastPageRead);
 
     @Delete
     void deleteBook(BookEntity bookEntry);
@@ -46,6 +47,24 @@ public interface BookDao {
 
     @Query("SELECT nbPagesRead FROM book WHERE id = :id")
     Integer loadNbPagesReadBookById(int id);
+
+    @Query("SELECT weekPlanning FROM book WHERE id = :id")
+    String loadWeekPlanningById(int id);
+
+    @Query("SELECT beginDate FROM book WHERE id = :id")
+    Date loadBeginDateById(int id);
+
+    @Query("SELECT endDate FROM book WHERE id = :id")
+    Date loadEndDateById(int id);
+
+    @Query("SELECT readTimeInSeconds FROM book WHERE id = :id")
+    Integer loadReadTimeInSecondsById(int id);
+
+    @Query("SELECT toPageNb FROM book WHERE id = :id")
+    Integer loadToPageNbById(int id);
+
+    @Query("UPDATE book SET nbPagesRead=0, percentRead=0, lastPageRead=0")
+    void updateAllBooksEraseReadings();
 
     @Query("SELECT percentRead FROM book WHERE id = :id")
     Double loadPercentReadBookById(int id);

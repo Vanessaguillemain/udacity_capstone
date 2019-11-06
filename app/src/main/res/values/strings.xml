@@ -61,7 +61,7 @@
     <string name="b_detail_estimation">Estimation :</string>
     <string name="b_detail_submit">Submit</string>
     <string name="b_detail_delete">Delete</string>
-    <string name="today_label_minutes">minutes</string>
+    <string name="today_label_minutes">min.</string>
     <string name="b_detail_msg_confirm_delete">Are you sure you want to delete?</string>
     <string name="b_detail_confirm_delete_yes">Yes delete</string>
     <string name="b_detail_confirm_delete_no">No</string>
@@ -91,6 +91,9 @@
 
     <!-- SCREEN TODAY  -->
     <string name="err_page_count_required">Count is required !</string>
+    <string name="err_page_from_required">From is required !</string>
+    <string name="err_page_to_required">To is required !</string>
+    <string name="err_nb_page_count_negative">x</string>
     <string name="today_label_pages">pages</string>
     <string name="title_your_program_today">Your program today :</string>
     <string name="today_label_done">DONE</string>
@@ -114,6 +117,8 @@
     <string name="err_no_web_connection">No Web connection</string>
     <string name="ask_retry">Retry</string>
     <string name="ask_exit_retry">Exit and retry</string>
+    <string name="today_label_from_page">page :</string>
+    <string name="today_label_to_page">to :</string>
 
     <plurals name="page_count">
         <item quantity="one">%d page</item>

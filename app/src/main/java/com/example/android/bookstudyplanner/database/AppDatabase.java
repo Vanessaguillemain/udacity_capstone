@@ -13,7 +13,7 @@ import android.util.Log;
  * Created by vanessa on 10/07/2019.
  */
 
-@Database(entities = {BookEntity.class, PlanningEntity.class}, version = 8, exportSchema = false)
+@Database(entities = {BookEntity.class, PlanningEntity.class}, version = 10, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -29,7 +29,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         AppDatabase.class, AppDatabase.DATABASE_NAME)
                         .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
-                                MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
+                                MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10)
                         .build();
             }
         }
@@ -95,6 +95,21 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE book ADD COLUMN percentRead REAL DEFAULT 0 NOT NULL");
+        }
+    };
+
+    static final Migration MIGRATION_8_9 = new Migration(8, 9) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE planning ADD COLUMN firstPage INTEGER DEFAULT -1 NOT NULL");
+            database.execSQL("ALTER TABLE planning ADD COLUMN lastPage INTEGER DEFAULT -1 NOT NULL");
+        }
+    };
+
+    static final Migration MIGRATION_9_10 = new Migration(9, 10) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE book ADD COLUMN lastPageRead INTEGER DEFAULT -1 NOT NULL");
         }
     };
 

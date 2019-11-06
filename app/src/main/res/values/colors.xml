@@ -18,6 +18,9 @@
     <color name="red">#FF0000</color>
     <color name="yellow">#FFFF00</color>
     <color name="pink">#FF00FF</color>
+    <color name="purple">#8A2BE2</color>
+    <color name="green_light">#32CD32</color>
+
     <color name="black">#000000</color>
     <color name="light_grey">#EEEEEE</color>
     <color name="very_light_grey">#EFEFEF</color>

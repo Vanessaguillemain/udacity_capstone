@@ -19,15 +19,15 @@ import java.util.List;
 @Dao
 public interface PlanningDao {
 
-    @Query("SELECT p.bookId, p.date, p.done, p.nbPagesToRead, p.nbMinutesReading, b.title, b.imageLink FROM book b, planning p WHERE p.bookId=b.id and p.date = :date")
+    @Query("SELECT p.bookId, p.date, p.done, p.firstPage, p.lastPage, p.nbPagesToRead, p.nbMinutesReading, b.title, b.imageLink FROM book b, planning p WHERE p.bookId=b.id and p.date = :date")
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     LiveData<List<PlanningEntity>> loadAllPlanningsForDate(Date date);
 
-    @Query("SELECT p.bookId, p.date, p.done, p.nbPagesToRead, p.nbMinutesReading, b.title, b.imageLink FROM book b, planning p WHERE p.bookId=b.id and p.date = :date and p.done=:done")
+    @Query("SELECT p.bookId, p.date, p.done, p.firstPage, p.lastPage, p.nbPagesToRead, p.nbMinutesReading, b.title, b.imageLink FROM book b, planning p WHERE p.bookId=b.id and p.date = :date and p.done=:done")
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     List<PlanningEntity> loadAllWidgetPlanningsForDate(Date date, boolean done);
 
-    @Query("SELECT p.bookId, p.date, p.done, p.nbPagesToRead, p.nbMinutesReading, b.title, b.imageLink FROM book b, planning p WHERE p.bookId=b.id and p.date = :date and p.bookId = :bookId")
+    @Query("SELECT p.bookId, p.date, p.done, p.firstPage, p.lastPage, p.nbPagesToRead, p.nbMinutesReading, b.title, b.imageLink FROM book b, planning p WHERE p.bookId=b.id and p.date = :date and p.bookId = :bookId")
     LiveData<PlanningEntity> loadPlanningsForBookAndDate(int bookId, Date date);
 
 
@@ -42,6 +42,10 @@ public interface PlanningDao {
 
     @Delete
     void deletePlanning(PlanningEntity planningEntity);
+
+    //TODO remove when release
+    @Query ("DELETE FROM planning")
+    void deleteAllPlannings();
 
     @Query("DELETE FROM planning WHERE bookId = :bookId AND date >= :date")
     void deletePlanningByBookIdAfterIncludeDate(int bookId, Date date);

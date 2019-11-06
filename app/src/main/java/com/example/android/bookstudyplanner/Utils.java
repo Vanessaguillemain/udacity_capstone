@@ -210,7 +210,6 @@ public class Utils {
     }
 
     public static List<Date> getPlanning(Date fromDate, Date toDate, int[] weekPlanning, int nbDaysAWeek) {
-        //todo : le planning retourné était de taille nulle, voir pourquoi
         if(fromDate != null && toDate != null) {
             List<Date> planning = new ArrayList<>();
             if (nbDaysAWeek == 0) {
@@ -229,6 +228,19 @@ public class Utils {
             return planning;
         }
         return null;
+    }
+
+    public static int calculateNbDaysAWeek(int[] weekPlanning) {
+        int nbDaysAWeek = 0;
+        for(int i=0; i<weekPlanning.length; i++){
+            nbDaysAWeek += weekPlanning[i];
+        }
+        return nbDaysAWeek;
+    }
+
+    public static List<Date> getPlanning(Date fromDate, Date toDate, int[] weekPlanning) {
+        int nbDaysAWeek = calculateNbDaysAWeek(weekPlanning);
+        return getPlanning( fromDate,  toDate,  weekPlanning,  nbDaysAWeek);
     }
 
     public static int[] getTabWeekPlanningFromString(String sWeekPlanning) {

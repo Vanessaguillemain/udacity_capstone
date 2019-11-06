@@ -60,10 +60,13 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
         }
 
         holder.tvBookPageCount.setText(String.valueOf(planning.getNbPagesToRead()));
+        holder.tvBookPageFrom.setText(String.valueOf(planning.getFirstPage()));
+        holder.tvBookPageTo.setText(String.valueOf(planning.getLastPage()));
         holder.tvBookMinuteCount.setText(String.valueOf(planning.getNbMinutesReading()));
         if(planning.isDone()) {
             holder.btnDone.setEnabled(false);
-            holder.tvBookPageCount.setEnabled(false);
+            holder.tvBookPageFrom.setEnabled(false);
+            holder.tvBookPageTo.setEnabled(false);
             holder.tvBookMinuteCount.setEnabled(false);
         } else {
             holder.btnDone.setEnabled(true);
@@ -99,6 +102,8 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
         ImageView ivImageBook;
         TextView tvBookTitle;
         TextView tvBookPageCount;
+        TextView tvBookPageFrom;
+        TextView tvBookPageTo;
         TextView tvBookMinuteCount;
         Button btnDone;
 
@@ -107,8 +112,10 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
             tvBookTitle = itemView.findViewById(R.id.tvBookTitle_today);
             ivImageBook = itemView.findViewById(R.id.ivImageBook_today);
             tvBookPageCount = itemView.findViewById(R.id.tvBookPagesCount_today);
+            tvBookPageFrom = itemView.findViewById(R.id.tvBookFromPage_today);
+            tvBookPageTo = itemView.findViewById(R.id.tvBookToPage_today);
 
-            tvBookPageCount.addTextChangedListener(new TextWatcher() {
+            tvBookPageFrom.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {}
                 @Override
@@ -117,13 +124,30 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
                 @Override
                 public void afterTextChanged(Editable s) {
                     if( s.length() == 0 ) {
-                        tvBookPageCount.setError(mInflater.getContext().getResources().getString(R.string.err_page_count_required));
+                        tvBookPageFrom.setError(mInflater.getContext().getResources().getString(R.string.err_page_from_required));
                         btnDone.setEnabled(false);
                     } else {
-                        btnDone.setEnabled(true);
+                        btnDone.setEnabled(calculateAndSetTotalPagesAndReadingAvg());
                     }
                 }
             });
+            tvBookPageTo.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if( s.length() == 0 ) {
+                        tvBookPageTo.setError(mInflater.getContext().getResources().getString(R.string.err_page_to_required));
+                        btnDone.setEnabled(false);
+                    } else {
+                        btnDone.setEnabled(calculateAndSetTotalPagesAndReadingAvg());
+                    }
+                }
+            });
+
 
             tvBookMinuteCount = itemView.findViewById(R.id.tvBookMinutesCount_today);
             tvBookMinuteCount.addTextChangedListener(new TextWatcher() {
@@ -146,9 +170,29 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
             ivImageBook.setOnClickListener(this);//click opens Detail screen
         }
 
+        private boolean calculateAndSetTotalPagesAndReadingAvg() {
+            if(tvBookPageFrom.getText() != null && tvBookPageFrom.getText().length()>0 && tvBookPageTo.getText() != null && tvBookPageTo.getText().length() >0) {
+                int mAvgNbSecByPage = mInflater.getContext().getResources().getInteger(R.integer.avg_nb_sec_by_page);
+                int pageFrom = Integer.parseInt(tvBookPageFrom.getText().toString());
+                int pageTo = Integer.parseInt(tvBookPageTo.getText().toString());
+                int nbPages = pageTo - pageFrom + 1;
+                if(nbPages >= 0) {
+                    tvBookPageCount.setText(String.valueOf(nbPages));
+                    tvBookMinuteCount.setText(String.valueOf(mAvgNbSecByPage*nbPages/60));
+                    return true;
+                } else {
+                    String errText = mInflater.getContext().getResources().getString(R.string.err_nb_page_count_negative);
+                    tvBookPageCount.setText(errText);
+                    tvBookMinuteCount.setText(errText);
+                    return false;
+                }
+            }
+            return true;
+        }
+
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, tvBookPageCount, tvBookMinuteCount, getAdapterPosition() );
+            if (mClickListener != null) mClickListener.onItemClick(view, tvBookPageCount,tvBookPageFrom, tvBookPageTo, tvBookMinuteCount, getAdapterPosition() );
         }
     }
 
@@ -164,7 +208,7 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(View view, TextView pageCount, TextView minutes, int position);
+        void onItemClick(View view, TextView pageCount, TextView tvPageFrom, TextView tvPageTo, TextView minutes, int position);
     }
 
 }
