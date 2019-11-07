@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- DETAIL BOOK -->
+    <dimen name="guideline_end_cbx_width">40dp</dimen>
+    <dimen name="txt_box_text_size">12sp</dimen>
+    <dimen name="margin_constraint_layout">20dp</dimen>
+    <dimen name="margin_guidelines">20dp</dimen>
+
+    <!-- STYLE -->
+    <dimen name="text_size">16sp</dimen>
+    <dimen name="main_tv_error_text_size">22sp</dimen>
+
+    <!-- SCREEN BOOKS SIZES -->
+    <dimen name="book_title_text_size">20sp</dimen>
+    <dimen name="book_content_text_size">16sp</dimen>
+    <dimen name="books_label_width">150dp</dimen>
+    <dimen name="btn_calendar_size">20dp</dimen>
+
+    <!-- SCREEN TODAY TEXT SIZE -->
+    <dimen name="today_title_text_size">22sp</dimen>
+</resources>

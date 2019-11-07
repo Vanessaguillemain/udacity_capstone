@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/tv_error_no_plannings"
-        android:textSize="@dimen/main_tv_error_text_size"
+        android:textSize="@dimen/today_title_text_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

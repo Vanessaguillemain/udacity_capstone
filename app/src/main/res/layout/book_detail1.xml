@@ -48,35 +48,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="20dp" />
+                app:layout_constraintGuide_begin="@dimen/margin_guidelines" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="20dp" />
+                app:layout_constraintGuide_begin="@dimen/margin_guidelines" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline_end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_end="20dp" />
+                app:layout_constraintGuide_end="@dimen/margin_guidelines" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline_end_cbx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/guideline_end_cbx_width" />
+                app:layout_constraintGuide_end="@dimen/guideline_end_cbx_width" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline_bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_end="20dp" />
+                app:layout_constraintGuide_end="@dimen/margin_guidelines" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline_center"
@@ -304,13 +304,13 @@
                     app:layout_constraintTop_toBottomOf="@+id/labelPlanning"
                     android:text="@string/b_detail_pick_a_date"/>
 
-            <Button
-                android:id="@+id/btnCalendarFrom"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/ic_calendar"
-                app:layout_constraintStart_toEndOf="@+id/guideline_center"
-                app:layout_constraintTop_toBottomOf="@+id/labelPlanning" />
+                <Button
+                    android:id="@+id/btnCalendarFrom"
+                    android:layout_width="@dimen/btn_calendar_size"
+                    android:layout_height="@dimen/btn_calendar_size"
+                    android:background="@drawable/ic_calendar"
+                    app:layout_constraintStart_toEndOf="@+id/guideline_center"
+                    app:layout_constraintTop_toBottomOf="@+id/labelPlanning" />
 
                 <TextView
                     android:id="@+id/labelToDate"
@@ -329,8 +329,8 @@
 
                 <Button
                     android:id="@+id/btnCalendarTo"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/btn_calendar_size"
+                    android:layout_height="@dimen/btn_calendar_size"
                     android:background="@drawable/ic_calendar"
                     app:layout_constraintStart_toEndOf="@+id/guideline_center"
                     app:layout_constraintTop_toBottomOf="@+id/btnCalendarFrom" />
@@ -363,7 +363,6 @@
                 android:id="@+id/cbx2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:background="@drawable/radiobtn_bck"
                 android:button="@null"
                 android:checked="true"
@@ -378,7 +377,6 @@
                 android:id="@+id/cbx3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:background="@drawable/radiobtn_bck"
                 android:button="@null"
                 android:checked="true"
@@ -393,7 +391,6 @@
                 android:id="@+id/cbx4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:background="@drawable/radiobtn_bck"
                 android:button="@null"
                 android:checked="true"
@@ -408,7 +405,6 @@
                 android:id="@+id/cbx5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:background="@drawable/radiobtn_bck"
                 android:button="@null"
                 android:checked="true"
@@ -423,7 +419,6 @@
                 android:id="@+id/cbx6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:background="@drawable/radiobtn_bck"
                 android:button="@null"
                 android:gravity="center"
@@ -437,7 +432,6 @@
                 android:id="@+id/cbx7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:background="@drawable/radiobtn_bck"
                 android:button="@null"
                 android:gravity="center"

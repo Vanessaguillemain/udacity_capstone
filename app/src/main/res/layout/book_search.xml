@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             app:iconifiedByDefault="false"
             app:background="@null"
-
+            android:textSize="@dimen/main_tv_error_text_size"
             app:queryHint="Book title, author or ISBN" />
 
         <TextView
