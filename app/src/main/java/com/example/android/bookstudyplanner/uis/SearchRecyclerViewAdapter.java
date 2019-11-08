@@ -108,7 +108,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
                 tvBookTitle.setText(R.string.err_search_title_not_found);
             }
             if (volume.getVolumeInfoPageCount() != null && !volume.getVolumeInfoPageCount().equals(MyVolume.NO_PAGE_COUNT)) {
-                String pageCount = String.valueOf(volume.getVolumeInfoPageCount())+ R.string.label_pages;
+                String pageCount = String.valueOf(volume.getVolumeInfoPageCount())+ mInflater.getContext().getResources().getString(R.string.label_pages);
                 tvBookPageCount.setText(pageCount);
             } else {
                 tvBookPageCount.setText(R.string.label_search_no_pages);

@@ -27,12 +27,12 @@
 
             <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/imageBook_search"
-                android:layout_width="130dp"
-                android:layout_height="190dp"
+                android:scaleType="centerCrop"
+                android:layout_width="@dimen/books_image_width_little"
+                android:layout_height="@dimen/books_image_height_little"
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:layout_gravity="center_horizontal"
-                android:scaleType="centerCrop"
                 android:transitionName="@string/transition_photo"
                 android:layout_margin="4dp"
                 android:contentDescription="@string/desc_book_image" />
@@ -41,6 +41,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/height_search_tv_title"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:textSize="10sp"/>
 
             <TextView
