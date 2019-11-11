@@ -460,18 +460,13 @@ public class Utils {
     public static long getDiffForMidnight() {
         Calendar now = Calendar.getInstance();
         Calendar midNight = Calendar.getInstance();
-        midNight.set(Calendar.HOUR, 12);
+        midNight.set(Calendar.HOUR, 24);
         midNight.set(Calendar.MINUTE, 0);
         midNight.set(Calendar.SECOND, 0);
         midNight.set(Calendar.MILLISECOND, 0);
         midNight.set(Calendar.AM_PM, Calendar.AM);
 
-        long diff = now.getTimeInMillis() - midNight.getTimeInMillis();
-
-        if (diff < 0) {
-            midNight.add(Calendar.DAY_OF_MONTH, 1);
-            diff = midNight.getTimeInMillis() - now.getTimeInMillis();
-        }
+        long diff = midNight.getTimeInMillis() - now.getTimeInMillis();
         return diff;
     }
 }
