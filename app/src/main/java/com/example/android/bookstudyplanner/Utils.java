@@ -289,6 +289,10 @@ public class Utils {
         return addDays(date, 1);
     }
 
+    public static Date dateBefore(Date date) {
+        return addDays(date, -1);
+    }
+
     /**
      * Gives the index of the Day (Calendar.DAY_OF_WEEK ) for the date given.
      * @param date : the date whe want to know the day of week
@@ -453,4 +457,21 @@ public class Utils {
         Log.d("Display Info", "dpHeight=" + dpHeight);
     }
 
+    public static long getDiffForMidnight() {
+        Calendar now = Calendar.getInstance();
+        Calendar midNight = Calendar.getInstance();
+        midNight.set(Calendar.HOUR, 12);
+        midNight.set(Calendar.MINUTE, 0);
+        midNight.set(Calendar.SECOND, 0);
+        midNight.set(Calendar.MILLISECOND, 0);
+        midNight.set(Calendar.AM_PM, Calendar.AM);
+
+        long diff = now.getTimeInMillis() - midNight.getTimeInMillis();
+
+        if (diff < 0) {
+            midNight.add(Calendar.DAY_OF_MONTH, 1);
+            diff = midNight.getTimeInMillis() - now.getTimeInMillis();
+        }
+        return diff;
+    }
 }

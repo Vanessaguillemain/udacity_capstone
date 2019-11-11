@@ -55,6 +55,7 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
         String formatedDate = Utils.getFormatedDateFromDate(book.getEndDate(), context);
         holder.tvBookEndDate.setText(formatedDate);
         holder.tvPagesToRead.setText(String.valueOf(book.getNbPagesToRead()));
+        holder.tvPagesAlreadyRead.setText(String.valueOf(book.getNbPagesRead()));
         String progress = String.valueOf(book.getPercentRead()) + context.getResources().getString(R.string.b_search_label_percent);
         holder.tvBookProgress.setText(progress);
     }
@@ -84,6 +85,7 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
         TextView tvBookTitle;
         TextView tvBookEndDate;
         TextView tvPagesToRead;
+        TextView tvPagesAlreadyRead;
         TextView tvBookProgress;
 
         BooksViewHolder(View itemView) {
@@ -92,6 +94,7 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
             tvBookTitle = itemView.findViewById(R.id.tvBookTitle_books);
             tvBookEndDate = itemView.findViewById(R.id.tvBookEndDate_books);
             tvPagesToRead = itemView.findViewById(R.id.tvBookPagesToRead_books);
+            tvPagesAlreadyRead = itemView.findViewById(R.id.tvBookPagesAlreadyRead_books);
             tvBookProgress = itemView.findViewById(R.id.tvBookProgress_books);
             itemView.setOnClickListener(this);
         }

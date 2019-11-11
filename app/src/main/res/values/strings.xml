@@ -85,7 +85,8 @@
 
     <!-- SCREEN BOOKS  -->
     <string name="b_search_label_end_date">End date : </string>
-    <string name="b_search_label_pages_to_read">Pages to read : </string>
+    <string name="b_search_label_pages_to_read">Total to read : </string>
+    <string name="b_search_label_pages_already_read">Already read : </string>
     <string name="b_search_label_progression">Progression :</string>
     <string name="b_search_label_percent">&#160;%</string>
 

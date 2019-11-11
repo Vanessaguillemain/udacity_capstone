@@ -1,5 +1,6 @@
 package com.example.android.bookstudyplanner.uis;
 
+import android.app.Fragment;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
@@ -19,6 +20,8 @@ import android.widget.LinearLayout;
 import com.example.android.bookstudyplanner.MainViewModel;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
+import com.example.android.bookstudyplanner.bookservice.MidnightUpdateTask;
+import com.example.android.bookstudyplanner.bookservice.MidnightUtilities;
 import com.example.android.bookstudyplanner.database.AppDatabase;
 import com.example.android.bookstudyplanner.database.AppExecutor;
 import com.example.android.bookstudyplanner.database.BookEntity;
@@ -143,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
 
         hideFABMenu(!fabExpanded);
 
+        //Schedule the midnight update
+        MidnightUtilities.scheduleMidnightUpdate(this);
     }
 
     private void initListeners() {

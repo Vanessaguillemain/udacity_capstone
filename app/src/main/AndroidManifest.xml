@@ -56,6 +56,12 @@
         </receiver>
 
         <service android:name=".bookservice.WidgetService" />
+        <service android:name=".bookservice.MidnightUpdateFirebaseJobService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

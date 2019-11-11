@@ -160,7 +160,7 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
                     //insert all other plannings after today
                     int firstPage = pageTo +1;
                     int lastPage = firstPage + mNbPagesToReadByDay - 1;
-                    //inserting new planning, start with the second date, date today is already inserted
+                    //inserting new plannings for tomorrow and after
                     int nbMinutesReading = mNbPagesToReadByDay*mAvgNbSecByPage/60;
                     for (Date d : planningDates){
                         PlanningEntity planning = new PlanningEntity(d, mBookId, false, mNbPagesToReadByDay, firstPage, lastPage, nbMinutesReading);

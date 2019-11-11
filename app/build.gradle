@@ -76,4 +76,6 @@ dependencies {
     compile 'com.google.apis:google-api-services-books:v1-rev94-1.23.0'
     compile 'com.google.http-client:google-http-client-android:1.21.0'
 
+    compile 'com.firebase:firebase-jobdispatcher:0.5.0'
+
 }
