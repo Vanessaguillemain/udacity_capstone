@@ -457,11 +457,13 @@ public class Utils {
         Log.d("Display Info", "dpHeight=" + dpHeight);
     }
 
-    public static long getDiffForMidnight() {
+    //we set starting point for update at midnight and 30 minutes
+    //so we are sure the date is not the same date
+    public static long getDiffForMidnightThirty() {
         Calendar now = Calendar.getInstance();
         Calendar midNight = Calendar.getInstance();
         midNight.set(Calendar.HOUR, 24);
-        midNight.set(Calendar.MINUTE, 0);
+        midNight.set(Calendar.MINUTE, 30);
         midNight.set(Calendar.SECOND, 0);
         midNight.set(Calendar.MILLISECOND, 0);
         midNight.set(Calendar.AM_PM, Calendar.AM);

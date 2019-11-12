@@ -41,7 +41,7 @@
 
     <!-- TEXT SIZE -->
     <dimen name="card_text_size">12sp</dimen>
-    <dimen name="book_search_text_size">28sp</dimen>
+    <dimen name="book_search_text_size">18sp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information

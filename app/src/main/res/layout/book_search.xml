@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             app:iconifiedByDefault="false"
             app:background="@null"
-            android:textSize="@dimen/book_search_text_size"
+            app:theme="@style/AppSearchView"
             app:queryHint="Book title, author or ISBN" />
 
         <TextView

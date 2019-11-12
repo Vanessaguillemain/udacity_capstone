@@ -30,7 +30,7 @@ public class MidnightUtilities {
     synchronized public static void scheduleMidnightUpdate(@NonNull final Context context) {
 
         if(sFirstJob) {
-            long diff = Utils.getDiffForMidnight();
+            long diff = Utils.getDiffForMidnightThirty();
 
             int startSeconds = (int) (diff / 1000); // tell the start seconds
             int endSeconds = startSeconds + SYNC_FLEXTIME_SECONDS; // within delay

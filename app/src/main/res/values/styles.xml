@@ -23,6 +23,9 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/text_size</item>
     </style>
+    <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
+        <item name="android:textSize">@dimen/book_search_text_size</item>
+    </style>
 
 </resources>
 
