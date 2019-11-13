@@ -1,5 +1,6 @@
 package com.example.android.bookstudyplanner.uis;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
@@ -7,12 +8,19 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.transition.Slide;
 import android.transition.TransitionInflater;
 import android.support.v7.app.AlertDialog;
@@ -33,6 +41,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.bookstudyplanner.AddBookViewModel;
+import com.example.android.bookstudyplanner.BitmapUtils;
+import com.example.android.bookstudyplanner.BuildConfig;
 import com.example.android.bookstudyplanner.R;
 import com.example.android.bookstudyplanner.Utils;
 import com.example.android.bookstudyplanner.bookservice.WidgetService;
@@ -45,6 +55,9 @@ import com.example.android.bookstudyplanner.database.PlanningEntity;
 import com.example.android.bookstudyplanner.entities.MyVolume;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -136,6 +149,13 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     // Member variable for the Database
     private AppDatabase mDb;
     private int mBookId = DEFAULT_BOOK_ID;
+
+    //for taking Picture
+    Uri mFile;
+    private String mTempPhotoPath;
+    private Uri mPhotoURI;
+    private Bitmap mResultsBitmap;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -243,6 +263,85 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                }
 
            }
+        }
+
+        //Manage Picture
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            mImageBook.setEnabled(false);
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE }, 0);
+        }
+    }
+
+    public void takePicture(View view) {
+        // Create the capture image intent
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the temporary File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = BitmapUtils.createTempImageFile(this);
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                ex.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+
+                // Get the path of the temporary file
+                mTempPhotoPath = photoFile.getAbsolutePath();
+
+                String authority = BuildConfig.APPLICATION_ID + ".provider";
+
+                // Get the content URI for the image file
+                mPhotoURI = FileProvider.getUriForFile(this, authority, photoFile);
+
+                // Add the URI so the camera can store the image
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mPhotoURI);
+
+                // Launch the camera activity
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+
+    }
+    //Manage Picture
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 0) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                mImageBook.setEnabled(true);
+            }
+        }
+    }
+
+    //Manage Picture
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
+
+                // Resample the saved image to fit the ImageView
+                //mResultsBitmap = BitmapUtils.resamplePic(this, mTempPhotoPath);
+                mResultsBitmap = BitmapUtils.getResizedBitmap(mTempPhotoPath,200,300);
+
+                // Delete the temporary image file
+                //BitmapUtils.deleteImageFile(this, mTempPhotoPath);
+                // Save the image
+                //mImageLink = BitmapUtils.saveImage(this, mResultsBitmap);
+                //mImageLink = mTempPhotoPath.toString();
+                mImageLink = mPhotoURI.toString();
+
+                //mImageLink = mResultsBitmap;
+                Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
+
+            } else {
+                // Otherwise, delete the temporary image file
+                BitmapUtils.deleteImageFile(this, mTempPhotoPath);
+                Picasso.with(this).load(R.drawable.photobook).into((ImageView) mImageBook);
+            }
         }
     }
 
