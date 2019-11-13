@@ -8,4 +8,9 @@
     <!-- TEXTS -->
     <integer name="books_title_width">45</integer>
     <integer name="today_title_width">40</integer>
+
+    <!-- DETAIL BOOK -->
+    <integer name="picture_height">300</integer>
+    <integer name="picture_width">200</integer>
+
 </resources>

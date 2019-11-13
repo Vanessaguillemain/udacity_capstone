@@ -23,6 +23,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -37,40 +38,17 @@ import android.graphics.Matrix;
 
 public class BitmapUtils {
 
+    // Constant for logging
+    private static final String TAG = BitmapUtils.class.getSimpleName();
+
     /**
-     * Resamples the captured photo to fit the screen for better memory usage.
+     * Resizes the image given with new width and height
      *
-     * @param context   The application context.
-     * @param imagePath The path of the photo to be resampled.
-     * @return The resampled bitmap
+     * @param imagePath The path of the photo to be resized.
+     * @param newWidth The new width for the photo.
+     * @param newHeight The new height for the photo.
+     * @return The Bitmap resized.
      */
-    public static Bitmap resamplePic(Context context, String imagePath) {
-
-        // Get device screen size information
-        DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        manager.getDefaultDisplay().getMetrics(metrics);
-
-        int targetH = metrics.heightPixels;
-        int targetW = metrics.widthPixels;
-
-        // Get the dimensions of the original bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(imagePath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-
-        return BitmapFactory.decodeFile(imagePath);
-    }
-
     public static Bitmap getResizedBitmap(String imagePath, int newWidth, int newHeight) {
         Bitmap bm = BitmapFactory.decodeFile(imagePath);
         int width = bm.getWidth();
@@ -79,6 +57,7 @@ public class BitmapUtils {
         float scaleHeight = ((float) newHeight) / height;
         // CREATE A MATRIX FOR THE MANIPULATION
         Matrix matrix = new Matrix();
+
         // RESIZE THE BIT MAP
         matrix.postScale(scaleWidth, scaleHeight);
 
@@ -90,16 +69,15 @@ public class BitmapUtils {
     }
 
     /**
-     * Creates the temporary image file in the cache directory.
+     * Creates the image file in the directory.
      *
-     * @return The temporary image file.
+     * @return The image file.
      * @throws IOException Thrown if there is an error creating the file
      */
-    public static File createTempImageFile(Context context) throws IOException {
+    public static File createImageFile(Context context) throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
                 Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        //File storageDir = context.getExternalCacheDir();
         File storageDir = new File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                         + "/BookStudyPlanner");
@@ -128,7 +106,7 @@ public class BitmapUtils {
         // If there is an error deleting the file, show a Toast
         if (!deleted) {
             String errorMessage = context.getString(R.string.error);
-            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show();
+            Log.e(TAG, errorMessage);
         }
 
         return deleted;
@@ -148,7 +126,6 @@ public class BitmapUtils {
         context.sendBroadcast(mediaScanIntent);
     }
 
-
     /**
      * Helper method for saving the image.
      *
@@ -156,41 +133,21 @@ public class BitmapUtils {
      * @param image   The image to be saved.
      * @return The path of the saved image.
      */
-    public static String saveImage(Context context, Bitmap image) {
+    public static String saveImage(Context context, Bitmap image, String path) {
 
         String savedImagePath = null;
-
-        // Create the new file in the external storage
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                Locale.getDefault()).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + ".jpg";
-        File storageDir = new File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                        + "/BookStudyPlanner");
-        boolean success = true;
-        if (!storageDir.exists()) {
-            success = storageDir.mkdirs();
+        File imageFile = new File(path);
+        savedImagePath = imageFile.getAbsolutePath();
+        try {
+            OutputStream fOut = new FileOutputStream(imageFile);
+            image.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            fOut.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        // Save the new Bitmap
-        if (success) {
-            File imageFile = new File(storageDir, imageFileName);
-            savedImagePath = imageFile.getAbsolutePath();
-            try {
-                OutputStream fOut = new FileOutputStream(imageFile);
-                image.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                fOut.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            // Add the image to the system gallery
-            galleryAddPic(context, savedImagePath);
-
-            // Show a Toast with the save location
-            String savedMessage = context.getString(R.string.saved_message, savedImagePath);
-            Toast.makeText(context, savedMessage, Toast.LENGTH_SHORT).show();
-        }
+        // Add the image to the system gallery
+        galleryAddPic(context, savedImagePath);
 
         return savedImagePath;
     }

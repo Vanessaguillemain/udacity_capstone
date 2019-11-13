@@ -57,7 +57,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -82,6 +81,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private final String BUNDLE_KEY_TEXT_FROM_DATE = "BUNDLE_KEY_TEXT_FROM_DATE";
     private final String BUNDLE_KEY_TEXT_TO_DATE = "BUNDLE_KEY_TEXT_TO_DATE";
     private final String BUNDLE_KEY_IMAGE_LINK = "BUNDLE_KEY_IMAGE_LINK";
+    private final String BUNDLE_KEY_PHOTO_PATH = "BUNDLE_KEY_PHOTO_PATH";
 
     private final String STRING_NUMBER_PAGE_NULL = "0";
     private final String STRING_NUMBER_PAGE_ONE = "1";
@@ -152,9 +152,9 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
     //for taking Picture
     Uri mFile;
-    private String mTempPhotoPath;
+    private String mPhotoPath;
     private Uri mPhotoURI;
-    private Bitmap mResultsBitmap;
+    private Bitmap mResizedBitmap;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
@@ -173,6 +173,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             String sBegin = savedInstanceState.getString(BUNDLE_KEY_TEXT_FROM_DATE);
             String sEnd = savedInstanceState.getString(BUNDLE_KEY_TEXT_TO_DATE);
             mImageLink = savedInstanceState.getString(BUNDLE_KEY_IMAGE_LINK);
+            mPhotoPath = savedInstanceState.getString(BUNDLE_KEY_PHOTO_PATH);
 
             //Save locally the dates to avoid them to be wipe off by data base values
             if(sBegin != null && !sBegin.equals(defaultDate)) {
@@ -281,7 +282,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             // Create the temporary File where the photo should go
             File photoFile = null;
             try {
-                photoFile = BitmapUtils.createTempImageFile(this);
+                photoFile = BitmapUtils.createImageFile(this);
             } catch (IOException ex) {
                 // Error occurred while creating the File
                 ex.printStackTrace();
@@ -290,7 +291,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             if (photoFile != null) {
 
                 // Get the path of the temporary file
-                mTempPhotoPath = photoFile.getAbsolutePath();
+                mPhotoPath = photoFile.getAbsolutePath();
 
                 String authority = BuildConfig.APPLICATION_ID + ".provider";
 
@@ -324,23 +325,23 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             if (resultCode == RESULT_OK) {
 
                 // Resample the saved image to fit the ImageView
-                //mResultsBitmap = BitmapUtils.resamplePic(this, mTempPhotoPath);
-                mResultsBitmap = BitmapUtils.getResizedBitmap(mTempPhotoPath,200,300);
+                mResizedBitmap = BitmapUtils.getResizedBitmap(mPhotoPath, getResources().getInteger(R.integer.picture_width),getResources().getInteger(R.integer.picture_height));
 
-                // Delete the temporary image file
-                //BitmapUtils.deleteImageFile(this, mTempPhotoPath);
-                // Save the image
-                //mImageLink = BitmapUtils.saveImage(this, mResultsBitmap);
-                //mImageLink = mTempPhotoPath.toString();
+                // Delete the image file, and save the resized one
+                BitmapUtils.deleteImageFile(this, mPhotoPath);
+                BitmapUtils.saveImage(this, mResizedBitmap, mPhotoPath);
+
                 mImageLink = mPhotoURI.toString();
-
-                //mImageLink = mResultsBitmap;
                 Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
 
             } else {
                 // Otherwise, delete the temporary image file
-                BitmapUtils.deleteImageFile(this, mTempPhotoPath);
-                Picasso.with(this).load(R.drawable.photobook).into((ImageView) mImageBook);
+                BitmapUtils.deleteImageFile(this, mPhotoPath);
+                if(mImageLink != null) {
+                    Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
+                } else {
+                    Picasso.with(this).load(R.drawable.photobook).into((ImageView) mImageBook);
+                }
             }
         }
     }
@@ -623,6 +624,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         outState.putString(BUNDLE_KEY_TEXT_FROM_DATE, mLabelSelectFromDate.getText().toString());
         outState.putString(BUNDLE_KEY_TEXT_TO_DATE, mLabelSelectToDate.getText().toString());
         outState.putString(BUNDLE_KEY_IMAGE_LINK, mImageLink);
+        outState.putString(BUNDLE_KEY_PHOTO_PATH, mPhotoPath);
 
         super.onSaveInstanceState(outState);
     }
