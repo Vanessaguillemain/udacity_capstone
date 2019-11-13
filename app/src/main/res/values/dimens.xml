@@ -2,13 +2,8 @@
 <resources>
     <!-- ELEVATIONS -->
     <dimen name="fab_elevation">6dp</dimen>
-    <dimen name="fab_press_translation_z">12dp</dimen>
     <dimen name="card_elevation">8dp</dimen>
     <dimen name="card_resting_elevation">4dp</dimen>
-    <dimen name="appbar_elevation">4dp</dimen>
-    <dimen name="dialog_elevation">24dp</dimen>
-    <dimen name="top_app_bar_elevation">2dp</dimen>
-    <dimen name="top_app_bar_scroll_elevation">4dp</dimen>
 
     <!-- MARGINS -->
     <dimen name="fab_margin">16dp</dimen>
@@ -29,13 +24,7 @@
     <!-- IMAGES -->
     <dimen name="books_image_width_little">92dp</dimen>
     <dimen name="books_image_height_little">138dp</dimen>
-    <dimen name="books_image_width_medium">118dp</dimen>
-    <dimen name="books_image_height_medium">177dp</dimen>
-    <dimen name="books_image_width_large">145dp</dimen>
-    <dimen name="books_image_height_large">218dp</dimen>
 
-    <dimen name="books_image_width_search">135dp</dimen>
-    <dimen name="books_image_height_search">202dp</dimen>
     <dimen name="height_search_tv_title">40dp</dimen>
     <dimen name="height_search_tv_pages">20dp</dimen>
 
@@ -53,8 +42,6 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
 
     <!-- DETAIL BOOK -->
     <dimen name="guideline_end_cbx_width">10dp</dimen>
-    <dimen name="txt_box_text_size">10sp</dimen>
-    <dimen name="margin_constraint_layout">10dp</dimen>
     <dimen name="margin_guidelines">10dp</dimen>
     <dimen name="btn_calendar_size">13dp</dimen>
 

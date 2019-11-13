@@ -108,7 +108,6 @@
     <string name="your_next_reading">Your next book</string>
     <string name="nothing_today">Done!</string>
     <string name="widget_desc_book_image">Image of book to read today</string>
-    <string name="widget_page_count">%1$d pages</string>
 
     <!-- SCREEN BOOK SCAN -->
     <string name="title_scan">Scan</string>

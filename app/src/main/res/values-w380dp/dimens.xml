@@ -2,8 +2,6 @@
 <resources>
     <!-- DETAIL BOOK -->
     <dimen name="guideline_end_cbx_width">40dp</dimen>
-    <dimen name="txt_box_text_size">12sp</dimen>
-    <dimen name="margin_constraint_layout">20dp</dimen>
     <dimen name="margin_guidelines">20dp</dimen>
 
     <!-- STYLE -->

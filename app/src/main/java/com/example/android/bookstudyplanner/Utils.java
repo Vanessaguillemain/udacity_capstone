@@ -419,48 +419,6 @@ public class Utils {
         return 0;
     }
 
-    public static void getScreenSize(Context context, Activity activity) {
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        int realWidth;
-        int realHeight;
-
-        if (Build.VERSION.SDK_INT >= 17){
-            //new pleasant way to get real metrics
-            DisplayMetrics realMetrics = new DisplayMetrics();
-            display.getRealMetrics(realMetrics);
-            realWidth = realMetrics.widthPixels;
-            realHeight = realMetrics.heightPixels;
-
-        } else if (Build.VERSION.SDK_INT >= 14) {
-            //reflection for this weird in-between time
-            try {
-                Method mGetRawH = Display.class.getMethod("getRawHeight");
-                Method mGetRawW = Display.class.getMethod("getRawWidth");
-                realWidth = (Integer) mGetRawW.invoke(display);
-                realHeight = (Integer) mGetRawH.invoke(display);
-            } catch (Exception e) {
-                //this may not be 100% accurate, but it's all we've got
-                realWidth = display.getWidth();
-                realHeight = display.getHeight();
-                Log.e("Display Info", "Couldn't use reflection to get the real display metrics.");
-            }
-
-        } else {
-            //This should be close, as lower API devices should not have window navigation bars
-            realWidth = display.getWidth();
-            realHeight = display.getHeight();
-        }
-
-        Log.d("Display Info", "realWidth=" + realWidth);
-        Log.d("Display Info", "realHeight=" + realHeight);
-
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
-        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        Log.d("Display Info", "dpWidth=" + dpWidth);
-        Log.d("Display Info", "dpHeight=" + dpHeight);
-    }
-
     //we set starting point for update at midnight and 30 minutes
     //so we are sure the date is not the same date
     public static long getDiffForMidnightThirty() {

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -163,7 +163,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
-                    android:labelFor="@id/valuePageCount"
+                    android:labelFor="@id/valueSpeed"
                     android:gravity="center_vertical"
                     android:text="@string/b_detail_avg_speed" />
 

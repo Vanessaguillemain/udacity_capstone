@@ -4,29 +4,15 @@
     <color name="colorPrimaryDark">@color/black</color>
     <color name="colorAccent">@color/orange_A200</color>
 
-    <!--
-    <color name="cardview_light_background">@color/orange_A200</color>-->
     <color name="cardview_light_background">@color/white</color>
 
-    <!-- for FAB
-    <color name="colorSecondary">@color/orange_A200</color>
-    <color name="colorOnSecondary">@color/orange_A200</color>-->
-
-
     <color name="white">#FFFFFF</color>
-    <color name="green">#007700</color>
-    <color name="red">#FF0000</color>
-    <color name="yellow">#FFFF00</color>
-    <color name="pink">#FF00FF</color>
-    <color name="purple">#8A2BE2</color>
-    <color name="green_light">#32CD32</color>
 
     <color name="black">#000000</color>
     <color name="light_grey">#EEEEEE</color>
     <color name="very_light_grey">#EFEFEF</color>
 
     <color name="orange_A200">#FF6E40</color>
-    <color name="orange_50">#FFF2DF</color>
     <color name="blue_gray_500">#607D8B</color>
     <color name="blue_gray_700">#455A64</color>
 </resources>
