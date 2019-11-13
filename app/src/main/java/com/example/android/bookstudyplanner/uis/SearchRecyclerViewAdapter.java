@@ -86,10 +86,9 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
         public SearchBookViewHolder(ViewGroup viewGroup) {
             super(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.rv_search_item, viewGroup, false));
-            ivBookImage = (ImageView) itemView.findViewById(R.id.imageBook_search);
-            tvBookTitle = (TextView) itemView.findViewById(R.id.tvBookTitle_search);
-            //tvBookSubTitle = (TextView) itemView.findViewById(R.id.tvBookSubTitle_search);
-            tvBookPageCount = (TextView) itemView.findViewById(R.id.tvBookPageCount_search);
+            ivBookImage = itemView.findViewById(R.id.imageBook_search);
+            tvBookTitle = itemView.findViewById(R.id.tvBookTitle_search);
+            tvBookPageCount = itemView.findViewById(R.id.tvBookPageCount_search);
             itemView.setOnClickListener(this);
         }
 
@@ -98,7 +97,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
             String imageLink = volume.getVolumeInfoImageLink();
             if(imageLink != null && !imageLink.equals("")) {
-                Picasso.with(itemView.getContext()).load(imageLink).into((ImageView) ivBookImage);
+                Picasso.with(itemView.getContext()).load(imageLink).into(ivBookImage);
             } else {
                 ivBookImage.setImageResource(R.drawable.ic_photobook);
                 ivBookImage.setAdjustViewBounds(true);

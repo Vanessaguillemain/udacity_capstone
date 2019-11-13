@@ -54,7 +54,7 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
         holder.tvBookTitle.setText(title);
         String imageLink = planning.getImageLink();
         if(imageLink != null && !imageLink.equals("")) {
-            Picasso.with(context).load(imageLink).into((ImageView) holder.ivImageBook);
+            Picasso.with(context).load(imageLink).into(holder.ivImageBook);
         } else {
             holder.ivImageBook.setImageResource(R.drawable.ic_photobook);
             holder.ivImageBook.setAdjustViewBounds(true);

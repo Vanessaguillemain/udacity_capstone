@@ -192,7 +192,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             mLabelSelectFromDate.setText(sBegin);
             mLabelSelectToDate.setText(sEnd);
             if(mImageLink != null) {
-                Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
+                Picasso.with(this).load(mImageLink).into(mImageBook);
             } else {
                 mImageBook.setImageResource(R.drawable.ic_camera);
                 mImageBook.setAdjustViewBounds(true);
@@ -256,7 +256,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
 
                    mImageLink = metaData.getString(GoogleBookMetaData.IMAGE);
                    if(mImageLink != null && !mImageLink.equals("")) {
-                       Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
+                       Picasso.with(this).load(mImageLink).into(mImageBook);
                    } else {
                        mImageBook.setImageResource(R.drawable.ic_camera);
                        mImageBook.setAdjustViewBounds(true);
@@ -335,13 +335,13 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 BitmapUtils.saveImage(this, mResizedBitmap, mPhotoPath);
 
                 mImageLink = mPhotoURI.toString();
-                Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
+                Picasso.with(this).load(mImageLink).into(mImageBook);
 
             } else {
                 // Otherwise, delete the temporary image file
                 BitmapUtils.deleteImageFile(this, mPhotoPath);
                 if(mImageLink != null) {
-                    Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
+                    Picasso.with(this).load(mImageLink).into(mImageBook);
                 } else {
                     //Picasso.with(this).load(R.drawable.ic_camera).into((ImageView) mImageBook);
                     mImageBook.setImageResource(R.drawable.ic_camera);
@@ -354,7 +354,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     private void fillLayoutFields(BookEntity item) {
         mImageLink = item.getImageLink();
         if(mImageLink != null) {
-            Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
+            Picasso.with(this).load(mImageLink).into(mImageBook);
         } else {
             mImageBook.setImageResource(R.drawable.ic_camera);
             mImageBook.setAdjustViewBounds(true);
@@ -639,7 +639,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
     /**
      * Save Data
      */
-    public void onSaveButtonClicked() {
+    private void onSaveButtonClicked() {
 
         Date beginDate = Utils.getDateFromFormatedDate(mLabelSelectFromDate.getText().toString(), BookDetailActivity.this);
         Date endDate = Utils.getDateFromFormatedDate(mLabelSelectToDate.getText().toString(), BookDetailActivity.this);
@@ -736,7 +736,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         WidgetService.startActionUpdateWidgets(BookDetailActivity.this);
     }
 
-    public void onDateFromButtonClicked() {
+    private void onDateFromButtonClicked() {
         int y = (yearFrom != 0) ? yearFrom:year;
         int m = (monthFrom != 0) ? monthFrom:month;
         int d = (dayOfMonthFrom != 0) ? dayOfMonthFrom:dayOfMonth;
@@ -749,7 +749,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         datePickerDialog.show();
     }
 
-    public void onDateToButtonClicked() {
+    private void onDateToButtonClicked() {
         int y = (yearTo != 0) ? yearTo:year;
         int m = (monthTo != 0) ? monthTo:month;
         int d = (dayOfMonthTo != 0) ? dayOfMonthTo:dayOfMonth;
@@ -762,7 +762,7 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         datePickerDialog.show();
     }
 
-    public void onDeleteButtonClicked() {
+    private void onDeleteButtonClicked() {
         new AlertDialog.Builder(this)
             .setMessage(getResources().getString(R.string.b_detail_msg_confirm_delete))
             .setCancelable(false)

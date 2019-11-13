@@ -24,8 +24,8 @@ import java.util.List;
 
 public class TabBooksFragment extends Fragment implements BooksRecyclerViewAdapter.ItemClickListener  {
 
-    BooksRecyclerViewAdapter booksRecyclerViewAdapter;
-    ArrayList<BookEntity> bookEntities = new ArrayList<>();
+    private BooksRecyclerViewAdapter booksRecyclerViewAdapter;
+    private ArrayList<BookEntity> bookEntities = new ArrayList<>();
 
     public void setBookEntities(ArrayList<BookEntity> bookEntities) {
         this.bookEntities = bookEntities;

@@ -22,10 +22,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -135,9 +132,8 @@ public class BitmapUtils {
      */
     public static String saveImage(Context context, Bitmap image, String path) {
 
-        String savedImagePath = null;
         File imageFile = new File(path);
-        savedImagePath = imageFile.getAbsolutePath();
+        String savedImagePath = imageFile.getAbsolutePath();
         try {
             OutputStream fOut = new FileOutputStream(imageFile);
             image.compress(Bitmap.CompressFormat.JPEG, 100, fOut);

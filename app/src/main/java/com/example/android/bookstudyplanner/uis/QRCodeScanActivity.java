@@ -43,9 +43,9 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
 
     //Elements for scan
     @BindView(R.id.surfaceQRScanner) SurfaceView surfaceQRScanner;
-    BarcodeDetector barcodeDetector;
-    CameraSource cameraSource;
-    String scanResult = "";
+    private BarcodeDetector barcodeDetector;
+    private CameraSource cameraSource;
+    private String scanResult = "";
 
     //Element for search
     private SearchTask searchTask;
@@ -70,7 +70,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
     /**
      * Initializes components of activity
      */
-    public void initComponents() {
+    private void initComponents() {
         // Initialize objects
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.EAN_13|Barcode.ISBN)
@@ -142,7 +142,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements SearchTask.
      * launches an intent to DetailBookActivity
      * @param barcode the code scanned
      */
-    public void searchBookAndSendToDetail(String barcode) {
+    private void searchBookAndSendToDetail(String barcode) {
         boolean valid = false;
         //if it's an ISBN
         if (Utils.isInteger(barcode)) {

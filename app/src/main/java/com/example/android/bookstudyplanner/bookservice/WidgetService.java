@@ -26,7 +26,7 @@ public class WidgetService extends IntentService {
     private static final String TAG = WidgetService.class.getSimpleName();
     //for DB access
     private static AppDatabase mDb;
-    public static final String ACTION_UPDATE_WIDGETS = "ACTION_UPDATE_WIDGETS";
+    private static final String ACTION_UPDATE_WIDGETS = "ACTION_UPDATE_WIDGETS";
 
     public WidgetService(String name) {
         super(name);

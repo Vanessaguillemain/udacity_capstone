@@ -1,21 +1,13 @@
 package com.example.android.bookstudyplanner;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
-import android.os.Environment;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -143,7 +135,7 @@ public class Utils {
         return false;
     }
 
-    static Locale getCurrentLocale(Context context){
+    private static Locale getCurrentLocale(Context context){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
             return context.getResources().getConfiguration().getLocales().get(0);
         } else{
@@ -169,7 +161,7 @@ public class Utils {
     public static int calculateNbDaysToRead(Date fromDate, Date toDate, int[] weekPlanning, int nbDaysAWeek) {
         if(fromDate != null && toDate != null && nbDaysAWeek > 0) {
             int nbTotalDays = daysBetweenDatesIncluded(fromDate, toDate);
-            int nbWeeks = (int)nbTotalDays/7;
+            int nbWeeks = nbTotalDays/7;
 
             int indexFirstDay = getMyDayOfWeek(fromDate)-2; //-2 because Monday is 0 in weekPlanning[] and 2 in Calendar.MONDAY
             int nbDaysToReadDuringWeeks = nbDaysAWeek * nbWeeks;
@@ -282,7 +274,7 @@ public class Utils {
         return total;
     }
 
-    public static Date addDays(Date date, int days) {
+    private static Date addDays(Date date, int days) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DATE, days); //minus number would decrement the days
@@ -308,7 +300,7 @@ public class Utils {
         return calendarFrom.get(Calendar.DAY_OF_WEEK);
     }
 
-    public static int daysBetweenDatesIncluded(Date date1, Date date2 ){
+    private static int daysBetweenDatesIncluded(Date date1, Date date2){
         //divide by 1000 because date.getTime() have milliseconds that causes
         //wrong calculation just for some milliseconds of differences
         long lDate1 = date1.getTime()/1000;
@@ -322,7 +314,7 @@ public class Utils {
         if(seconds >= 24*3600) {
             return ERROR_NB_SECONDS_A_DAY;
         }
-        int hours = (int)seconds/3600;
+        int hours = seconds/3600;
         int minutes = (seconds-hours*3600)/60;
         String result ="";
         if(hours>0) {
@@ -374,7 +366,7 @@ public class Utils {
 
     // Returns ISBN error syndrome, zero for a valid ISBN, non-zero for an invalid one.
     // digits[i] must be between 0 and 10.
-    public static int CheckISBN10(char digits[]){
+    private static int CheckISBN10(char digits[]){
         int i, s = 0, t = 0;
         for (i = 0; i < 10; i++) {
             t += digits[i];

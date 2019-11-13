@@ -43,8 +43,8 @@ public class TabTodayFragment extends Fragment implements TodayRecyclerViewAdapt
     private static final String TAG = TabTodayFragment.class.getSimpleName();
     private RecyclerView myRecyclerView;
 
-    TodayRecyclerViewAdapter todayRecyclerViewAdapter;
-    ArrayList<PlanningEntity> planningEntities = new ArrayList<>();
+    private TodayRecyclerViewAdapter todayRecyclerViewAdapter;
+    private ArrayList<PlanningEntity> planningEntities = new ArrayList<>();
 
     private AppDatabase mDb;
 

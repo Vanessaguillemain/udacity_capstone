@@ -2,7 +2,6 @@
 package com.example.android.bookstudyplanner.bookservice;
 
 
-import android.app.Fragment;
 import android.content.Context;
 import android.support.annotation.NonNull;
 

@@ -45,7 +45,7 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
         String imageLink = book.getImageLink();
         Context context = holder.ivImageBooks.getContext();
         if(imageLink != null && !imageLink.equals("")) {
-            Picasso.with(context).load(imageLink).into((ImageView) holder.ivImageBooks);
+            Picasso.with(context).load(imageLink).into(holder.ivImageBooks);
         } else {
             holder.ivImageBooks.setImageResource(R.drawable.ic_photobook);
             holder.ivImageBooks.setAdjustViewBounds(true);

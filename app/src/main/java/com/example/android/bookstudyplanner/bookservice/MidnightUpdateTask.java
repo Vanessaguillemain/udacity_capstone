@@ -13,18 +13,16 @@ import com.example.android.bookstudyplanner.uis.TabTodayFragment;
 import java.util.Date;
 import java.util.List;
 
-public class MidnightUpdateTask {
+class MidnightUpdateTask {
 
-    public static final String ACTION_MIDNIGHT_UPDATE = "charging-reminder";
+    public static final String ACTION_MIDNIGHT_UPDATE = "ACTION_MIDNIGHT_UPDATE";
     private static AppDatabase mDb;
 
     // Constant for logging
     private static final String TAG = TabTodayFragment.class.getSimpleName();
 
     public static void executeTask(Context context, String action) {
-        if (ACTION_MIDNIGHT_UPDATE.equals(action)) {
-            manageMidnightUpdates(context);
-        }
+        manageMidnightUpdates(context);
     }
 
     private static void manageMidnightUpdates(Context context) {
@@ -42,7 +40,7 @@ public class MidnightUpdateTask {
         AppExecutor.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                int mBookId = Utils.INTENT_VAL_BOOK_ID_EMPTY;
+                int mBookId;
                 Date mDateToday = Utils.getToday();
                 Date mDateYesterday = Utils.dateBefore(mDateToday);
                 //load plannings

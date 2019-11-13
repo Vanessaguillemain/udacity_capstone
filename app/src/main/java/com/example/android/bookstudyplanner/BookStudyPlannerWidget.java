@@ -6,28 +6,16 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.transition.Visibility;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RemoteViews;
 
 import com.example.android.bookstudyplanner.bookservice.WidgetService;
 import com.example.android.bookstudyplanner.uis.MainActivity;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Calendar;
 
 /**
@@ -37,8 +25,8 @@ public class BookStudyPlannerWidget extends AppWidgetProvider {
 
     private static final String TAG ="BookStudyPlannerWidget";
 
-    static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager, final String imgRes, int bookId, int nbPagesToRead,
-                                final int appWidgetId) {
+    private static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager, final String imgRes, int bookId, int nbPagesToRead,
+                                        final int appWidgetId) {
 
         final int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, BookStudyPlannerWidget.class));
 

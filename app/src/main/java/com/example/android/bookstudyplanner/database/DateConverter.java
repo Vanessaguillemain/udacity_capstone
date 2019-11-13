@@ -8,7 +8,7 @@ import java.util.Date;
  * Created by vanessa on 10/07/2019.
  */
 
-public class DateConverter {
+class DateConverter {
     @TypeConverter
     public static Date toDate(Long timestamp) {
         return timestamp == null ? null : new Date(timestamp);
