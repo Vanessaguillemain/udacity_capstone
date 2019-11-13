@@ -94,7 +94,7 @@
                 android:contentDescription="@string/desc_book_image"
                 app:layout_constraintStart_toStartOf="@+id/guideline_start"
                 app:layout_constraintTop_toTopOf="@+id/guideline_top"
-                app:srcCompat="@drawable/photobook"
+                app:srcCompat="@drawable/ic_camera"
                 android:onClick="takePicture"/>
 
             <TextView

@@ -29,6 +29,7 @@
             <ImageView
                 android:id="@+id/ivImageBook_books"
                 android:scaleType="centerCrop"
+                android:layout_gravity="center"
                 android:elevation="@dimen/fab_elevation"
                 android:layout_width="@dimen/books_image_width_little"
                 android:layout_height="@dimen/books_image_height_little"

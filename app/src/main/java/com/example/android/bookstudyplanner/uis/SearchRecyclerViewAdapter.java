@@ -100,7 +100,9 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             if(imageLink != null && !imageLink.equals("")) {
                 Picasso.with(itemView.getContext()).load(imageLink).into((ImageView) ivBookImage);
             } else {
-                Picasso.with(itemView.getContext()).load(R.drawable.photobook).into((ImageView) ivBookImage);
+                ivBookImage.setImageResource(R.drawable.ic_photobook);
+                ivBookImage.setAdjustViewBounds(true);
+
             }
             if (volume.getVolumeInfoTitle() != null) {
                 tvBookTitle.setText(volume.getVolumeInfoTitle());

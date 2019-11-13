@@ -194,7 +194,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
             if(mImageLink != null) {
                 Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
             } else {
-                Picasso.with(this).load(R.drawable.photobook).into((ImageView) mImageBook);
+                mImageBook.setImageResource(R.drawable.ic_camera);
+                mImageBook.setAdjustViewBounds(true);
             }
         }
 
@@ -257,10 +258,12 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                    if(mImageLink != null && !mImageLink.equals("")) {
                        Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
                    } else {
-                       Picasso.with(this).load(R.drawable.photobook).into((ImageView) mImageBook);
+                       mImageBook.setImageResource(R.drawable.ic_camera);
+                       mImageBook.setAdjustViewBounds(true);
                    }
                } else {
-                   Picasso.with(this).load(R.drawable.photobook).into((ImageView) mImageBook);
+                   mImageBook.setImageResource(R.drawable.ic_camera);
+                   mImageBook.setAdjustViewBounds(true);
                }
 
            }
@@ -340,7 +343,9 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
                 if(mImageLink != null) {
                     Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
                 } else {
-                    Picasso.with(this).load(R.drawable.photobook).into((ImageView) mImageBook);
+                    //Picasso.with(this).load(R.drawable.ic_camera).into((ImageView) mImageBook);
+                    mImageBook.setImageResource(R.drawable.ic_camera);
+                    mImageBook.setAdjustViewBounds(true);
                 }
             }
         }
@@ -351,7 +356,8 @@ public class BookDetailActivity extends AppCompatActivity implements TextWatcher
         if(mImageLink != null) {
             Picasso.with(this).load(mImageLink).into((ImageView) mImageBook);
         } else {
-            Picasso.with(this).load(R.drawable.photobook).into((ImageView) mImageBook);
+            mImageBook.setImageResource(R.drawable.ic_camera);
+            mImageBook.setAdjustViewBounds(true);
         }
 
         mTvTitle.setText(item.getTitle());

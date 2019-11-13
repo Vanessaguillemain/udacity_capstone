@@ -47,7 +47,8 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<BooksRecycler
         if(imageLink != null && !imageLink.equals("")) {
             Picasso.with(context).load(imageLink).into((ImageView) holder.ivImageBooks);
         } else {
-            Picasso.with(context).load(R.drawable.photobook).into((ImageView) holder.ivImageBooks);
+            holder.ivImageBooks.setImageResource(R.drawable.ic_photobook);
+            holder.ivImageBooks.setAdjustViewBounds(true);
         }
         String title = Utils.getTruncatedStringFor(book.getTitle(), Utils.SCREEN_BOOKS, context);
 

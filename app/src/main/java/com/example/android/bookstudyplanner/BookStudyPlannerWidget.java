@@ -58,7 +58,7 @@ public class BookStudyPlannerWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.widget_title, result);
             //Test String image
             if (imgRes == null) {
-                views.setImageViewResource(R.id.widget_book_image, R.drawable.photobook);
+                views.setImageViewResource(R.id.widget_book_image, R.drawable.ic_photobook_widget);
             } else {
                 Handler uiHandler = new Handler(Looper.getMainLooper());
                 uiHandler.post(new Runnable() {

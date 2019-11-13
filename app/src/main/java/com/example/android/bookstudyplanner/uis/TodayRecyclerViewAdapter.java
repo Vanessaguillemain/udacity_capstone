@@ -56,7 +56,8 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter<TodayRecycler
         if(imageLink != null && !imageLink.equals("")) {
             Picasso.with(context).load(imageLink).into((ImageView) holder.ivImageBook);
         } else {
-            Picasso.with(context).load(R.drawable.photobook).into((ImageView) holder.ivImageBook);
+            holder.ivImageBook.setImageResource(R.drawable.ic_photobook);
+            holder.ivImageBook.setAdjustViewBounds(true);
         }
 
         holder.tvBookPageCount.setText(String.valueOf(planning.getNbPagesToRead()));
